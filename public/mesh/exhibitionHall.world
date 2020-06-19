@@ -1,0 +1,1448 @@
+<?xml version="1.0" encoding="utf-8"?>
+<world version="1.21">
+	<materials>
+		<library>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/materials/5Fzhanting.mat</library>
+	</materials>
+	<editor>
+		<node type="NodeLayer" id="1510133022" name="日照系统">
+			<layer>nodes/level.node</layer>
+			<transform>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</transform>
+			<node type="LightWorld" id="2095181367" name="sun">
+				<scattering>1</scattering>
+				<shadow_range>2000</shadow_range>
+				<shadow_distribute>0.233333</shadow_distribute>
+				<deferred>1</deferred>
+				<color>1 0.88341 0.637142 1</color>
+				<multiplier>1.79847</multiplier>
+				<shadow_size>4</shadow_size>
+				<shadow_softness>2</shadow_softness>
+				<transform>-0.275579 -0.477317 -0.834401 0 0.866026 -0.5 0 0 -0.417201 -0.722612 0.551158 0 -2.56563 -264.813 0.0789404 1</transform>
+			</node>
+			<node type="ObjectSky" id="2126500912" collider="0" name="sky">
+				<size>8000 8000 300</size>
+				<min_slices>256</min_slices>
+				<max_slices>512</max_slices>
+				<distribute>4</distribute>
+				<humidity>0.8</humidity>
+				<transition>0.5</transition>
+				<extinction>0.6</extinction>
+				<density_image>textures/environment/clouds.png</density_image>
+				<density_velocity>30 30 0</density_velocity>
+				<density_offset>855.185 855.185 0</density_offset>
+				<density_layer>2</density_layer>
+				<surface name="sphere" material="sky" property="surface_base">
+					<material>
+						<blend src="src_alpha" dest="one_minus_src_alpha"/>
+						<options post_scattering="1"/>
+						<state name="inscattering">1</state>
+					</material>
+				</surface>
+				<surface name="volume" material="sky" property="surface_base">
+					<material>
+						<blend src="src_alpha" dest="one_minus_src_alpha"/>
+						<options post_scattering="1" two_sided="1"/>
+						<state name="surface">1</state>
+						<state name="inscattering">1</state>
+					</material>
+				</surface>
+				<surface name="shadow" enabled="0" material="sky" property="surface_base">
+					<material>
+						<blend src="zero" dest="src_alpha"/>
+						<options/>
+						<state name="surface">2</state>
+					</material>
+				</surface>
+				<transform>1 0 0 0 0 1 0 0 0 0 1 0 0 0 1000 1</transform>
+			</node>
+			<node type="WorldExpression" id="1277578981" name="NodesToPlayerBinding1">
+				<size>100000 100000 100000</size>
+				<expression>{
+
+// get player
+Player player = engine.editor.isLoaded() ? engine.editor.getPlayer() : engine.game.getPlayer();
+if(player == 0) return;
+
+// player position
+vec3 offset = vec3(0.0f,0.0f,-15.0f);
+mat4 transform = translate(player.getWorldTransform() * offset);
+
+// transform childs
+Node node = getNode();
+forloop(int i = 0; node.getNumChilds()) {
+Node child = node.getChild(i);
+child.setWorldTransform(transform);
+}
+
+}</expression>
+				<transform>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</transform>
+				<node type="NodeDummy" id="1715075075" name="NodesContainer">
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 0.674255 -54.8747 174.261 1</transform>
+					<node type="ObjectParticles" id="1216267544" collider="0" name="rain_drops">
+						<particles_type>3</particles_type>
+						<spawn_rate>0</spawn_rate>
+						<physical_mask>-1</physical_mask>
+						<length_stretch>0.1</length_stretch>
+						<emitter_type>3</emitter_type>
+						<emitter_enabled>1</emitter_enabled>
+						<emitter_size>110 110 0</emitter_size>
+						<emitter_direction>0 0 -20</emitter_direction>
+						<emitter_spread>1 1 0</emitter_spread>
+						<life_mean>1</life_mean>
+						<life_spread>0</life_spread>
+						<velocity_mean>40</velocity_mean>
+						<velocity_spread>27</velocity_spread>
+						<radius_mean>0.06</radius_mean>
+						<radius_spread>0.03</radius_spread>
+						<gravity>0 0 -10</gravity>
+						<force>
+							<attached>1</attached>
+							<transform>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</transform>
+							<radius>80</radius>
+							<attenuation>1</attenuation>
+							<attractor>0</attractor>
+							<rotator>0</rotator>
+						</force>
+						<deflector>
+							<type>1</type>
+							<attached>0</attached>
+							<transform>0.714943 -0.699183 0 0 0.699183 0.714943 0 0 0 0 1 0 -13.8654 -216.974 4.345 1</transform>
+							<size>5.5 9.9 0</size>
+							<restitution>0.85</restitution>
+							<roughness>0</roughness>
+						</deflector>
+						<surface name="particles" max_fade_distance="1e+008" material="rain_drops" property="surface_base"/>
+						<transform>1 0 0 0 0 1 0 0 0 0 1 0 -2.44066 -4.50647 27.7426 1</transform>
+					</node>
+					<node type="ObjectParticles" id="1795963183" collider="0" name="rain_drops_collision1">
+						<particles_type>3</particles_type>
+						<collision>1</collision>
+						<culling>1</culling>
+						<spawn_rate>0</spawn_rate>
+						<physical_mask>-1</physical_mask>
+						<length_stretch>0.3</length_stretch>
+						<emitter_type>3</emitter_type>
+						<emitter_enabled>1</emitter_enabled>
+						<emitter_size>30 30 0</emitter_size>
+						<emitter_direction>0 4.96845 -20</emitter_direction>
+						<emitter_spread>1.33123 2.32492 0</emitter_spread>
+						<life_mean>1</life_mean>
+						<life_spread>0</life_spread>
+						<velocity_mean>60</velocity_mean>
+						<velocity_spread>40</velocity_spread>
+						<radius_mean>0.1</radius_mean>
+						<radius_spread>0.04</radius_spread>
+						<gravity>0 0 -10</gravity>
+						<force>
+							<attached>1</attached>
+							<transform>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</transform>
+							<radius>80</radius>
+							<attenuation>1</attenuation>
+							<attractor>0</attractor>
+							<rotator>0</rotator>
+						</force>
+						<surface name="particles" enabled="0" max_fade_distance="1e+008" material="rain_drops" property="surface_base"/>
+						<transform>1 0 0 0 0 1 0 0 0 0 1 0 0 0 30 1</transform>
+						<node type="ObjectParticles" id="1567053306" collider="0" name="rain_splashes">
+							<variation_x>1</variation_x>
+							<variation_y>1</variation_y>
+							<spawn_rate>1</spawn_rate>
+							<growth_damping>1</growth_damping>
+							<emitter_type>5</emitter_type>
+							<emitter_enabled>1</emitter_enabled>
+							<emitter_direction>0 0 10</emitter_direction>
+							<life_mean>0.3</life_mean>
+							<life_spread>0.1</life_spread>
+							<velocity_mean>0</velocity_mean>
+							<velocity_spread>0.3</velocity_spread>
+							<radius_mean>0.05</radius_mean>
+							<radius_spread>0.025</radius_spread>
+							<growth_mean>0.05</growth_mean>
+							<growth_spread>0.05</growth_spread>
+							<gravity>0 0 -5</gravity>
+							<surface name="particles" material="rain_splash" property="surface_base"/>
+							<transform>1 0 0 0 0 1 0 0 0 0 1 0 3.48336 -2.71939 -0.352833 1</transform>
+						</node>
+						<node type="ObjectParticles" id="182329837" collider="0" name="rain_splashes_fume">
+							<variation_x>1</variation_x>
+							<variation_y>1</variation_y>
+							<texture_atlas>1</texture_atlas>
+							<spawn_rate>1</spawn_rate>
+							<growth_damping>1</growth_damping>
+							<emitter_type>5</emitter_type>
+							<emitter_enabled>1</emitter_enabled>
+							<emitter_direction>0 0 10</emitter_direction>
+							<life_mean>0.8</life_mean>
+							<life_spread>0.1</life_spread>
+							<velocity_mean>0.7</velocity_mean>
+							<velocity_spread>0.3</velocity_spread>
+							<radius_mean>0.2</radius_mean>
+							<radius_spread>0.05</radius_spread>
+							<growth_mean>0.1</growth_mean>
+							<growth_spread>0.05</growth_spread>
+							<gravity>0 0 -2</gravity>
+							<surface name="particles" material="fume" property="surface_base"/>
+							<transform>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</transform>
+						</node>
+					</node>
+					<node type="ObjectParticles" id="1990854000" collider="0" name="rain_drops_collision2">
+						<particles_type>3</particles_type>
+						<collision>1</collision>
+						<culling>1</culling>
+						<spawn_rate>0</spawn_rate>
+						<physical_mask>-1</physical_mask>
+						<length_stretch>0.3</length_stretch>
+						<emitter_type>3</emitter_type>
+						<emitter_enabled>1</emitter_enabled>
+						<emitter_size>70 70 0</emitter_size>
+						<emitter_direction>0 4.96845 -20</emitter_direction>
+						<emitter_spread>1.33123 2.32492 0</emitter_spread>
+						<life_mean>1</life_mean>
+						<life_spread>0</life_spread>
+						<velocity_mean>60</velocity_mean>
+						<velocity_spread>40</velocity_spread>
+						<radius_mean>0.1</radius_mean>
+						<radius_spread>0.04</radius_spread>
+						<gravity>0 0 -10</gravity>
+						<force>
+							<attached>1</attached>
+							<transform>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</transform>
+							<radius>80</radius>
+							<attenuation>1</attenuation>
+							<attractor>0</attractor>
+							<rotator>0</rotator>
+						</force>
+						<surface name="particles" enabled="0" max_fade_distance="1e+008" material="rain_drops" property="surface_base"/>
+						<transform>1 0 0 0 0 1 0 0 0 0 1 0 0 0 30 1</transform>
+						<node type="ObjectParticles" id="874069119" collider="0" name="rain_fume">
+							<texture_atlas>1</texture_atlas>
+							<spawn_rate>1</spawn_rate>
+							<growth_damping>1</growth_damping>
+							<emitter_type>5</emitter_type>
+							<emitter_enabled>1</emitter_enabled>
+							<life_mean>5</life_mean>
+							<life_spread>0</life_spread>
+							<velocity_mean>0</velocity_mean>
+							<velocity_spread>0</velocity_spread>
+							<rotation_mean>0</rotation_mean>
+							<rotation_spread>20</rotation_spread>
+							<radius_mean>4</radius_mean>
+							<radius_spread>0</radius_spread>
+							<growth_mean>1</growth_mean>
+							<growth_spread>0</growth_spread>
+							<surface name="particles" material="fume" property="surface_base"/>
+							<transform>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</transform>
+						</node>
+					</node>
+				</node>
+				<node type="NodeReference" id="988389428" name="stars">
+					<reference>library/weather/nodes/stars.node</reference>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 0.674255 -54.8747 174.261 1</transform>
+				</node>
+			</node>
+			<node type="WorldExpression" id="2115067465" name="NodesToPlayerBinding2">
+				<size>100000 100000 100000</size>
+				<expression>{
+
+// get player
+Player player = engine.editor.isLoaded() ? engine.editor.getPlayer() : engine.game.getPlayer();
+if(player == 0) return;
+
+// player position
+mat4 transform = player.getWorldTransform();
+
+// transform childs
+Node node = getNode();
+forloop(int i = 0; node.getNumChilds()) {
+Node child = node.getChild(i);
+child.setWorldTransform(transform);
+}
+
+}</expression>
+				<transform>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</transform>
+				<node type="NodeDummy" id="405278391" name="NodesContainer">
+					<transform>1 0 0 0 0 0.866025 0.5 0 0 -0.5 0.866025 0 0.674255 -62.3747 187.251 1</transform>
+					<node type="ObjectParticles" id="1594240363" collider="0" name="camera_drops">
+						<variation_x>1</variation_x>
+						<texture_atlas>1</texture_atlas>
+						<spawn_rate>0</spawn_rate>
+						<emitter_type>3</emitter_type>
+						<emitter_enabled>1</emitter_enabled>
+						<emitter_based>1</emitter_based>
+						<emitter_continuous>0</emitter_continuous>
+						<emitter_size>2 0 2</emitter_size>
+						<emitter_direction>0 0 -1</emitter_direction>
+						<emitter_spread>0 0 0</emitter_spread>
+						<life_mean>1</life_mean>
+						<life_spread>0.3</life_spread>
+						<velocity_mean>0</velocity_mean>
+						<velocity_spread>0</velocity_spread>
+						<angle_mean>0</angle_mean>
+						<angle_spread>0</angle_spread>
+						<radius_mean>0.07</radius_mean>
+						<radius_spread>0.03</radius_spread>
+						<gravity>0 0 -0.1</gravity>
+						<surface name="particles" material="camera_drop" property="surface_base"/>
+						<transform>1 1.49789e-008 3.44132e-008 0 -2.76195e-008 0 -1 0 5.3551e-009 1 8.9407e-008 0 0.00012207 3.05176e-005 -1 1</transform>
+					</node>
+				</node>
+			</node>
+		</node>
+		<node type="NodeDummy" id="784083310" name="RootNode">
+			<transform>1 0 0 0 0 -4.37114e-008 1 0 0 -1 -4.37114e-008 0 0 0 0 1</transform>
+			<node type="NodeDummy" id="603836450" name="　">
+				<transform>1 0 0 0 0 0 -1 0 0 1 0 0 0 0 0 1</transform>
+			</node>
+			<node type="ObjectMeshStatic" id="1513239288" name="bgs_waikuang">
+				<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/bgs_waikuang.mesh</mesh_name>
+				<surface name="Default" material="Default" property="surface_base"/>
+				<transform>-5.3797e-007 2.20653e-014 -12.3073 0 12.6147 2.23115e-006 -5.51404e-007 0 2.23115e-006 -12.6147 -3.08283e-014 0 0.564289 20.8086 -46.3024 1</transform>
+			</node>
+			<node type="NodeDummy" id="1429035769" name="shebei">
+				<transform>1 0 0 0 0 0 -1 0 0 1 0 0 0 0 0 1</transform>
+				<node type="ObjectMeshStatic" id="1416717101" name="daping">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/daping.mesh</mesh_name>
+					<surface name="Default" material="Default" property="surface_base"/>
+					<transform>-3.3679e-007 7.70486 -9.65748e-015 0 7.7648 3.3941e-007 1.35681e-006 0 1.32297e-006 8.71805e-014 -7.38637 0 7.17527 62.5882 16.4629 1</transform>
+					<node type="ObjectMeshStatic" id="462679050" name="daping">
+						<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/daping_1.mesh</mesh_name>
+						<surface name="08 - Default" material="08 - Default" property="surface_base"/>
+						<transform>1.63724 8.63473e-015 1.3814e-015 0 -3.6888e-015 1 -1.85288e-022 0 -9.836e-016 1.09991e-014 1 0 -0.0716127 4.23419e-006 5.16124e-006 1</transform>
+					</node>
+				</node>
+				<node type="ObjectMeshStatic" id="1853338278" name="kongtiao02">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/kongtiao02.mesh</mesh_name>
+					<surface name="14 - Default" material="14 - Default" property="surface_base"/>
+					<surface name="Default" material="Default" property="surface_base"/>
+					<transform>-4.30591e-007 9.85078 -5.50311e-015 0 9.85078 4.30591e-007 1.50677e-006 0 1.02479e-006 3.69401e-014 -4.46238 0 65.5293 -1.97364 39.5433 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="463637198" name="kongtiao01">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/kongtiao01.mesh</mesh_name>
+					<surface name="14 - Default" material="14 - Default" property="surface_base"/>
+					<surface name="Default" material="Default" property="surface_base"/>
+					<transform>-4.30591e-007 9.85078 -5.50311e-015 0 9.85078 4.30591e-007 1.50677e-006 0 1.02479e-006 3.69401e-014 -4.46238 0 -42.3942 6.08438 39.5433 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1138296151" name="shexiangtou">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/shexiangtou.mesh</mesh_name>
+					<surface name="Default" material="Default" property="surface_base"/>
+					<transform>-0.918201 4.36377 0.246032 0 -8.28387 -1.8682 2.21966 0 1.15591 -7.06323e-007 4.31392 0 -50.1327 65.145 37.7366 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="677179112" name="sxj_shizhui">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/sxj_shizhui.mesh</mesh_name>
+					<surface name="15 - Default" material="15 - Default" property="surface_base"/>
+					<transform>-0.554032 -0.148453 -0.819152 0 0.79124 0.212012 -0.573577 0 0.258819 -0.965926 3.79918e-009 0 -32.6321 69.5966 25.8684 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1055848816" name="kaiguan03">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/kaiguan03.mesh</mesh_name>
+					<surface name="Default" material="Default" property="surface_base"/>
+					<transform>2.25053 2.2299 1.88838e-007 0 -2.2299 2.25053 -1.38486e-007 0 -2.31614e-007 -3.45387e-008 3.16818 0 -59.4501 56.6393 16.8034 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1173932690" name="kaiguan04">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/kaiguan04.mesh</mesh_name>
+					<surface name="Default" material="Default" property="surface_base"/>
+					<transform>2.25053 2.2299 1.88838e-007 0 -2.2299 2.25053 -1.38486e-007 0 -2.31614e-007 -3.45387e-008 3.16818 0 -60.2962 55.801 16.8034 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="569943882" name="kaiguan02">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/kaiguan02.mesh</mesh_name>
+					<surface name="Default" material="Default" property="surface_base"/>
+					<transform>2.25053 2.2299 1.88838e-007 0 -2.2299 2.25053 -1.38486e-007 0 -2.31614e-007 -3.45387e-008 3.16818 0 -61.1422 54.9627 16.8034 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="931795198" name="kaiguan01">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/kaiguan01.mesh</mesh_name>
+					<surface name="Default" material="Default" property="surface_base"/>
+					<transform>2.25053 2.2299 1.88838e-007 0 -2.2299 2.25053 -1.38486e-007 0 -2.31614e-007 -3.45387e-008 3.16818 0 -61.9917 54.1357 16.8034 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="273117516" name="kongkai">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/kongkai.mesh</mesh_name>
+					<surface name="Default" material="Default" property="surface_base"/>
+					<surface name="07 - Default" material="07 - Default" property="surface_base"/>
+					<transform>-1.88455e-007 4.31134 -6.91346e-015 0 -36.4702 -1.59416e-006 4.63455e-006 0 -9.18626e-007 -4.06053e-014 5.0732 0 -83.4472 5.41921 18.5581 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="44908994" name="xianshiqi">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/xianshiqi.mesh</mesh_name>
+					<surface name="Default" material="Default" property="surface_base"/>
+					<surface name="05 - Default" material="05 - Default" property="surface_base"/>
+					<transform>-3.30197 3.30776 2.06268e-015 0 1.62471 1.62187 4.92162e-007 0 4.73045e-007 4.72217e-007 -4.26602 0 -76.2598 38.9153 21.2691 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="392676565" name="kaiguan05">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/kaiguan05.mesh</mesh_name>
+					<surface name="Default" material="Default" property="surface_base"/>
+					<transform>-1.89621 1.99697 -1.22145e-015 0 1.99697 1.89621 8.53757e-007 0 6.19115e-007 5.87876e-007 -2.75381 0 84.1171 33.0555 8.18177 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="2049289281" name="kaiguan06">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/kaiguan06.mesh</mesh_name>
+					<surface name="Default" material="Default" property="surface_base"/>
+					<transform>1.89621 -1.99697 -2.09473e-015 0 1.99697 1.89621 -1.20373e-007 0 8.72902e-008 8.28858e-008 2.75381 0 82.697 34.555 8.06226 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="809887013" name="kaiguan07">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/kaiguan07.mesh</mesh_name>
+					<surface name="Default" material="Default" property="surface_base"/>
+					<transform>1.89621 -1.99697 -2.09473e-015 0 1.99697 1.89621 -1.20373e-007 0 8.72902e-008 8.28858e-008 2.75381 0 81.9874 35.3023 8.06226 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1183890703" name="kaiguan08">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/kaiguan08.mesh</mesh_name>
+					<surface name="Default" material="Default" property="surface_base"/>
+					<transform>1.89621 -1.99697 -2.09473e-015 0 1.99697 1.89621 -1.20373e-007 0 8.72902e-008 8.28858e-008 2.75381 0 83.4065 33.8078 8.06226 1</transform>
+				</node>
+			</node>
+			<node type="NodeDummy" id="1364572223" name="zhuangshi">
+				<transform>0.233652 0 0 0 0 -1.07747e-016 -0.233652 0 0 0.233652 -1.07747e-016 0 0 0 0 1</transform>
+				<node type="ObjectMeshStatic" id="1762083419" name="ditan">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/ditan.mesh</mesh_name>
+					<surface name="10 - Default" material="10 - Default" property="surface_base"/>
+					<transform>-2.35994e-006 53.989 -8.64444e-014 0 2.35994e-006 -8.64444e-014 -53.989 0 -53.989 -2.35994e-006 -2.35994e-006 0 1.31149 105.195 16.8705 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1841203161" name="dixian01">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/dixian01.mesh</mesh_name>
+					<surface name="Default" material="Default" property="surface_base"/>
+					<transform>-2.35994e-006 53.989 -8.64444e-014 0 2.35994e-006 -8.64444e-014 -53.989 0 -53.989 -2.35994e-006 -2.35994e-006 0 5.69129 22.6602 19.0978 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1254601051" name="dixian02">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/dixian02.mesh</mesh_name>
+					<surface name="Default" material="Default" property="surface_base"/>
+					<transform>-2.35994e-006 53.989 -8.64444e-014 0 2.35994e-006 -8.64444e-014 -53.989 0 -53.989 -2.35994e-006 -2.35994e-006 0 -364.893 -15.3498 18.9927 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="25282623" name="boli01">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/boli01.mesh</mesh_name>
+					<surface name="02 - Default" material="02 - Default" property="surface_base"/>
+					<transform>-2.36008e-006 -21.9983 1.3525e-014 0 -45.1321 4.84197e-006 1.83124e-006 0 -1.97279e-006 2.97269e-013 -41.8938 0 -196.097 349.445 66.4334 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1021081003" name="boli02">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/boli02.mesh</mesh_name>
+					<surface name="02 - Default" material="02 - Default" property="surface_base"/>
+					<transform>-53.989 -2.35994e-006 1.34086e-022 0 2.35994e-006 -53.989 -2.35994e-006 0 1.03156e-013 -2.35994e-006 53.989 0 388.57 -142.654 87.8586 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="446688061" name="kongkaizhijia">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/kongkaizhijia.mesh</mesh_name>
+					<surface name="Default" material="Default" property="surface_base"/>
+					<transform>-9.49088e-007 21.7126 1.33622e-015 0 -10.2237 -4.46893e-007 4.12282e-007 0 2.44432e-006 1.20305e-013 21.7126 0 -355.705 23.1935 38.8121 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="147403454" name="qiangshi">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/qiangshi.mesh</mesh_name>
+					<surface name="Default" material="Default" property="surface_base"/>
+					<transform>-2.30244e-006 52.6736 5.38569e-014 0 53.989 2.35994e-006 9.54901e-006 0 9.54901e-006 3.3525e-013 -53.989 0 -0.162313 195.872 89.0581 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1547901443" name="logo">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/logo.mesh</mesh_name>
+					<surface name="Default" material="Default" property="surface_base"/>
+					<surface name="24 - Default" material="24 - Default" property="surface_base"/>
+					<transform>-5.71283e-007 13.0694 5.76846e-015 0 93.2586 4.07646e-006 1.47781e-005 0 1.12655e-005 5.13662e-013 -53.989 0 34.2546 273.758 91.0295 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1915293249" name="zhantai">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/zhantai.mesh</mesh_name>
+					<surface name="Default" material="Default" property="surface_base"/>
+					<transform>-2.35994e-006 53.989 -8.64444e-014 0 53.989 2.35994e-006 9.54901e-006 0 9.54901e-006 3.3525e-013 -53.989 0 449.528 10.0749 48.7148 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="233244950" name="dengdai">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/dengdai.mesh</mesh_name>
+					<surface name="13 - Default" material="13 - Default" property="surface_base"/>
+					<transform>-2.35994e-006 53.989 9.19678e-014 0 53.989 2.35994e-006 9.54901e-006 0 9.54901e-006 2.7038e-013 -53.989 0 449.528 10.0749 45.5558 1</transform>
+				</node>
+			</node>
+			<node type="ObjectMeshStatic" id="1113782661" name="liangzhu">
+				<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/liangzhu.mesh</mesh_name>
+				<surface name="Default" material="Default" property="surface_base"/>
+				<transform>-5.3797e-007 2.20653e-014 -12.3073 0 12.6147 2.23115e-006 -5.51404e-007 0 2.23115e-006 -12.6147 -3.08283e-014 0 0.564289 20.8086 -46.3024 1</transform>
+			</node>
+			<node type="ObjectMeshStatic" id="461551916" name="dengdai">
+				<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/dengdai_1.mesh</mesh_name>
+				<surface name="Default" material="Default" property="surface_base"/>
+				<transform>-5.3797e-007 2.20653e-014 -12.3073 0 12.6147 2.23115e-006 -5.51404e-007 0 2.23115e-006 -12.6147 -3.08283e-014 0 0.564289 20.8086 -46.3024 1</transform>
+			</node>
+			<node type="NodeDummy" id="1279588324" name="fangdeng">
+				<transform>1 0 0 0 0 0 -1 0 0 1 0 0 0 0 0 1</transform>
+				<node type="ObjectMeshStatic" id="598294303" name="fd_dguan01">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_dguan01.mesh</mesh_name>
+					<surface name="lightA" material="lightA" property="surface_base"/>
+					<transform>0.833707 0 0 0 0 -3.64425e-008 -0.262108 0 0 0.833707 -1.14571e-008 0 -63.4154 29.4091 38.2151 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="2075419695" name="fd_waike01">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_waike01.mesh</mesh_name>
+					<surface name="fangdeng" material="fangdeng" property="surface_base"/>
+					<transform>1 0 0 0 0 -4.37114e-008 -1 0 0 1 -4.37114e-008 0 -63.4154 29.4091 38.3904 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="2075955917" name="fd_dguan02">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_dguan02.mesh</mesh_name>
+					<surface name="lightA" material="lightA" property="surface_base"/>
+					<transform>0.833707 0 0 0 0 -3.64425e-008 -0.262108 0 0 0.833707 -1.14571e-008 0 -63.4154 12.0394 38.2151 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1381384206" name="fd_waike02">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_waike02.mesh</mesh_name>
+					<surface name="fangdeng" material="fangdeng" property="surface_base"/>
+					<transform>1 0 0 0 0 -4.37114e-008 -1 0 0 1 -4.37114e-008 0 -63.4154 12.0394 38.3904 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="957107207" name="fd_dguan03">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_dguan03.mesh</mesh_name>
+					<surface name="lightA" material="lightA" property="surface_base"/>
+					<transform>0.833707 0 0 0 0 -3.64425e-008 -0.262108 0 0 0.833707 -1.14571e-008 0 -63.4154 -4.18158 38.2152 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="2066904175" name="fd_waike03">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_waike03.mesh</mesh_name>
+					<surface name="fangdeng" material="fangdeng" property="surface_base"/>
+					<transform>1 0 0 0 0 -4.37114e-008 -1 0 0 1 -4.37114e-008 0 -63.4154 -4.18158 38.3904 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1023637617" name="fd_dguan04">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_dguan04.mesh</mesh_name>
+					<surface name="lightA" material="lightA" property="surface_base"/>
+					<transform>0.833707 0 0 0 0 -3.64425e-008 -0.262108 0 0 0.833707 -1.14571e-008 0 -63.4154 -20.543 38.2152 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1298013676" name="fd_waike04">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_waike04.mesh</mesh_name>
+					<surface name="fangdeng" material="fangdeng" property="surface_base"/>
+					<transform>1 0 0 0 0 -4.37114e-008 -1 0 0 1 -4.37114e-008 0 -63.4154 -20.543 38.3904 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="877418097" name="fd_dguan05">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_dguan05.mesh</mesh_name>
+					<surface name="lightA" material="lightA" property="surface_base"/>
+					<transform>0.833707 0 0 0 0 -3.64425e-008 -0.262108 0 0 0.833707 -1.14571e-008 0 -25.4134 -20.543 38.2152 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1336201263" name="fd_waike05">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_waike05.mesh</mesh_name>
+					<surface name="fangdeng" material="fangdeng" property="surface_base"/>
+					<transform>1 0 0 0 0 -4.37114e-008 -1 0 0 1 -4.37114e-008 0 -25.4134 -20.543 38.3904 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="654058259" name="fd_dguan06">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_dguan06.mesh</mesh_name>
+					<surface name="lightA" material="lightA" property="surface_base"/>
+					<transform>0.833707 0 0 0 0 -3.64425e-008 -0.262108 0 0 0.833707 -1.14571e-008 0 -25.4134 -4.18158 38.2152 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1244587360" name="fd_waike06">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_waike06.mesh</mesh_name>
+					<surface name="fangdeng" material="fangdeng" property="surface_base"/>
+					<transform>1 0 0 0 0 -4.37114e-008 -1 0 0 1 -4.37114e-008 0 -25.4134 -4.18158 38.3904 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="2058937588" name="fd_dguan07">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_dguan07.mesh</mesh_name>
+					<surface name="lightA" material="lightA" property="surface_base"/>
+					<transform>0.833707 0 0 0 0 -3.64425e-008 -0.262108 0 0 0.833707 -1.14571e-008 0 -25.4134 12.0393 38.2152 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1193853065" name="fd_waike07">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_waike07.mesh</mesh_name>
+					<surface name="fangdeng" material="fangdeng" property="surface_base"/>
+					<transform>1 0 0 0 0 -4.37114e-008 -1 0 0 1 -4.37114e-008 0 -25.4134 12.0393 38.3904 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="2145397797" name="fd_dguan08">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_dguan08.mesh</mesh_name>
+					<surface name="lightA" material="lightA" property="surface_base"/>
+					<transform>0.833707 0 0 0 0 -3.64425e-008 -0.262108 0 0 0.833707 -1.14571e-008 0 -25.4134 29.4091 38.2152 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="493687808" name="fd_waike08">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_waike08.mesh</mesh_name>
+					<surface name="fangdeng" material="fangdeng" property="surface_base"/>
+					<transform>1 0 0 0 0 -4.37114e-008 -1 0 0 1 -4.37114e-008 0 -25.4134 29.4091 38.3904 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1991500826" name="fd_dguan09">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_dguan09.mesh</mesh_name>
+					<surface name="lightA" material="lightA" property="surface_base"/>
+					<transform>0.833707 0 0 0 0 -3.64425e-008 -0.262108 0 0 0.833707 -1.14571e-008 0 -25.4134 47.0172 38.2152 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1982608077" name="fd_waike09">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_waike09.mesh</mesh_name>
+					<surface name="fangdeng" material="fangdeng" property="surface_base"/>
+					<transform>1 0 0 0 0 -4.37114e-008 -1 0 0 1 -4.37114e-008 0 -25.4134 47.0172 38.3904 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="377229964" name="fd_dguan10">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_dguan10.mesh</mesh_name>
+					<surface name="lightA" material="lightA" property="surface_base"/>
+					<transform>0.833707 0 0 0 0 -3.64425e-008 -0.262108 0 0 0.833707 -1.14571e-008 0 11.9859 47.0172 38.2152 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1519667734" name="fd_waike10">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_waike10.mesh</mesh_name>
+					<surface name="fangdeng" material="fangdeng" property="surface_base"/>
+					<transform>1 0 0 0 0 -4.37114e-008 -1 0 0 1 -4.37114e-008 0 11.9859 47.0172 38.3904 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="397780323" name="fd_dguan11">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_dguan11.mesh</mesh_name>
+					<surface name="lightA" material="lightA" property="surface_base"/>
+					<transform>0.833707 0 0 0 0 -3.64425e-008 -0.262108 0 0 0.833707 -1.14571e-008 0 11.986 29.4091 38.2152 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="897038464" name="fd_waike11">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_waike11.mesh</mesh_name>
+					<surface name="fangdeng" material="fangdeng" property="surface_base"/>
+					<transform>1 0 0 0 0 -4.37114e-008 -1 0 0 1 -4.37114e-008 0 11.986 29.4091 38.3904 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="993147039" name="fd_dguan12">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_dguan12.mesh</mesh_name>
+					<surface name="lightA" material="lightA" property="surface_base"/>
+					<transform>0.833707 0 0 0 0 -3.64425e-008 -0.262108 0 0 0.833707 -1.14571e-008 0 11.9859 12.0393 38.2152 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1576225183" name="fd_waike12">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_waike12.mesh</mesh_name>
+					<surface name="fangdeng" material="fangdeng" property="surface_base"/>
+					<transform>1 0 0 0 0 -4.37114e-008 -1 0 0 1 -4.37114e-008 0 11.9859 12.0393 38.3904 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1363729729" name="fd_dguan13">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_dguan13.mesh</mesh_name>
+					<surface name="lightA" material="lightA" property="surface_base"/>
+					<transform>0.833707 0 0 0 0 -3.64425e-008 -0.262108 0 0 0.833707 -1.14571e-008 0 11.986 -4.18158 38.2152 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="538937176" name="fd_waike13">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_waike13.mesh</mesh_name>
+					<surface name="fangdeng" material="fangdeng" property="surface_base"/>
+					<transform>1 0 0 0 0 -4.37114e-008 -1 0 0 1 -4.37114e-008 0 11.986 -4.18158 38.3904 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1140319533" name="fd_dguan14">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_dguan14.mesh</mesh_name>
+					<surface name="lightA" material="lightA" property="surface_base"/>
+					<transform>0.833707 0 0 0 0 -3.64425e-008 -0.262108 0 0 0.833707 -1.14571e-008 0 11.9859 -20.543 38.2152 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1152186958" name="fd_waike14">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_waike14.mesh</mesh_name>
+					<surface name="fangdeng" material="fangdeng" property="surface_base"/>
+					<transform>1 0 0 0 0 -4.37114e-008 -1 0 0 1 -4.37114e-008 0 11.9859 -20.543 38.3904 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="437101850" name="fd_dguan15">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_dguan15.mesh</mesh_name>
+					<surface name="lightA" material="lightA" property="surface_base"/>
+					<transform>0.833707 0 0 0 0 -3.64425e-008 -0.262108 0 0 0.833707 -1.14571e-008 0 42.6683 -20.543 38.2152 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="378632259" name="fd_waike15">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_waike15.mesh</mesh_name>
+					<surface name="fangdeng" material="fangdeng" property="surface_base"/>
+					<transform>1 0 0 0 0 -4.37114e-008 -1 0 0 1 -4.37114e-008 0 42.6683 -20.543 38.3904 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="139739766" name="fd_dguan16">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_dguan16.mesh</mesh_name>
+					<surface name="lightA" material="lightA" property="surface_base"/>
+					<transform>0.833707 0 0 0 0 -3.64425e-008 -0.262108 0 0 0.833707 -1.14571e-008 0 42.6683 -4.18159 38.2152 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1874094215" name="fd_waike16">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_waike16.mesh</mesh_name>
+					<surface name="fangdeng" material="fangdeng" property="surface_base"/>
+					<transform>1 0 0 0 0 -4.37114e-008 -1 0 0 1 -4.37114e-008 0 42.6683 -4.18159 38.3904 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1857517387" name="fd_dguan17">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_dguan17.mesh</mesh_name>
+					<surface name="lightA" material="lightA" property="surface_base"/>
+					<transform>0.833707 0 0 0 0 -3.64425e-008 -0.262108 0 0 0.833707 -1.14571e-008 0 42.6683 12.0393 38.2152 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1015941983" name="fd_waike17">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_waike17.mesh</mesh_name>
+					<surface name="fangdeng" material="fangdeng" property="surface_base"/>
+					<transform>1 0 0 0 0 -4.37114e-008 -1 0 0 1 -4.37114e-008 0 42.6683 12.0393 38.3904 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1718115886" name="fd_dguan18">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_dguan18.mesh</mesh_name>
+					<surface name="lightA" material="lightA" property="surface_base"/>
+					<transform>0.833707 0 0 0 0 -3.64425e-008 -0.262108 0 0 0.833707 -1.14571e-008 0 42.6683 29.4091 38.2152 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="114738022" name="fd_waike18">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_waike18.mesh</mesh_name>
+					<surface name="fangdeng" material="fangdeng" property="surface_base"/>
+					<transform>1 0 0 0 0 -4.37114e-008 -1 0 0 1 -4.37114e-008 0 42.6683 29.4091 38.3904 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1259091489" name="fd_dguan19">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_dguan19.mesh</mesh_name>
+					<surface name="lightA" material="lightA" property="surface_base"/>
+					<transform>0.833707 0 0 0 0 -3.64425e-008 -0.262108 0 0 0.833707 -1.14571e-008 0 42.6683 47.0172 38.2152 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="2049531648" name="fd_waike19">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_waike19.mesh</mesh_name>
+					<surface name="fangdeng" material="fangdeng" property="surface_base"/>
+					<transform>1 0 0 0 0 -4.37114e-008 -1 0 0 1 -4.37114e-008 0 42.6683 47.0172 38.3904 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1071787391" name="fd_dguan20">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_dguan20.mesh</mesh_name>
+					<surface name="lightA" material="lightA" property="surface_base"/>
+					<transform>0.833707 0 0 0 0 -3.64425e-008 -0.262108 0 0 0.833707 -1.14571e-008 0 82.5316 24.6365 38.2151 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1924226744" name="fd_waike20">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_waike20.mesh</mesh_name>
+					<surface name="fangdeng" material="fangdeng" property="surface_base"/>
+					<transform>1 0 0 0 0 -4.37114e-008 -1 0 0 1 -4.37114e-008 0 82.5316 24.6365 38.3904 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="887629536" name="fd_dguan21">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_dguan21.mesh</mesh_name>
+					<surface name="lightA" material="lightA" property="surface_base"/>
+					<transform>0.833707 0 0 0 0 -3.64425e-008 -0.262108 0 0 0.833707 -1.14571e-008 0 82.5316 7.26674 38.2151 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="2093759407" name="fd_waike21">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_waike21.mesh</mesh_name>
+					<surface name="fangdeng" material="fangdeng" property="surface_base"/>
+					<transform>1 0 0 0 0 -4.37114e-008 -1 0 0 1 -4.37114e-008 0 82.5316 7.26674 38.3904 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1997046789" name="fd_dguan22">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_dguan22.mesh</mesh_name>
+					<surface name="lightA" material="lightA" property="surface_base"/>
+					<transform>0.833707 0 0 0 0 -3.64425e-008 -0.262108 0 0 0.833707 -1.14571e-008 0 82.5316 -8.95418 38.2151 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1656205823" name="fd_waike22">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_waike22.mesh</mesh_name>
+					<surface name="fangdeng" material="fangdeng" property="surface_base"/>
+					<transform>1 0 0 0 0 -4.37114e-008 -1 0 0 1 -4.37114e-008 0 82.5316 -8.95418 38.3904 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="842788798" name="fd_dguan23">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_dguan23.mesh</mesh_name>
+					<surface name="lightA" material="lightA" property="surface_base"/>
+					<transform>0.833707 0 0 0 0 -3.64425e-008 -0.262108 0 0 0.833707 -1.14571e-008 0 82.5316 -25.3156 38.2151 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="858916646" name="fd_waike23">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_waike23.mesh</mesh_name>
+					<surface name="fangdeng" material="fangdeng" property="surface_base"/>
+					<transform>1 0 0 0 0 -4.37114e-008 -1 0 0 1 -4.37114e-008 0 82.5316 -25.3156 38.3904 1</transform>
+				</node>
+			</node>
+			<node type="NodeDummy" id="2025070289" name="">
+				<transform>1 0 0 0 0 0 -1 0 0 1 0 0 0 0 0 1</transform>
+			</node>
+			<node type="NodeDummy" id="1210931055" name="yuandeng">
+				<transform>1.50897e-006 4.78232e-015 -4.99672 0 6.65354e-007 -4.99672 1.9417e-013 0 -4.99672 -6.65354e-007 -1.50897e-006 0 0 -3.00975e-008 2.11289e-026 1</transform>
+				<node type="ObjectMeshStatic" id="1309187813" name="yd_dguan52">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan52.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>5.14903e-016 5.20458e-009 -0.0390857 0 -1.70849e-009 0.0325663 4.33646e-009 0 0.0390857 1.42352e-009 9.31955e-016 0 -5.38084 -7.70318 18.4702 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1366086487" name="yd_dguan51">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan51.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>5.14903e-016 5.20458e-009 -0.0390857 0 -1.70849e-009 0.0325663 4.33646e-009 0 0.0390857 1.42352e-009 9.31955e-016 0 -0.522786 -7.70318 18.4702 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="794008168" name="yd_dguan50">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan50.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>5.14903e-016 5.20458e-009 -0.0390857 0 -1.70849e-009 0.0325663 4.33646e-009 0 0.0390857 1.42352e-009 9.31955e-016 0 4.3559 -7.70318 18.4702 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1496256756" name="yd_dguan49">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan49.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>5.14903e-016 5.20458e-009 -0.0390857 0 -1.70849e-009 0.0325663 4.33646e-009 0 0.0390857 1.42352e-009 9.31955e-016 0 4.97849 -7.70318 20.3845 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="409379702" name="yd_dguan48">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan48.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>5.14903e-016 5.20458e-009 -0.0390857 0 -1.70849e-009 0.0325663 4.33646e-009 0 0.0390857 1.42352e-009 9.31955e-016 0 4.3559 -7.70318 22.6208 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1339969124" name="yd_dguan47">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan47.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>5.14903e-016 5.20458e-009 -0.0390857 0 -1.70849e-009 0.0325663 4.33646e-009 0 0.0390857 1.42352e-009 9.31955e-016 0 1.13657 -7.70318 22.6208 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="233274051" name="yd_dguan46">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan46.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>5.14903e-016 5.20458e-009 -0.0390857 0 -1.70849e-009 0.0325663 4.33646e-009 0 0.0390857 1.42352e-009 9.31955e-016 0 -2.33488 -7.70318 22.6208 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="279691052" name="yd_dguan45">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan45.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>5.14903e-016 5.20458e-009 -0.0390857 0 -1.70849e-009 0.0325663 4.33646e-009 0 0.0390857 1.42352e-009 9.31955e-016 0 -5.3413 -7.70318 22.6208 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="578868098" name="yd_dguan44">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan44.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>5.14903e-016 5.20458e-009 -0.0390857 0 -1.70849e-009 0.0325663 4.33646e-009 0 0.0390857 1.42352e-009 9.31955e-016 0 -5.55542 -7.70318 20.3845 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1782632614" name="yd_dguan43">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan43.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>5.14903e-016 5.20458e-009 -0.0390857 0 -1.70849e-009 0.0325663 4.33646e-009 0 0.0390857 1.42352e-009 9.31955e-016 0 10.2703 -7.70318 11.5366 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="100934734" name="yd_dguan42">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan42.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>5.14903e-016 5.20458e-009 -0.0390857 0 -1.70849e-009 0.0325663 4.33646e-009 0 0.0390857 1.42352e-009 9.31955e-016 0 8.68745 -7.70318 13.1651 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="711159143" name="yd_dguan41">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan41.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>5.14903e-016 5.20458e-009 -0.0390857 0 -1.70849e-009 0.0325663 4.33646e-009 0 0.0390857 1.42352e-009 9.31955e-016 0 7.03306 -7.70318 14.7128 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="93742865" name="yd_dguan40">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan40.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>5.14903e-016 5.20458e-009 -0.0390857 0 -1.70849e-009 0.0325663 4.33646e-009 0 0.0390857 1.42352e-009 9.31955e-016 0 6.01395 -7.70318 15.5914 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="564088999" name="yd_dguan39">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan39.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>5.14903e-016 5.20458e-009 -0.0390857 0 -1.70849e-009 0.0325663 4.33646e-009 0 0.0390857 1.42352e-009 9.31955e-016 0 -5.4639 -7.70318 15.5914 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="349431275" name="yd_dguan38">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan38.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>5.14903e-016 5.20458e-009 -0.0390857 0 -1.70849e-009 0.0325663 4.33646e-009 0 0.0390857 1.42352e-009 9.31955e-016 0 -2.56435 -7.70318 15.5914 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="736969899" name="yd_dguan37">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan37.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>5.14903e-016 5.20458e-009 -0.0390857 0 -1.70849e-009 0.0325663 4.33646e-009 0 0.0390857 1.42352e-009 9.31955e-016 0 0.295361 -7.70318 15.5914 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1526463261" name="yd_dguan36">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan36.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>5.14903e-016 5.20458e-009 -0.0390857 0 -1.70849e-009 0.0325663 4.33646e-009 0 0.0390857 1.42352e-009 9.31955e-016 0 2.96373 -7.70318 15.5914 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="962293290" name="yd_dguan35">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan35.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>5.14903e-016 5.20458e-009 -0.0390857 0 -1.70849e-009 0.0325663 4.33646e-009 0 0.0390857 1.42352e-009 9.31955e-016 0 -5.4639 -7.70318 8.57104 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="890497518" name="yd_dguan34">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan34.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>5.14903e-016 5.20458e-009 -0.0390857 0 -1.70849e-009 0.0325663 4.33646e-009 0 0.0390857 1.42352e-009 9.31955e-016 0 -2.56435 -7.70318 8.57104 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1471452596" name="yd_dguan33">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan33.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>5.14903e-016 5.20458e-009 -0.0390857 0 -1.70849e-009 0.0325663 4.33646e-009 0 0.0390857 1.42352e-009 9.31955e-016 0 4.16191 -7.70318 8.57104 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1108775061" name="yd_dguan32">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan32.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>5.14903e-016 5.20458e-009 -0.0390857 0 -1.70849e-009 0.0325663 4.33646e-009 0 0.0390857 1.42352e-009 9.31955e-016 0 7.27711 -7.70318 8.57104 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="942172703" name="yd_dguan31">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan31.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>5.14903e-016 5.20458e-009 -0.0390857 0 -1.70849e-009 0.0325663 4.33646e-009 0 0.0390857 1.42352e-009 9.31955e-016 0 10.3547 -7.70318 8.57104 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1746223904" name="yd_dguan30">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan30.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>5.14903e-016 5.20458e-009 -0.0390857 0 -1.70849e-009 0.0325663 4.33646e-009 0 0.0390857 1.42352e-009 9.31955e-016 0 -5.4639 -7.70318 1.66019 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="989254381" name="yd_dguan29">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan29.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>5.14903e-016 5.20458e-009 -0.0390857 0 -1.70849e-009 0.0325663 4.33646e-009 0 0.0390857 1.42352e-009 9.31955e-016 0 -2.56435 -7.70318 1.6602 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1600359004" name="yd_dguan28">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan28.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>5.14903e-016 5.20458e-009 -0.0390857 0 -1.70849e-009 0.0325663 4.33646e-009 0 0.0390857 1.42352e-009 9.31955e-016 0 4.16191 -7.70318 1.6602 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1829710513" name="yd_dguan27">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan27.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>5.14903e-016 5.20458e-009 -0.0390857 0 -1.70849e-009 0.0325663 4.33646e-009 0 0.0390857 1.42352e-009 9.31955e-016 0 7.27711 -7.70318 1.66019 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="884861630" name="yd_dguan26">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan26.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>5.14903e-016 5.20458e-009 -0.0390857 0 -1.70849e-009 0.0325663 4.33646e-009 0 0.0390857 1.42352e-009 9.31955e-016 0 10.3547 -7.70318 1.6602 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="549819258" name="yd_dguan25">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan25.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>5.14903e-016 5.20458e-009 -0.0390857 0 -1.70849e-009 0.0325663 4.33646e-009 0 0.0390857 1.42352e-009 9.31955e-016 0 1.10048 -7.70318 1.6602 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1483845961" name="yd_dguan24">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan24.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>5.14903e-016 5.20458e-009 -0.0390857 0 -1.70849e-009 0.0325663 4.33646e-009 0 0.0390857 1.42352e-009 9.31955e-016 0 -5.4639 -7.70318 -5.62398 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1701590842" name="yd_dguan23">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan23.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>5.14903e-016 5.20458e-009 -0.0390857 0 -1.70849e-009 0.0325663 4.33646e-009 0 0.0390857 1.42352e-009 9.31955e-016 0 -2.56435 -7.70318 -5.62398 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="562412153" name="yd_dguan22">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan22.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>5.14903e-016 5.20458e-009 -0.0390857 0 -1.70849e-009 0.0325663 4.33646e-009 0 0.0390857 1.42352e-009 9.31955e-016 0 4.16191 -7.70318 -5.62398 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="470258736" name="yd_dguan21">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan21.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>5.14903e-016 5.20458e-009 -0.0390857 0 -1.70849e-009 0.0325663 4.33646e-009 0 0.0390857 1.42352e-009 9.31955e-016 0 7.27711 -7.70318 -5.62398 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1491285030" name="yd_dguan20">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan20.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>5.14903e-016 5.20458e-009 -0.0390857 0 -1.70849e-009 0.0325663 4.33646e-009 0 0.0390857 1.42352e-009 9.31955e-016 0 10.3547 -7.70318 -5.62398 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="2012201035" name="yd_dguan19">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan19.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>5.14903e-016 5.20458e-009 -0.0390857 0 -1.70849e-009 0.0325663 4.33646e-009 0 0.0390857 1.42352e-009 9.31955e-016 0 1.10048 -7.70318 -5.62398 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1014722420" name="yd_dguan18">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan18.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>5.14903e-016 5.20458e-009 -0.0390857 0 -1.70849e-009 0.0325663 4.33646e-009 0 0.0390857 1.42352e-009 9.31955e-016 0 -5.4639 -7.70318 -12.1408 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="91796888" name="yd_dguan17">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan17.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>5.14903e-016 5.20458e-009 -0.0390857 0 -1.70849e-009 0.0325663 4.33646e-009 0 0.0390857 1.42352e-009 9.31955e-016 0 -2.36776 -7.70318 -12.1408 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="242327987" name="yd_dguan16">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan16.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>5.14903e-016 5.20458e-009 -0.0390857 0 -1.70849e-009 0.0325663 4.33646e-009 0 0.0390857 1.42352e-009 9.31955e-016 0 4.31149 -7.70318 -12.1408 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="966629031" name="yd_dguan15">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan15.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>5.14903e-016 5.20458e-009 -0.0390857 0 -1.70849e-009 0.0325663 4.33646e-009 0 0.0390857 1.42352e-009 9.31955e-016 0 6.91908 -7.70318 -12.1408 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="373337419" name="yd_dguan14">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan14.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>5.14903e-016 5.20458e-009 -0.0390857 0 -1.70849e-009 0.0325663 4.33646e-009 0 0.0390857 1.42352e-009 9.31955e-016 0 9.56663 -7.70318 -12.1408 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1940257009" name="yd_dguan13">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan13.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>5.14903e-016 5.20458e-009 -0.0390857 0 -1.70849e-009 0.0325663 4.33646e-009 0 0.0390857 1.42352e-009 9.31955e-016 0 1.60259 -7.70318 -12.1408 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="786886050" name="yd_dguan12">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan12.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>5.14903e-016 5.20458e-009 -0.0390857 0 -1.70849e-009 0.0325663 4.33646e-009 0 0.0390857 1.42352e-009 9.31955e-016 0 5.2552 -7.70317 -22.1912 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="147664197" name="yd_dguan11">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan11.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>5.14903e-016 5.20458e-009 -0.0390857 0 -1.70849e-009 0.0325663 4.33646e-009 0 0.0390857 1.42352e-009 9.31955e-016 0 -5.4639 -7.70317 -22.1912 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1158216200" name="yd_dguan10">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan10.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>5.14903e-016 5.20458e-009 -0.0390857 0 -1.70849e-009 0.0325663 4.33646e-009 0 0.0390857 1.42352e-009 9.31955e-016 0 -3.27478 -7.70317 -22.1912 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1190168109" name="yd_dguan09">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan09.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>5.14903e-016 5.20458e-009 -0.0390857 0 -1.70849e-009 0.0325663 4.33646e-009 0 0.0390857 1.42352e-009 9.31955e-016 0 -0.0623567 -7.70317 -22.1912 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1847620250" name="yd_dguan08">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan08.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>5.14903e-016 5.20458e-009 -0.0390857 0 -1.70849e-009 0.0325663 4.33646e-009 0 0.0390857 1.42352e-009 9.31955e-016 0 2.59624 -7.70317 -22.1912 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="70099283" name="yd_dguan07">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan07.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>2.03908e-015 7.57124e-009 -0.056859 0 -2.48539e-009 0.047375 6.30836e-009 0 0.056859 2.07083e-009 2.64578e-015 0 14.2739 -7.70318 5.38016 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1637859629" name="yd_dguan06">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan06.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>2.03908e-015 7.57124e-009 -0.056859 0 -2.48539e-009 0.047375 6.30836e-009 0 0.056859 2.07083e-009 2.64578e-015 0 14.2739 -7.70318 3.21428 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="546352112" name="yd_dguan05">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan05.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>2.03908e-015 7.57124e-009 -0.056859 0 -2.48539e-009 0.047375 6.30836e-009 0 0.056859 2.07083e-009 2.64578e-015 0 14.2739 -7.70318 1.04839 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="152431413" name="yd_dguan04">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan04.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>2.03908e-015 7.57124e-009 -0.056859 0 -2.48539e-009 0.047375 6.30836e-009 0 0.056859 2.07083e-009 2.64578e-015 0 14.2739 -7.70318 -1.11749 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="280800815" name="yd_dguan03">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan03.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>2.03908e-015 7.57124e-009 -0.056859 0 -2.48539e-009 0.047375 6.30836e-009 0 0.056859 2.07083e-009 2.64578e-015 0 14.2739 -7.70318 -3.28337 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="140464302" name="yd_dguan02">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan02.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>2.03908e-015 7.57124e-009 -0.056859 0 -2.48539e-009 0.047375 6.30836e-009 0 0.056859 2.07083e-009 2.64578e-015 0 14.2739 -7.70318 -5.44925 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1703925142" name="yd_dguan01">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_dguan01.mesh</mesh_name>
+					<surface name="lightB" material="lightB" property="surface_base"/>
+					<transform>2.03908e-015 7.57124e-009 -0.056859 0 -2.48539e-009 0.047375 6.30836e-009 0 0.056859 2.07083e-009 2.64578e-015 0 14.2739 -7.70318 -7.61514 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1070233859" name="yd_waike01">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike01.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-1.07875e-015 6.11096e-009 -0.0458925 0 -2.00603e-009 0.0868915 1.15703e-008 0 0.0458925 3.79815e-009 -3.05878e-016 0 -5.38084 -7.72413 18.4702 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1439675758" name="yd_waike02">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike02.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-1.07875e-015 6.11096e-009 -0.0458925 0 -2.00603e-009 0.0868915 1.15703e-008 0 0.0458925 3.79815e-009 -3.05878e-016 0 -0.522786 -7.72413 18.4702 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1513937910" name="yd_waike03">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike03.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-1.07875e-015 6.11096e-009 -0.0458925 0 -2.00603e-009 0.0868915 1.15703e-008 0 0.0458925 3.79815e-009 -3.05878e-016 0 4.3559 -7.72413 18.4702 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1120704555" name="yd_waike04">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike04.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-1.07875e-015 6.11096e-009 -0.0458925 0 -2.00603e-009 0.0868915 1.15703e-008 0 0.0458925 3.79815e-009 -3.05878e-016 0 4.97849 -7.72413 20.3845 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1398579591" name="yd_waike05">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike05.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-1.07875e-015 6.11096e-009 -0.0458925 0 -2.00603e-009 0.0868915 1.15703e-008 0 0.0458925 3.79815e-009 -3.05878e-016 0 4.3559 -7.72413 22.6208 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1074708182" name="yd_waike06">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike06.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-1.07875e-015 6.11096e-009 -0.0458925 0 -2.00603e-009 0.0868915 1.15703e-008 0 0.0458925 3.79815e-009 -3.05878e-016 0 1.13657 -7.72413 22.6208 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="2109372383" name="yd_waike07">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike07.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-1.07875e-015 6.11096e-009 -0.0458925 0 -2.00603e-009 0.0868915 1.15703e-008 0 0.0458925 3.79815e-009 -3.05878e-016 0 -2.33488 -7.72413 22.6208 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="586722418" name="yd_waike08">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike08.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-1.07875e-015 6.11096e-009 -0.0458925 0 -2.00603e-009 0.0868915 1.15703e-008 0 0.0458925 3.79815e-009 -3.05878e-016 0 -5.3413 -7.72413 22.6208 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="200887351" name="yd_waike09">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike09.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-1.07875e-015 6.11096e-009 -0.0458925 0 -2.00603e-009 0.0868915 1.15703e-008 0 0.0458925 3.79815e-009 -3.05878e-016 0 -5.55542 -7.72413 20.3845 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="2138402917" name="yd_waike10">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike10.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-1.07875e-015 6.11096e-009 -0.0458925 0 -2.00603e-009 0.0868915 1.15703e-008 0 0.0458925 3.79815e-009 -3.05878e-016 0 10.2703 -7.72413 11.5366 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="452140988" name="yd_waike11">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike11.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-1.07875e-015 6.11096e-009 -0.0458925 0 -2.00603e-009 0.0868915 1.15703e-008 0 0.0458925 3.79815e-009 -3.05878e-016 0 8.68745 -7.72413 13.1651 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="983297249" name="yd_waike12">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike12.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-1.07875e-015 6.11096e-009 -0.0458925 0 -2.00603e-009 0.0868915 1.15703e-008 0 0.0458925 3.79815e-009 -3.05878e-016 0 7.03306 -7.72413 14.7128 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="887407997" name="yd_waike13">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike13.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-1.07875e-015 6.11096e-009 -0.0458925 0 -2.00603e-009 0.0868915 1.15703e-008 0 0.0458925 3.79815e-009 -3.05878e-016 0 6.01395 -7.72413 15.5914 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="139795018" name="yd_waike14">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike14.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-1.07875e-015 6.11096e-009 -0.0458925 0 -2.00603e-009 0.0868915 1.15703e-008 0 0.0458925 3.79815e-009 -3.05878e-016 0 -5.4639 -7.72413 15.5914 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1569960273" name="yd_waike15">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike15.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-1.07875e-015 6.11096e-009 -0.0458925 0 -2.00603e-009 0.0868915 1.15703e-008 0 0.0458925 3.79815e-009 -3.05878e-016 0 -2.56435 -7.72413 15.5914 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="2098092193" name="yd_waike16">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike16.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-1.07875e-015 6.11096e-009 -0.0458925 0 -2.00603e-009 0.0868915 1.15703e-008 0 0.0458925 3.79815e-009 -3.05878e-016 0 0.295361 -7.72413 15.5914 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="443989690" name="yd_waike17">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike17.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-1.07875e-015 6.11096e-009 -0.0458925 0 -2.00603e-009 0.0868915 1.15703e-008 0 0.0458925 3.79815e-009 -3.05878e-016 0 2.96373 -7.72413 15.5914 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="307408360" name="yd_waike18">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike18.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-1.07875e-015 6.11096e-009 -0.0458925 0 -2.00603e-009 0.0868915 1.15703e-008 0 0.0458925 3.79815e-009 -3.05878e-016 0 -5.4639 -7.72413 8.57104 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="2027811286" name="yd_waike19">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike19.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-1.07875e-015 6.11096e-009 -0.0458925 0 -2.00603e-009 0.0868915 1.15703e-008 0 0.0458925 3.79815e-009 -3.05878e-016 0 -2.56435 -7.72413 8.57104 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="679416976" name="yd_waike20">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike20.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-1.07875e-015 6.11096e-009 -0.0458925 0 -2.00603e-009 0.0868915 1.15703e-008 0 0.0458925 3.79815e-009 -3.05878e-016 0 4.16191 -7.72413 8.57104 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="320490047" name="yd_waike21">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike21.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-1.07875e-015 6.11096e-009 -0.0458925 0 -2.00603e-009 0.0868915 1.15703e-008 0 0.0458925 3.79815e-009 -3.05878e-016 0 7.27711 -7.72413 8.57104 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="426098648" name="yd_waike22">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike22.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-1.07875e-015 6.11096e-009 -0.0458925 0 -2.00603e-009 0.0868915 1.15703e-008 0 0.0458925 3.79815e-009 -3.05878e-016 0 10.3547 -7.72413 8.57104 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="547784185" name="yd_waike23">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike23.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-1.07875e-015 6.11096e-009 -0.0458925 0 -2.00603e-009 0.0868915 1.15703e-008 0 0.0458925 3.79815e-009 -3.05878e-016 0 -5.4639 -7.72413 1.66019 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="938633023" name="yd_waike24">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike24.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-1.07875e-015 6.11096e-009 -0.0458925 0 -2.00603e-009 0.0868915 1.15703e-008 0 0.0458925 3.79815e-009 -3.05878e-016 0 -2.56435 -7.72413 1.6602 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1968104276" name="yd_waike25">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike25.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-1.07875e-015 6.11096e-009 -0.0458925 0 -2.00603e-009 0.0868915 1.15703e-008 0 0.0458925 3.79815e-009 -3.05878e-016 0 4.16191 -7.72413 1.6602 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1574537957" name="yd_waike26">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike26.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-1.07875e-015 6.11096e-009 -0.0458925 0 -2.00603e-009 0.0868915 1.15703e-008 0 0.0458925 3.79815e-009 -3.05878e-016 0 7.27711 -7.72413 1.66019 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="240580570" name="yd_waike27">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike27.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-1.07875e-015 6.11096e-009 -0.0458925 0 -2.00603e-009 0.0868915 1.15703e-008 0 0.0458925 3.79815e-009 -3.05878e-016 0 10.3547 -7.72413 1.6602 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1849474294" name="yd_waike28">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike28.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-1.07875e-015 6.11096e-009 -0.0458925 0 -2.00603e-009 0.0868915 1.15703e-008 0 0.0458925 3.79815e-009 -3.05878e-016 0 1.10048 -7.72413 1.6602 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="447112755" name="yd_waike29">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike29.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-1.07875e-015 6.11096e-009 -0.0458925 0 -2.00603e-009 0.0868915 1.15703e-008 0 0.0458925 3.79815e-009 -3.05878e-016 0 -5.4639 -7.72413 -5.62398 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1666247184" name="yd_waike30">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike30.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-1.07875e-015 6.11096e-009 -0.0458925 0 -2.00603e-009 0.0868915 1.15703e-008 0 0.0458925 3.79815e-009 -3.05878e-016 0 -2.56435 -7.72413 -5.62398 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="2146219534" name="yd_waike31">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike31.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-1.07875e-015 6.11096e-009 -0.0458925 0 -2.00603e-009 0.0868915 1.15703e-008 0 0.0458925 3.79815e-009 -3.05878e-016 0 4.16191 -7.72413 -5.62398 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1359520685" name="yd_waike32">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike32.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-1.07875e-015 6.11096e-009 -0.0458925 0 -2.00603e-009 0.0868915 1.15703e-008 0 0.0458925 3.79815e-009 -3.05878e-016 0 7.27711 -7.72413 -5.62398 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1674121739" name="yd_waike33">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike33.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-1.07875e-015 6.11096e-009 -0.0458925 0 -2.00603e-009 0.0868915 1.15703e-008 0 0.0458925 3.79815e-009 -3.05878e-016 0 10.3547 -7.72413 -5.62398 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1924948619" name="yd_waike34">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike34.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-1.07875e-015 6.11096e-009 -0.0458925 0 -2.00603e-009 0.0868915 1.15703e-008 0 0.0458925 3.79815e-009 -3.05878e-016 0 1.10048 -7.72413 -5.62398 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="888673439" name="yd_waike35">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike35.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-1.07875e-015 6.11096e-009 -0.0458925 0 -2.00603e-009 0.0868915 1.15703e-008 0 0.0458925 3.79815e-009 -3.05878e-016 0 -5.4639 -7.72413 -12.1408 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="735301906" name="yd_waike36">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike36.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-1.07875e-015 6.11096e-009 -0.0458925 0 -2.00603e-009 0.0868915 1.15703e-008 0 0.0458925 3.79815e-009 -3.05878e-016 0 -2.36776 -7.72413 -12.1408 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="846433535" name="yd_waike37">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike37.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-1.07875e-015 6.11096e-009 -0.0458925 0 -2.00603e-009 0.0868915 1.15703e-008 0 0.0458925 3.79815e-009 -3.05878e-016 0 4.31149 -7.72413 -12.1408 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="375854783" name="yd_waike38">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike38.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-1.07875e-015 6.11096e-009 -0.0458925 0 -2.00603e-009 0.0868915 1.15703e-008 0 0.0458925 3.79815e-009 -3.05878e-016 0 6.91908 -7.72413 -12.1408 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1923041288" name="yd_waike39">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike39.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-1.07875e-015 6.11096e-009 -0.0458925 0 -2.00603e-009 0.0868915 1.15703e-008 0 0.0458925 3.79815e-009 -3.05878e-016 0 9.56663 -7.72413 -12.1408 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="183573384" name="yd_waike40">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike40.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-1.07875e-015 6.11096e-009 -0.0458925 0 -2.00603e-009 0.0868915 1.15703e-008 0 0.0458925 3.79815e-009 -3.05878e-016 0 1.60259 -7.72413 -12.1408 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1836309798" name="yd_waike41">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike41.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-1.07875e-015 6.11096e-009 -0.0458925 0 -2.00603e-009 0.0868915 1.15703e-008 0 0.0458925 3.79815e-009 -3.05878e-016 0 5.2552 -7.72412 -22.1912 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="552456519" name="yd_waike42">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike42.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-1.07875e-015 6.11096e-009 -0.0458925 0 -2.00603e-009 0.0868915 1.15703e-008 0 0.0458925 3.79815e-009 -3.05878e-016 0 -5.4639 -7.72413 -22.1912 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="60583227" name="yd_waike43">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike43.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-1.07875e-015 6.11096e-009 -0.0458925 0 -2.00603e-009 0.0868915 1.15703e-008 0 0.0458925 3.79815e-009 -3.05878e-016 0 -3.27478 -7.72413 -22.1912 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1082621475" name="yd_waike44">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike44.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-1.07875e-015 6.11096e-009 -0.0458925 0 -2.00603e-009 0.0868915 1.15703e-008 0 0.0458925 3.79815e-009 -3.05878e-016 0 -0.0623567 -7.72413 -22.1912 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="44855946" name="yd_waike45">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike45.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-1.07875e-015 6.11096e-009 -0.0458925 0 -2.00603e-009 0.0868915 1.15703e-008 0 0.0458925 3.79815e-009 -3.05878e-016 0 2.59624 -7.72412 -22.1912 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="608109044" name="yd_waike46">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike46.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-6.90527e-016 8.88977e-009 -0.066761 0 -2.91822e-009 0.126403 1.68316e-008 0 0.066761 5.52526e-009 4.33791e-016 0 14.2739 -7.72413 5.38016 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="842826140" name="yd_waike47">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike47.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-6.90527e-016 8.88977e-009 -0.066761 0 -2.91822e-009 0.126403 1.68316e-008 0 0.066761 5.52526e-009 4.33791e-016 0 14.2739 -7.72413 3.21428 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1670453934" name="yd_waike48">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike48.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-6.90527e-016 8.88977e-009 -0.066761 0 -2.91822e-009 0.126403 1.68316e-008 0 0.066761 5.52526e-009 4.33791e-016 0 14.2739 -7.72413 1.04839 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1561729579" name="yd_waike49">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike49.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-6.90527e-016 8.88977e-009 -0.066761 0 -2.91822e-009 0.126403 1.68316e-008 0 0.066761 5.52526e-009 4.33791e-016 0 14.2739 -7.72413 -1.11749 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="2040575689" name="yd_waike50">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike50.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-6.90527e-016 8.88977e-009 -0.066761 0 -2.91822e-009 0.126403 1.68316e-008 0 0.066761 5.52526e-009 4.33791e-016 0 14.2739 -7.72413 -3.28337 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1381984005" name="yd_waike51">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike51.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-6.90527e-016 8.88977e-009 -0.066761 0 -2.91822e-009 0.126403 1.68316e-008 0 0.066761 5.52526e-009 4.33791e-016 0 14.2739 -7.72413 -5.44925 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1322988199" name="yd_waike52">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/yd_waike52.mesh</mesh_name>
+					<surface name="22 - Default" material="22 - Default" property="surface_base"/>
+					<transform>-6.90527e-016 8.88977e-009 -0.066761 0 -2.91822e-009 0.126403 1.68316e-008 0 0.066761 5.52526e-009 4.33791e-016 0 14.2739 -7.72413 -7.61514 1</transform>
+				</node>
+			</node>
+			<node type="ObjectMeshStatic" id="1941703674" name="5louwaiqiang">
+				<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/5louwaiqiang.mesh</mesh_name>
+				<surface name="01 - Default" material="01 - Default" property="surface_base"/>
+				<transform>-5.31694e-007 6.29083e-015 -12.1637 0 12.4675 2.57619e-006 -5.44972e-007 0 2.57619e-006 -12.4675 -9.5562e-014 0 0.278039 20.7263 -47.4696 1</transform>
+			</node>
+			<node type="ObjectMeshStatic" id="1017685758" name="diban">
+				<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/diban.mesh</mesh_name>
+				<surface name="Default" material="Default" property="surface_base"/>
+				<transform>1 0 0 0 0 -1 4.37114e-008 0 0 -4.37114e-008 -1 0 0 1.49294e-014 -25.7315 1</transform>
+			</node>
+			<node type="NodeDummy" id="930866626" name="Particle View 001">
+				<transform>1 0 0 0 0 0 -1 0 0 1 0 0 0 0 0 1</transform>
+			</node>
+			<node type="ObjectMeshStatic" id="503917887" name="diangui2">
+				<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/diangui2.mesh</mesh_name>
+				<surface name="Default" material="Default" property="surface_base"/>
+				<surface name="04 - Default" material="04 - Default" property="surface_base"/>
+				<transform>-5.51404e-007 -1.08581e-014 -12.6147 0 12.6147 2.23115e-006 -5.51404e-007 0 2.23115e-006 -12.6147 -3.08283e-014 0 -104.097 18.0545 2.56852 1</transform>
+			</node>
+			<node type="ObjectMeshStatic" id="985521632" name="diangui1">
+				<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/diangui1.mesh</mesh_name>
+				<surface name="Default" material="Default" property="surface_base"/>
+				<surface name="04 - Default" material="04 - Default" property="surface_base"/>
+				<transform>-5.51404e-007 -1.08581e-014 -12.6147 0 12.6147 2.23115e-006 -5.51404e-007 0 2.23115e-006 -12.6147 -3.08283e-014 0 -104.097 18.0545 2.56852 1</transform>
+			</node>
+			<node type="NodeDummy" id="1296378879" name="fd_tijiguang">
+				<transform>1 0 0 0 0 0 -1 0 0 1 0 0 0 0 0 1</transform>
+				<node type="ObjectMeshStatic" id="999990931" name="fd_tijiguang01">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_tijiguang01.mesh</mesh_name>
+					<surface name="23 - Default" material="23 - Default" property="surface_base"/>
+					<transform>-5.44283e-007 12.4518 -1.25636e-014 0 5.30707e-007 3.25905e-014 -6.14015 0 -12.1412 -5.30707e-007 -2.68395e-007 0 -128.779 -75.1273 37.3126 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="898733916" name="fd_tijiguang02">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_tijiguang02.mesh</mesh_name>
+					<surface name="23 - Default" material="23 - Default" property="surface_base"/>
+					<transform>-5.44283e-007 12.4518 -1.25636e-014 0 5.30707e-007 3.25905e-014 -6.14015 0 -12.1412 -5.30707e-007 -2.68395e-007 0 -128.779 -58.7418 37.3126 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="759991479" name="fd_tijiguang03">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_tijiguang03.mesh</mesh_name>
+					<surface name="23 - Default" material="23 - Default" property="surface_base"/>
+					<transform>-5.44283e-007 12.4518 -1.25636e-014 0 5.30707e-007 3.25905e-014 -6.14015 0 -12.1412 -5.30707e-007 -2.68395e-007 0 -128.779 -42.5159 37.3126 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1354187627" name="fd_tijiguang04">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_tijiguang04.mesh</mesh_name>
+					<surface name="23 - Default" material="23 - Default" property="surface_base"/>
+					<transform>-5.44283e-007 12.4518 -1.25636e-014 0 5.30707e-007 3.25905e-014 -6.14015 0 -12.1412 -5.30707e-007 -2.68395e-007 0 -128.779 -25.1539 37.3126 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="978860462" name="fd_tijiguang05">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_tijiguang05.mesh</mesh_name>
+					<surface name="23 - Default" material="23 - Default" property="surface_base"/>
+					<transform>-5.44283e-007 12.4518 -1.25636e-014 0 5.30707e-007 3.25905e-014 -6.14015 0 -12.1412 -5.30707e-007 -2.68395e-007 0 -90.7523 -7.56085 37.3126 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="968696217" name="fd_tijiguang06">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_tijiguang06.mesh</mesh_name>
+					<surface name="23 - Default" material="23 - Default" property="surface_base"/>
+					<transform>-5.44283e-007 12.4518 -1.25636e-014 0 5.30707e-007 3.25905e-014 -6.14015 0 -12.1412 -5.30707e-007 -2.68395e-007 0 -90.7514 -25.1105 37.3126 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1286765133" name="fd_tijiguang07">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_tijiguang07.mesh</mesh_name>
+					<surface name="23 - Default" material="23 - Default" property="surface_base"/>
+					<transform>-5.44283e-007 12.4518 -1.25636e-014 0 5.30707e-007 3.25905e-014 -6.14015 0 -12.1412 -5.30707e-007 -2.68395e-007 0 -90.8251 -42.5055 37.3126 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="764513815" name="fd_tijiguang08">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_tijiguang08.mesh</mesh_name>
+					<surface name="23 - Default" material="23 - Default" property="surface_base"/>
+					<transform>-5.44283e-007 12.4518 -1.25636e-014 0 5.30707e-007 3.25905e-014 -6.14015 0 -12.1412 -5.30707e-007 -2.68395e-007 0 -90.7523 -58.7004 37.3126 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="384307132" name="fd_tijiguang09">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_tijiguang09.mesh</mesh_name>
+					<surface name="23 - Default" material="23 - Default" property="surface_base"/>
+					<transform>-5.44283e-007 12.4518 -1.25636e-014 0 5.30707e-007 3.25905e-014 -6.14015 0 -12.1412 -5.30707e-007 -2.68395e-007 0 -90.7523 -75.0696 37.3126 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="363633730" name="fd_tijiguang10">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_tijiguang10.mesh</mesh_name>
+					<surface name="23 - Default" material="23 - Default" property="surface_base"/>
+					<transform>-5.44283e-007 12.4518 -1.25636e-014 0 5.30707e-007 3.25905e-014 -6.14015 0 -12.1412 -5.30707e-007 -2.68395e-007 0 17.2661 -29.8967 37.3126 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="440953701" name="fd_tijiguang11">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_tijiguang11.mesh</mesh_name>
+					<surface name="23 - Default" material="23 - Default" property="surface_base"/>
+					<transform>-5.44283e-007 12.4518 -1.25636e-014 0 5.30707e-007 3.25905e-014 -6.14015 0 -12.1412 -5.30707e-007 -2.68395e-007 0 17.1923 -47.272 37.3126 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="280777482" name="fd_tijiguang12">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_tijiguang12.mesh</mesh_name>
+					<surface name="23 - Default" material="23 - Default" property="surface_base"/>
+					<transform>-5.44283e-007 12.4518 -1.25636e-014 0 5.30707e-007 3.25905e-014 -6.14015 0 -12.1412 -5.30707e-007 -2.68395e-007 0 17.2652 -63.5112 37.3126 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="856522969" name="fd_tijiguang13">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_tijiguang13.mesh</mesh_name>
+					<surface name="23 - Default" material="23 - Default" property="surface_base"/>
+					<transform>-5.44283e-007 12.4518 -1.25636e-014 0 5.30707e-007 3.25905e-014 -6.14015 0 -12.1412 -5.30707e-007 -2.68395e-007 0 17.2652 -79.849 37.3126 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1984889177" name="fd_tijiguang14">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_tijiguang14.mesh</mesh_name>
+					<surface name="23 - Default" material="23 - Default" property="surface_base"/>
+					<transform>-5.44283e-007 12.4518 -1.25636e-014 0 5.30707e-007 3.25905e-014 -6.14015 0 -12.1412 -5.30707e-007 -2.68395e-007 0 -53.3388 -7.56085 37.3126 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="494962359" name="fd_tijiguang15">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_tijiguang15.mesh</mesh_name>
+					<surface name="23 - Default" material="23 - Default" property="surface_base"/>
+					<transform>-5.44283e-007 12.4518 -1.25636e-014 0 5.30707e-007 3.25905e-014 -6.14015 0 -12.1412 -5.30707e-007 -2.68395e-007 0 -53.3379 -25.1105 37.3126 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1752529792" name="fd_tijiguang16">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_tijiguang16.mesh</mesh_name>
+					<surface name="23 - Default" material="23 - Default" property="surface_base"/>
+					<transform>-5.44283e-007 12.4518 -1.25636e-014 0 5.30707e-007 3.25905e-014 -6.14015 0 -12.1412 -5.30707e-007 -2.68395e-007 0 -53.4117 -42.5055 37.3126 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="2082653846" name="fd_tijiguang17">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_tijiguang17.mesh</mesh_name>
+					<surface name="23 - Default" material="23 - Default" property="surface_base"/>
+					<transform>-5.44283e-007 12.4518 -1.25636e-014 0 5.30707e-007 3.25905e-014 -6.14015 0 -12.1412 -5.30707e-007 -2.68395e-007 0 -53.3388 -58.7004 37.3126 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1332571030" name="fd_tijiguang18">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_tijiguang18.mesh</mesh_name>
+					<surface name="23 - Default" material="23 - Default" property="surface_base"/>
+					<transform>-5.44283e-007 12.4518 -1.25636e-014 0 5.30707e-007 3.25905e-014 -6.14015 0 -12.1412 -5.30707e-007 -2.68395e-007 0 -53.3388 -75.0696 37.3126 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1658477293" name="fd_tijiguang19">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_tijiguang19.mesh</mesh_name>
+					<surface name="23 - Default" material="23 - Default" property="surface_base"/>
+					<transform>-5.44283e-007 12.4518 -1.25636e-014 0 5.30707e-007 3.25905e-014 -6.14015 0 -12.1412 -5.30707e-007 -2.68395e-007 0 -22.6091 -7.56085 37.3126 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1800180969" name="fd_tijiguang20">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_tijiguang20.mesh</mesh_name>
+					<surface name="23 - Default" material="23 - Default" property="surface_base"/>
+					<transform>-5.44283e-007 12.4518 -1.25636e-014 0 5.30707e-007 3.25905e-014 -6.14015 0 -12.1412 -5.30707e-007 -2.68395e-007 0 -22.6082 -25.1105 37.3126 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1528168440" name="fd_tijiguang21">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_tijiguang21.mesh</mesh_name>
+					<surface name="23 - Default" material="23 - Default" property="surface_base"/>
+					<transform>-5.44283e-007 12.4518 -1.25636e-014 0 5.30707e-007 3.25905e-014 -6.14015 0 -12.1412 -5.30707e-007 -2.68395e-007 0 -22.682 -42.5055 37.3126 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1453398880" name="fd_tijiguang22">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_tijiguang22.mesh</mesh_name>
+					<surface name="23 - Default" material="23 - Default" property="surface_base"/>
+					<transform>-5.44283e-007 12.4518 -1.25636e-014 0 5.30707e-007 3.25905e-014 -6.14015 0 -12.1412 -5.30707e-007 -2.68395e-007 0 -22.6091 -58.7004 37.3126 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1978717861" name="fd_tijiguang23">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/fd_tijiguang23.mesh</mesh_name>
+					<surface name="23 - Default" material="23 - Default" property="surface_base"/>
+					<transform>-5.44283e-007 12.4518 -1.25636e-014 0 5.30707e-007 3.25905e-014 -6.14015 0 -12.1412 -5.30707e-007 -2.68395e-007 0 -22.6091 -75.0696 37.3126 1</transform>
+				</node>
+			</node>
+			<node type="ObjectMeshStatic" id="270847976" name="diangui0">
+				<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/diangui0.mesh</mesh_name>
+				<surface name="Default" material="Default" property="surface_base"/>
+				<surface name="04 - Default" material="04 - Default" property="surface_base"/>
+				<transform>-5.51404e-007 -1.08581e-014 -12.6147 0 12.6147 2.23115e-006 -5.51404e-007 0 2.23115e-006 -12.6147 -3.08283e-014 0 -104.097 18.0545 2.56852 1</transform>
+			</node>
+			<node type="ObjectMeshStatic" id="1147481976" name="jinggaopai">
+				<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/jinggaopai.mesh</mesh_name>
+				<surface name="配电柜\1m_default" material="配电柜\1m_default" property="surface_base"/>
+				<surface name="06 - Default" material="06 - Default" property="surface_base"/>
+				<transform>1.03639e-007 -9.60535e-008 -0.636133 0 -0.428238 -9.26647e-008 -6.97688e-008 0 -1.04056e-007 0.523795 -7.90909e-008 0 -85.069 26.4608 3.05136 1</transform>
+			</node>
+			<node type="ObjectMeshStatic" id="89748183" name="guizhang">
+				<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/guizhang.mesh</mesh_name>
+				<surface name="waikuang" material="waikuang" property="surface_base"/>
+				<surface name="21 - Default" material="21 - Default" property="surface_base"/>
+				<transform>0.04171 0 0 0 0 4.48588e-010 -0.0503578 0 0 0.0400953 -4.48588e-010 0 -97.302 29.141 -31.0924 1</transform>
+			</node>
+			<node type="ObjectMeshStatic" id="1819103091" name="jiexiantu">
+				<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/jiexiantu.mesh</mesh_name>
+				<surface name="waikuang" material="waikuang" property="surface_base"/>
+				<surface name="jiexiantu" material="jiexiantu" property="surface_base"/>
+				<transform>3.4436e-009 8.51289e-017 -0.0456118 0 -0.0503578 1.48639e-010 -3.80191e-009 0 -1.48639e-010 0.0469573 -7.12433e-017 0 -116.977 27.7544 -4.52158 1</transform>
+			</node>
+			<node type="NodeDummy" id="322371926" name="shexiangji">
+				<transform>-0.707107 -1.12005e-015 0.707107 0 0.707107 -1.12005e-015 0.707107 0 0 1 0 0 -76.0057 28.7793 -38.2815 1</transform>
+				<node type="ObjectMeshStatic" id="724122370" name="shexiangji">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/shexiangji.mesh</mesh_name>
+					<surface name="16 - Default" material="16 - Default" property="surface_base"/>
+					<transform>1 1.16532e-017 0 0 -2.78725e-015 1 9.05541e-008 0 8.5487e-015 -2.26013e-007 1.65556 0 4.0859e-008 4.0859e-008 -1.32193 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="433519307" name="shexiangtou">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/shexiangtou_1.mesh</mesh_name>
+					<surface name="16 - Default" material="16 - Default" property="surface_base"/>
+					<surface name="17 - Default" material="17 - Default" property="surface_base"/>
+					<transform>0.919421 4.56953e-017 1.69706e-015 0 -3.342e-015 0.919421 1.09604e-007 0 -5.77241e-015 -1.09604e-007 0.919421 0 0 0 -1.24785e-015 1</transform>
+					<node type="ObjectMeshStatic" id="1561296606" name="shizhui">
+						<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/shizhui.mesh</mesh_name>
+						<surface name="15 - Default" material="15 - Default" property="surface_base"/>
+						<transform>29.5688 2.78819e-015 -3.81113e-014 0 -4.19796e-014 49.4733 1.35747e-006 0 1.15195e-013 1.35748e-006 18.4179 0 -4.4007e-006 27.0458 -4.46267e-006 1</transform>
+					</node>
+				</node>
+			</node>
+			<node type="NodeDummy" id="1964090686" name="shexiangji01">
+				<transform>1.19249e-008 0 -1 0 4.37114e-008 -1 0 0 -1 -4.37114e-008 -1.19249e-008 0 -87.9667 34.885 2.26841 1</transform>
+				<node type="ObjectMeshStatic" id="134934520" name="shexiangji01">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/shexiangji01.mesh</mesh_name>
+					<surface name="16 - Default" material="16 - Default" property="surface_base"/>
+					<transform>1 -6.61744e-024 -2.81998e-024 0 -1.07985e-015 1 9.0554e-008 0 6.34187e-016 -2.26013e-007 1.65556 0 1.57639e-008 5.77834e-008 -1.32193 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="355491523" name="shexiangtou01">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/shexiangtou01.mesh</mesh_name>
+					<surface name="16 - Default" material="16 - Default" property="surface_base"/>
+					<surface name="17 - Default" material="17 - Default" property="surface_base"/>
+					<transform>0.919421 -1.54741e-015 2.57435e-016 0 -3.66231e-015 0.590993 0.704318 0 1.76494e-016 -0.704318 0.590993 0 0 -2.0357e-015 0 1</transform>
+					<node type="ObjectMeshStatic" id="1655340896" name="shizhui01">
+						<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/shizhui01.mesh</mesh_name>
+						<surface name="15 - Default" material="15 - Default" property="surface_base"/>
+						<transform>23.9967 6.56282e-015 -1.84286e-014 0 6.78976e-014 18.2207 7.753e-007 0 1.3835e-014 3.26617e-007 14.9472 0 -1.34573e-007 10.5792 -5.20789e-006 1</transform>
+					</node>
+				</node>
+			</node>
+			<node type="ObjectMeshStatic" id="2039601377" name="shapan">
+				<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/shapan.mesh</mesh_name>
+				<surface name="12 - Default" material="12 - Default" property="surface_base"/>
+				<transform>-5.51404e-007 -2.60151e-014 -12.6147 0 12.6147 2.23115e-006 -5.51404e-007 0 2.23115e-006 -12.6147 -7.25147e-014 0 103.029 11.3823 -2.35401 1</transform>
+				<node type="ObjectMeshStatic" id="1514535214" name="1f">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/1f.mesh</mesh_name>
+					<surface name="18 - Default" material="18 - Default" property="surface_base"/>
+					<transform>1 5.70768e-015 -3.3046e-015 0 -5.70768e-015 1 4.65314e-015 0 -1.20154e-015 -4.65314e-015 1 0 5.67003e-008 6.04804e-007 -1.51201e-007 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1045458169" name="2f">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/2f.mesh</mesh_name>
+					<surface name="18 - Default" material="18 - Default" property="surface_base"/>
+					<transform>1 5.70768e-015 -3.3046e-015 0 -5.70768e-015 1 4.65314e-015 0 -1.20154e-015 -4.65314e-015 1 0 5.67003e-008 6.04804e-007 -1.51201e-007 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="472240744" name="3f">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/3f.mesh</mesh_name>
+					<surface name="18 - Default" material="18 - Default" property="surface_base"/>
+					<transform>1 5.70768e-015 -3.3046e-015 0 -5.70768e-015 1 4.65314e-015 0 -1.20154e-015 -4.65314e-015 1 0 5.67003e-008 6.04804e-007 -1.51201e-007 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="669867185" name="4f">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/4f.mesh</mesh_name>
+					<surface name="18 - Default" material="18 - Default" property="surface_base"/>
+					<transform>1 5.70768e-015 -3.3046e-015 0 -5.70768e-015 1 4.65314e-015 0 -1.20154e-015 -4.65314e-015 1 0 5.67003e-008 6.04804e-007 -1.51201e-007 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="548203501" name="5f">
+					<mesh_name>worlds/5Fzhanting/5Fzhanting_2020-06-17_16-47-08-3/meshes/5f.mesh</mesh_name>
+					<surface name="18 - Default" material="18 - Default" property="surface_base"/>
+					<transform>1 5.70768e-015 -3.3046e-015 0 -5.70768e-015 1 4.65314e-015 0 -1.20154e-015 -4.65314e-015 1 0 5.67003e-008 6.04804e-007 -1.51201e-007 1</transform>
+				</node>
+			</node>
+		</node>
+	</editor>
+	<camera transform="1 0 0 0 0 0.866025 0.5 0 0 -0.5 0.866025 0 0.674255 -62.3747 187.251 1" target="-2.99757 25.4365 20.0263"/>
+</world>

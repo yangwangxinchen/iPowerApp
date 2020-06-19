@@ -1,0 +1,127 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="description" content="Web site created using create-react-app" />
+  <link rel="shortcut icon" href="./bitbug_favicon.ico">
+  <title>昌华工业园智能电力运维系统</title>
+
+  <style>
+    html,
+    body,
+    #Maker_Render_Canvas {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    @-webkit-keyframes slide-down {
+      0% {
+        transform: scale(1, 0);
+      }
+
+      25% {
+        transform: scale(1, 1.2);
+      }
+
+      50% {
+        transform: scale(1, 0.85);
+      }
+
+      75% {
+        transform: scale(1, 1.05);
+      }
+
+      100% {
+        transform: scale(1, 1);
+      }
+    }
+  </style>
+  <script src="js/libs/three.min.js"></script>
+  <script src="./js/DefaultSQLiteURL.js"></script>
+
+  <script src="js/postprocessing/EffectComposer.js"></script>
+  <script src="js/postprocessing/RenderPass.js"></script>
+  <script src="js/postprocessing/ShaderPass.js"></script>
+  <script src="js/postprocessing/OutlinePass.js"></script>
+  <script src="js/postprocessing/BloomPass.js"></script>
+  <script src="js/postprocessing/SSAARenderPass.js"></script>
+  <script src="js/postprocessing/TAARenderPass.js"></script>
+
+  <!-- SSAO -->
+  <!-- <script src="js/math/SimplexNoise.js"></script>
+    <script src="js/shaders/SSAOShader.js"></script>
+    <script src="js/postprocessing/SSAOPass.js"></script> -->
+
+  <script src="js/shaders/CopyShader.js"></script>
+  <script src="js/shaders/SAOShader.js"></script>
+  <script src="js/shaders/DepthLimitedBlurShader.js"></script>
+  <script src="js/shaders/UnpackDepthRGBAShader.js"></script>
+  <script src="js/shaders/BloomShader.js"></script>
+  <script src="js/shaders/LuminosityHighPassShader.js"></script>
+
+  <script src="js/utils/DDSLoader.js"></script>
+  <!-- <script src="js/utils/TGALoader.js"></script> -->
+  <script src="js/Engine.js"></script>
+  <script src="js/utils/Stream.js"></script>
+  <script src="js/scene/World.js"></script>
+  <script src="js/common/Helper.js"></script>
+  <script src="js/common/NodeSelection.js"></script>
+  <script src="js/common/Parameters.js"></script>
+  <script src="js/utils/Mesh.js"></script>
+  <script src="js/utils/Merger.js"></script>
+  <script src="js/utils/FileLoader.js"></script>
+  <script src="js/scene/LODs.js"></script>
+  <script src="js/scene/Effects.js"></script>
+  <script src="js/scene/Bloom.js"></script>
+  <script src="js/scene/Materials.js"></script>
+  <script src="js/scene/DefaultMat.js"></script>
+  <script src="js/utils/Path.js"></script>
+  <script src="js/scene/OrbitControls.js"></script>
+  <!-- 性能监测 -->
+  <script src="js/libs/stats.js"></script>
+  <script src='js/libs/dat.gui.min.js'></script>
+
+  <!-- 画线 -->
+  <script src='js/lines/LineSegmentsGeometry.js'></script>
+  <script src='js/lines/LineGeometry.js'></script>
+  <script src='js/lines/LineMaterial.js'></script>
+  <script src='js/lines/LineSegments2.js'></script>
+  <script src='js/lines/Line2.js'></script>
+
+  <!-- 三维面板 -->
+  <script src="js/libs/CSS3DRenderer.js"></script>
+  <script src="js/scene/FieldTips.js"></script>
+
+  <!-- 二维面板 -->
+  <script src="js/libs/CSS2DRenderer.js"></script>
+  <script src="js/scene/FieldTips2D.js"></script>
+
+  <!-- 画热力图 -->
+  <script src="js/scene/heatmap.js"></script>
+
+  <!-- 动画效果 -->
+  <script src="js/scene/Tween.js"></script>
+
+</head>
+
+<body>
+  <div id="root">
+    <div id="MakerJS">
+      <canvas id="Maker_Render_Canvas"></canvas>
+    </div>
+  </div>
+  <script>
+    var Public_Engine = new MakerJS.Engine();
+    Public_Engine.load('../public/mesh/默认视图.world', false, function () {
+
+    })
+    console.log('hello')
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,814 @@
+<?xml version="1.0" encoding="utf-8"?>
+<world version="1.21">
+	<materials>
+		<library>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/materials/PDJ.mat</library>
+	</materials>
+	<editor>
+		<node type="NodeLayer" id="1510133022" name="日照系统">
+			<layer>nodes/level.node</layer>
+			<transform>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</transform>
+			<node type="LightWorld" id="2095181367" name="sun">
+				<scattering>1</scattering>
+				<shadow_range>2000</shadow_range>
+				<shadow_distribute>0.233333</shadow_distribute>
+				<deferred>1</deferred>
+				<color>1 0.88341 0.637142 1</color>
+				<multiplier>1.79847</multiplier>
+				<shadow_size>4</shadow_size>
+				<shadow_softness>2</shadow_softness>
+				<transform>-0.275579 -0.477317 -0.834401 0 0.866026 -0.5 0 0 -0.417201 -0.722612 0.551158 0 -2.56563 -264.813 0.0789404 1</transform>
+			</node>
+			<node type="ObjectSky" id="2126500912" collider="0" name="sky">
+				<size>8000 8000 300</size>
+				<min_slices>256</min_slices>
+				<max_slices>512</max_slices>
+				<distribute>4</distribute>
+				<humidity>0.8</humidity>
+				<transition>0.5</transition>
+				<extinction>0.6</extinction>
+				<density_image>textures/environment/clouds.png</density_image>
+				<density_velocity>30 30 0</density_velocity>
+				<density_offset>855.996 855.996 0</density_offset>
+				<density_layer>2</density_layer>
+				<surface name="sphere" material="sky" property="surface_base">
+					<material>
+						<blend src="src_alpha" dest="one_minus_src_alpha"/>
+						<options post_scattering="1"/>
+						<state name="inscattering">1</state>
+					</material>
+				</surface>
+				<surface name="volume" material="sky" property="surface_base">
+					<material>
+						<blend src="src_alpha" dest="one_minus_src_alpha"/>
+						<options post_scattering="1" two_sided="1"/>
+						<state name="surface">1</state>
+						<state name="inscattering">1</state>
+					</material>
+				</surface>
+				<surface name="shadow" enabled="0" material="sky" property="surface_base">
+					<material>
+						<blend src="zero" dest="src_alpha"/>
+						<options/>
+						<state name="surface">2</state>
+					</material>
+				</surface>
+				<transform>1 0 0 0 0 1 0 0 0 0 1 0 0 0 1000 1</transform>
+			</node>
+			<node type="WorldExpression" id="1277578981" name="NodesToPlayerBinding1">
+				<size>100000 100000 100000</size>
+				<expression>{
+
+// get player
+Player player = engine.editor.isLoaded() ? engine.editor.getPlayer() : engine.game.getPlayer();
+if(player == 0) return;
+
+// player position
+vec3 offset = vec3(0.0f,0.0f,-15.0f);
+mat4 transform = translate(player.getWorldTransform() * offset);
+
+// transform childs
+Node node = getNode();
+forloop(int i = 0; node.getNumChilds()) {
+Node child = node.getChild(i);
+child.setWorldTransform(transform);
+}
+
+}</expression>
+				<transform>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</transform>
+				<node type="NodeDummy" id="1715075075" name="NodesContainer">
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 -15.7112 -827.972 662.211 1</transform>
+					<node type="ObjectParticles" id="1216267544" collider="0" name="rain_drops">
+						<particles_type>3</particles_type>
+						<spawn_rate>0</spawn_rate>
+						<physical_mask>-1</physical_mask>
+						<length_stretch>0.1</length_stretch>
+						<emitter_type>3</emitter_type>
+						<emitter_enabled>1</emitter_enabled>
+						<emitter_size>110 110 0</emitter_size>
+						<emitter_direction>0 0 -20</emitter_direction>
+						<emitter_spread>1 1 0</emitter_spread>
+						<life_mean>1</life_mean>
+						<life_spread>0</life_spread>
+						<velocity_mean>40</velocity_mean>
+						<velocity_spread>27</velocity_spread>
+						<radius_mean>0.06</radius_mean>
+						<radius_spread>0.03</radius_spread>
+						<gravity>0 0 -10</gravity>
+						<force>
+							<attached>1</attached>
+							<transform>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</transform>
+							<radius>80</radius>
+							<attenuation>1</attenuation>
+							<attractor>0</attractor>
+							<rotator>0</rotator>
+						</force>
+						<deflector>
+							<type>1</type>
+							<attached>0</attached>
+							<transform>0.714943 -0.699183 0 0 0.699183 0.714943 0 0 0 0 1 0 -13.8653 -216.974 4.34492 1</transform>
+							<size>5.5 9.9 0</size>
+							<restitution>0.85</restitution>
+							<roughness>0</roughness>
+						</deflector>
+						<surface name="particles" max_fade_distance="1e+008" material="rain_drops" property="surface_base"/>
+						<transform>1 0 0 0 0 1 0 0 0 0 1 0 -2.44066 -4.50647 27.7426 1</transform>
+					</node>
+					<node type="ObjectParticles" id="1795963183" collider="0" name="rain_drops_collision1">
+						<particles_type>3</particles_type>
+						<collision>1</collision>
+						<culling>1</culling>
+						<spawn_rate>0</spawn_rate>
+						<physical_mask>-1</physical_mask>
+						<length_stretch>0.3</length_stretch>
+						<emitter_type>3</emitter_type>
+						<emitter_enabled>1</emitter_enabled>
+						<emitter_size>30 30 0</emitter_size>
+						<emitter_direction>0 4.96845 -20</emitter_direction>
+						<emitter_spread>1.33123 2.32492 0</emitter_spread>
+						<life_mean>1</life_mean>
+						<life_spread>0</life_spread>
+						<velocity_mean>60</velocity_mean>
+						<velocity_spread>40</velocity_spread>
+						<radius_mean>0.1</radius_mean>
+						<radius_spread>0.04</radius_spread>
+						<gravity>0 0 -10</gravity>
+						<force>
+							<attached>1</attached>
+							<transform>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</transform>
+							<radius>80</radius>
+							<attenuation>1</attenuation>
+							<attractor>0</attractor>
+							<rotator>0</rotator>
+						</force>
+						<surface name="particles" enabled="0" max_fade_distance="1e+008" material="rain_drops" property="surface_base"/>
+						<transform>1 0 0 0 0 1 0 0 0 0 1 0 0 0 30 1</transform>
+						<node type="ObjectParticles" id="1567053306" collider="0" name="rain_splashes">
+							<variation_x>1</variation_x>
+							<variation_y>1</variation_y>
+							<spawn_rate>1</spawn_rate>
+							<growth_damping>1</growth_damping>
+							<emitter_type>5</emitter_type>
+							<emitter_enabled>1</emitter_enabled>
+							<emitter_direction>0 0 10</emitter_direction>
+							<life_mean>0.3</life_mean>
+							<life_spread>0.1</life_spread>
+							<velocity_mean>0</velocity_mean>
+							<velocity_spread>0.3</velocity_spread>
+							<radius_mean>0.05</radius_mean>
+							<radius_spread>0.025</radius_spread>
+							<growth_mean>0.05</growth_mean>
+							<growth_spread>0.05</growth_spread>
+							<gravity>0 0 -5</gravity>
+							<surface name="particles" material="rain_splash" property="surface_base"/>
+							<transform>1 0 0 0 0 1 0 0 0 0 1 0 3.48336 -2.71939 -0.352833 1</transform>
+						</node>
+						<node type="ObjectParticles" id="182329837" collider="0" name="rain_splashes_fume">
+							<variation_x>1</variation_x>
+							<variation_y>1</variation_y>
+							<texture_atlas>1</texture_atlas>
+							<spawn_rate>1</spawn_rate>
+							<growth_damping>1</growth_damping>
+							<emitter_type>5</emitter_type>
+							<emitter_enabled>1</emitter_enabled>
+							<emitter_direction>0 0 10</emitter_direction>
+							<life_mean>0.8</life_mean>
+							<life_spread>0.1</life_spread>
+							<velocity_mean>0.7</velocity_mean>
+							<velocity_spread>0.3</velocity_spread>
+							<radius_mean>0.2</radius_mean>
+							<radius_spread>0.05</radius_spread>
+							<growth_mean>0.1</growth_mean>
+							<growth_spread>0.05</growth_spread>
+							<gravity>0 0 -2</gravity>
+							<surface name="particles" material="fume" property="surface_base"/>
+							<transform>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</transform>
+						</node>
+					</node>
+					<node type="ObjectParticles" id="1990854000" collider="0" name="rain_drops_collision2">
+						<particles_type>3</particles_type>
+						<collision>1</collision>
+						<culling>1</culling>
+						<spawn_rate>0</spawn_rate>
+						<physical_mask>-1</physical_mask>
+						<length_stretch>0.3</length_stretch>
+						<emitter_type>3</emitter_type>
+						<emitter_enabled>1</emitter_enabled>
+						<emitter_size>70 70 0</emitter_size>
+						<emitter_direction>0 4.96845 -20</emitter_direction>
+						<emitter_spread>1.33123 2.32492 0</emitter_spread>
+						<life_mean>1</life_mean>
+						<life_spread>0</life_spread>
+						<velocity_mean>60</velocity_mean>
+						<velocity_spread>40</velocity_spread>
+						<radius_mean>0.1</radius_mean>
+						<radius_spread>0.04</radius_spread>
+						<gravity>0 0 -10</gravity>
+						<force>
+							<attached>1</attached>
+							<transform>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</transform>
+							<radius>80</radius>
+							<attenuation>1</attenuation>
+							<attractor>0</attractor>
+							<rotator>0</rotator>
+						</force>
+						<surface name="particles" enabled="0" max_fade_distance="1e+008" material="rain_drops" property="surface_base"/>
+						<transform>1 0 0 0 0 1 0 0 0 0 1 0 0 0 30 1</transform>
+						<node type="ObjectParticles" id="874069119" collider="0" name="rain_fume">
+							<texture_atlas>1</texture_atlas>
+							<spawn_rate>1</spawn_rate>
+							<growth_damping>1</growth_damping>
+							<emitter_type>5</emitter_type>
+							<emitter_enabled>1</emitter_enabled>
+							<life_mean>5</life_mean>
+							<life_spread>0</life_spread>
+							<velocity_mean>0</velocity_mean>
+							<velocity_spread>0</velocity_spread>
+							<rotation_mean>0</rotation_mean>
+							<rotation_spread>20</rotation_spread>
+							<radius_mean>4</radius_mean>
+							<radius_spread>0</radius_spread>
+							<growth_mean>1</growth_mean>
+							<growth_spread>0</growth_spread>
+							<surface name="particles" material="fume" property="surface_base"/>
+							<transform>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</transform>
+						</node>
+					</node>
+				</node>
+				<node type="NodeReference" id="988389428" name="stars">
+					<reference>library/weather/nodes/stars.node</reference>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 -15.7112 -827.972 662.211 1</transform>
+				</node>
+			</node>
+			<node type="WorldExpression" id="2115067465" name="NodesToPlayerBinding2">
+				<size>100000 100000 100000</size>
+				<expression>{
+
+// get player
+Player player = engine.editor.isLoaded() ? engine.editor.getPlayer() : engine.game.getPlayer();
+if(player == 0) return;
+
+// player position
+mat4 transform = player.getWorldTransform();
+
+// transform childs
+Node node = getNode();
+forloop(int i = 0; node.getNumChilds()) {
+Node child = node.getChild(i);
+child.setWorldTransform(transform);
+}
+
+}</expression>
+				<transform>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</transform>
+				<node type="NodeDummy" id="405278391" name="NodesContainer">
+					<transform>0.999945 -0.0104715 3.77418e-010 0 0.00526739 0.502995 0.864273 0 -0.00905021 -0.864226 0.503023 0 -15.847 -840.935 669.756 1</transform>
+					<node type="ObjectParticles" id="1594240363" collider="0" name="camera_drops">
+						<variation_x>1</variation_x>
+						<texture_atlas>1</texture_atlas>
+						<spawn_rate>0</spawn_rate>
+						<emitter_type>3</emitter_type>
+						<emitter_enabled>1</emitter_enabled>
+						<emitter_based>1</emitter_based>
+						<emitter_continuous>0</emitter_continuous>
+						<emitter_size>2 0 2</emitter_size>
+						<emitter_direction>0 0 -1</emitter_direction>
+						<emitter_spread>0 0 0</emitter_spread>
+						<life_mean>1</life_mean>
+						<life_spread>0.3</life_spread>
+						<velocity_mean>0</velocity_mean>
+						<velocity_spread>0</velocity_spread>
+						<angle_mean>0</angle_mean>
+						<angle_spread>0</angle_spread>
+						<radius_mean>0.07</radius_mean>
+						<radius_spread>0.03</radius_spread>
+						<gravity>0 0 -0.1</gravity>
+						<surface name="particles" material="camera_drop" property="surface_base"/>
+						<transform>1 1.49789e-008 3.44132e-008 0 -2.76195e-008 0 -1 0 5.3551e-009 1 8.9407e-008 0 0.00012207 3.05176e-005 -1 1</transform>
+					</node>
+				</node>
+			</node>
+		</node>
+		<node type="NodeDummy" id="899353890" name="RootNode">
+			<transform>1 0 0 0 0 -4.37114e-008 1 0 0 -1 -4.37114e-008 0 0 0 0 1</transform>
+			<node type="NodeDummy" id="2133254621" name="">
+				<transform>1 0 0 0 0 0 -1 0 0 1 0 0 0 0 0 1</transform>
+			</node>
+			<node type="NodeDummy" id="1660774945" name="　">
+				<transform>1 0 0 0 0 0 -1 0 0 1 0 0 0 0 0 1</transform>
+			</node>
+			<node type="ObjectMeshStatic" id="2072061580" name="diban">
+				<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/diban.mesh</mesh_name>
+				<surface name="01 - Default" material="01 - Default" property="surface_base"/>
+				<transform>1.35988 0 0 0 0 -3.00087 7.7735e-008 0 0 -1.31172e-007 -1.77837 0 0 -12.5401 -43.9857 1</transform>
+			</node>
+			<node type="ObjectMeshStatic" id="1865400974" name="waiqiang01">
+				<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/waiqiang01.mesh</mesh_name>
+				<surface name="01 - Default" material="01 - Default" property="surface_base"/>
+				<transform>1.09043 0 0 0 0 -7.36049e-009 -0.999999 0 0 0.168388 -4.37114e-008 0 -6.10203e-005 387.724 190.43 1</transform>
+			</node>
+			<node type="ObjectMeshStatic" id="1746390219" name="guizhang">
+				<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/guizhang.mesh</mesh_name>
+				<surface name="01 - Default" material="01 - Default" property="surface_base"/>
+				<surface name="11 - Default" material="11 - Default" property="surface_base"/>
+				<transform>5.07174e-017 1.23422e-007 0.828274 0 3.76554 4.66609e-007 -6.97607e-014 0 5.85755e-008 0.796209 -1.18644e-007 0 439.228 248.898 106.562 1</transform>
+			</node>
+			<node type="ObjectMeshStatic" id="826857162" name="jiexiantu">
+				<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/jiexiantu.mesh</mesh_name>
+				<surface name="01 - Default" material="01 - Default" property="surface_base"/>
+				<surface name="10 - Default" material="10 - Default" property="surface_base"/>
+				<transform>0.905755 0 0 0 0 -4.07597e-008 -2.30797 0 0 0.932473 -1.00885e-007 0 -30.6939 257.884 -283.018 1</transform>
+			</node>
+			<node type="NodeDummy" id="525488162" name="shexiangji">
+				<transform>1 0 0 0 0 0 -1 0 0 1 0 0 0 408.304 174.381 1</transform>
+				<node type="ObjectMeshStatic" id="305747817" name="dizuo">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/dizuo.mesh</mesh_name>
+					<surface name="lambert1" material="lambert1" property="surface_base"/>
+					<transform>10.2977 0 0 0 0 -7.45208e-007 -10.2977 0 0 17.0484 -4.50126e-007 0 0 -14.1255 -0.0267938 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1174254895" name="shexiangtou">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/shexiangtou.mesh</mesh_name>
+					<surface name="lambert1" material="lambert1" property="surface_base"/>
+					<transform>9.4679 0 0 0 0 7.75565 -5.43056 0 0 5.43056 7.75565 0 -5.68434e-013 1.52588e-005 -6.75091e-013 1</transform>
+					<node type="ObjectMeshStatic" id="940922164" name="shizhui">
+						<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/shizhui.mesh</mesh_name>
+						<surface name="lambert1" material="lambert1" property="surface_base"/>
+						<transform>23.9967 0 0 0 0 17.4625 -2.31929 0 0 -5.86716 21.3195 0 5.68434e-014 11.4282 -1.00381 1</transform>
+					</node>
+				</node>
+			</node>
+			<node type="ObjectMeshStatic" id="1829137962" name="gui1">
+				<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui1.mesh</mesh_name>
+				<surface name="01 - Default" material="01 - Default" property="surface_base"/>
+				<surface name="guiti" material="guiti" property="surface_base"/>
+				<transform>143.185 0 0 0 0 6.25881e-006 143.185 0 0 -143.185 6.25881e-006 0 5.02173 178.688 -75.0013 1</transform>
+				<node type="ObjectMeshStatic" id="828088372" name="gui1_kaiguan03">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui1_kaiguan03.mesh</mesh_name>
+					<surface name="08 - Default" material="08 - Default" property="surface_base"/>
+					<transform>1.10909 0 0 0 0 0.999987 -0.005935 0 0 0.0053512 1.10908 0 -0.128947 -0.0557652 0.0316064 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1179338096" name="gui1_kaiguan04">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui1_kaiguan04.mesh</mesh_name>
+					<surface name="08 - Default" material="08 - Default" property="surface_base"/>
+					<transform>1.10909 0 0 0 0 0.999987 -0.005935 0 0 0.0053512 1.10908 0 0.0471203 -0.0557652 0.0316064 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="372848062" name="gui1_kaiguan02">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui1_kaiguan02.mesh</mesh_name>
+					<surface name="09 - Default" material="09 - Default" property="surface_base"/>
+					<transform>1.10909 0 0 0 0 0.999987 -0.005935 0 0 0.0053512 1.10908 0 0.0471203 -0.0557652 0.123684 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1080050189" name="gui1_kaiguan01">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui1_kaiguan01.mesh</mesh_name>
+					<surface name="09 - Default" material="09 - Default" property="surface_base"/>
+					<transform>1.10909 0 0 0 0 0.999987 -0.005935 0 0 0.0053512 1.10908 0 -0.128947 -0.0557652 0.123684 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="920298610" name="gui1_beiban">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui1_beiban.mesh</mesh_name>
+					<surface name="01 - Default" material="01 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 -0.00167051 0.0834548 1.06567e-007 1</transform>
+				</node>
+			</node>
+			<node type="ObjectMeshStatic" id="844601148" name="gui2">
+				<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui2.mesh</mesh_name>
+				<surface name="01 - Default" material="01 - Default" property="surface_base"/>
+				<surface name="guiti" material="guiti" property="surface_base"/>
+				<transform>143.185 0 0 0 0 6.25881e-006 143.185 0 0 -143.185 6.25881e-006 0 5.02172 178.688 -75.0013 1</transform>
+				<node type="ObjectMeshStatic" id="1034647629" name="gui2_duanlq">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui2_duanlq.mesh</mesh_name>
+					<surface name="05 - Default" material="05 - Default" property="surface_base"/>
+					<surface name="06 - Default" material="06 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 -2.19794e-007 -0.0144685 7.45969e-007 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="126452985" name="gui2_hongd01">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui2_hongd01.mesh</mesh_name>
+					<surface name="09 - Default" material="09 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 -5.32834e-008 -0.0144684 3.19701e-007 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1554096042" name="gui2_lvd01">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui2_lvd01.mesh</mesh_name>
+					<surface name="08 - Default" material="08 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 -4.6623e-008 -0.0144684 3.19701e-007 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1650278018" name="gui2_kguan01">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui2_kguan01.mesh</mesh_name>
+					<surface name="07 - Default" material="07 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 -7.32647e-008 -0.0144684 5.32835e-007 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1921438539" name="gui2_hongd02">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui2_hongd02.mesh</mesh_name>
+					<surface name="09 - Default" material="09 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 -5.32834e-008 -0.0144685 0.755348 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1175379425" name="gui2_duanlqge">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui2_duanlqge.mesh</mesh_name>
+					<surface name="05 - Default" material="05 - Default" property="surface_base"/>
+					<surface name="06 - Default" material="06 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 -2.19794e-007 -0.0144686 0.755348 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="876347494" name="gui2_kguan02">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui2_kguan02.mesh</mesh_name>
+					<surface name="07 - Default" material="07 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 -7.32647e-008 -0.0144684 0.755348 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1115307638" name="gui2_lvd02">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui2_lvd02.mesh</mesh_name>
+					<surface name="08 - Default" material="08 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 -4.6623e-008 -0.0144685 0.755348 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1376432293" name="gui2_huilu01">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui2_huilu01.mesh</mesh_name>
+					<surface name="04 - Default" material="04 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 -1.66511e-007 -0.0255718 -4.26268e-007 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="367062651" name="gui2_huilu01kg">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui2_huilu01kg.mesh</mesh_name>
+					<surface name="07 - Default" material="07 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 -6.66043e-009 -0.0255715 -7.45969e-007 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="585002294" name="gui2_huilu01hongd">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui2_huilu01hongd.mesh</mesh_name>
+					<surface name="09 - Default" material="09 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 -2.33115e-008 -0.0255714 -1.06567e-007 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1437667472" name="gui2_huilu02lvd">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui2_huilu02lvd.mesh</mesh_name>
+					<surface name="08 - Default" material="08 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 9.99064e-009 -0.0255716 0.18756 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1218063820" name="gui2_huilu02hongd">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui2_huilu02hongd.mesh</mesh_name>
+					<surface name="09 - Default" material="09 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 -4.99532e-008 -0.0255716 0.18756 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="491997248" name="gui2_huilu02kg">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui2_huilu02kg.mesh</mesh_name>
+					<surface name="07 - Default" material="07 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 -3.33021e-008 -0.0255716 0.18756 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1583070380" name="gui2_huilu03kg">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui2_huilu03kg.mesh</mesh_name>
+					<surface name="07 - Default" material="07 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 -5.99438e-008 -0.0255713 0.375121 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="803840140" name="gui2_huilu03hongd">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui2_huilu03hongd.mesh</mesh_name>
+					<surface name="09 - Default" material="09 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 -7.65949e-008 -0.0255715 0.37512 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="431889844" name="gui2_huilu03lvd">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui2_huilu03lvd.mesh</mesh_name>
+					<surface name="08 - Default" material="08 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 9.99064e-009 -0.0255715 0.37512 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="538931824" name="gui2_huilu03">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui2_huilu03.mesh</mesh_name>
+					<surface name="04 - Default" material="04 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 -2.19794e-007 -0.0255718 0.375121 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1965947233" name="gui2_huilu02">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui2_huilu02.mesh</mesh_name>
+					<surface name="04 - Default" material="04 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 -1.66511e-007 -0.0255718 0.18756 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="2079084651" name="gui2_beiban">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui2_beiban.mesh</mesh_name>
+					<surface name="01 - Default" material="01 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 -1.23218e-007 0.016977 -2.13134e-007 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1512178904" name="gui2_huilu01lvd">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui2_huilu01lvd.mesh</mesh_name>
+					<surface name="08 - Default" material="08 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 7.65949e-008 -0.0255715 -1.06567e-007 1</transform>
+				</node>
+			</node>
+			<node type="ObjectMeshStatic" id="1868687371" name="gui3">
+				<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui3.mesh</mesh_name>
+				<surface name="01 - Default" material="01 - Default" property="surface_base"/>
+				<surface name="guiti" material="guiti" property="surface_base"/>
+				<transform>143.185 0 0 0 0 6.25881e-006 143.185 0 0 -143.185 6.25881e-006 0 5.02174 178.688 -75.0013 1</transform>
+				<node type="ObjectMeshStatic" id="1198744815" name="gui3_huilu01">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui3_huilu01.mesh</mesh_name>
+					<surface name="03 - Default" material="03 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 1.4986e-007 -0.0054339 3.19701e-007 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1953166192" name="gui3_huilu02">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui3_huilu02.mesh</mesh_name>
+					<surface name="03 - Default" material="03 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 3.62993e-007 -0.0054339 0.189226 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1989549108" name="gui3_huilu03">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui3_huilu03.mesh</mesh_name>
+					<surface name="03 - Default" material="03 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 5.76127e-007 -0.00543401 0.378452 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1939478744" name="gui3_huilu04">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui3_huilu04.mesh</mesh_name>
+					<surface name="03 - Default" material="03 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 8.95828e-007 -0.00543385 0.567678 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="149778932" name="gui3_huilu05">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui3_huilu05.mesh</mesh_name>
+					<surface name="03 - Default" material="03 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 1.10896e-006 -0.00543396 0.756904 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1844761635" name="gui3_huilu06">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui3_huilu06.mesh</mesh_name>
+					<surface name="03 - Default" material="03 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 1.32209e-006 -0.00543364 0.94613 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="722162760" name="gui3_huilu07">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui3_huilu07.mesh</mesh_name>
+					<surface name="03 - Default" material="03 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 1.6418e-006 -0.00543369 1.13536 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="648963424" name="gui3_huilu08">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui3_huilu08.mesh</mesh_name>
+					<surface name="03 - Default" material="03 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 1.74836e-006 -0.00543369 1.32458 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1090570261" name="gui3_huilu09">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui3_huilu09.mesh</mesh_name>
+					<surface name="03 - Default" material="03 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 2.06806e-006 -0.00543358 1.51381 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1258335825" name="gui3_huilu10">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui3_huilu10.mesh</mesh_name>
+					<surface name="03 - Default" material="03 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 2.17463e-006 -0.00543364 1.70303 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="194792731" name="gui3_huilu11">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui3_huilu11.mesh</mesh_name>
+					<surface name="03 - Default" material="03 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 2.38776e-006 -0.00543348 1.89226 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="434513395" name="gui3_beiban">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui3_beiban.mesh</mesh_name>
+					<surface name="01 - Default" material="01 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 5.19513e-007 0.0391075 -1.06567e-007 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1320699128" name="gui3_huilu01_ld">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui3_huilu01_ld.mesh</mesh_name>
+					<surface name="08 - Default" material="08 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 7.25987e-007 -0.0054339 6.39402e-007 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="132887562" name="gui3_huilu02_ld">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui3_huilu02_ld.mesh</mesh_name>
+					<surface name="08 - Default" material="08 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 9.3912e-007 -0.00543412 0.189226 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="2088918325" name="gui3_huilu03_ld">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui3_huilu03_ld.mesh</mesh_name>
+					<surface name="08 - Default" material="08 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 1.25882e-006 -0.00543401 0.378452 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1844421794" name="gui3_huilu04_ld">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui3_huilu04_ld.mesh</mesh_name>
+					<surface name="08 - Default" material="08 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 1.47195e-006 -0.0054339 0.567678 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1606481480" name="gui3_huilu05_ld">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui3_huilu05_ld.mesh</mesh_name>
+					<surface name="08 - Default" material="08 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 1.68509e-006 -0.00543385 0.756904 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="787581089" name="gui3_huilu06_ld">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui3_huilu06_ld.mesh</mesh_name>
+					<surface name="08 - Default" material="08 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 1.89822e-006 -0.00543374 0.94613 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="975015331" name="gui3_huilu07_ld">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui3_huilu07_ld.mesh</mesh_name>
+					<surface name="08 - Default" material="08 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 2.00479e-006 -0.00543374 1.13536 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1557668163" name="gui3_huilu08_ld">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui3_huilu08_ld.mesh</mesh_name>
+					<surface name="08 - Default" material="08 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 2.32449e-006 -0.00543374 1.32458 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="2020352437" name="gui3_huilu09_ld">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui3_huilu09_ld.mesh</mesh_name>
+					<surface name="08 - Default" material="08 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 2.53762e-006 -0.00543364 1.51381 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1647789486" name="gui3_huilu10_ld">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui3_huilu10_ld.mesh</mesh_name>
+					<surface name="08 - Default" material="08 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 2.75076e-006 -0.00543374 1.70303 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1374854646" name="gui3_huilu11_ld">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui3_huilu11_ld.mesh</mesh_name>
+					<surface name="08 - Default" material="08 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 2.96389e-006 -0.0054338 1.89226 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="790089073" name="gui3_huilu01_kg">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui3_huilu01_kg.mesh</mesh_name>
+					<surface name="07 - Default" material="07 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 7.15996e-007 -0.00543401 6.39402e-007 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1940864497" name="gui3_huilu01_hd">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui3_huilu01_hd.mesh</mesh_name>
+					<surface name="09 - Default" material="09 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 7.39307e-007 -0.0054339 6.39402e-007 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1489073935" name="gui3_huilu02_kg">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui3_huilu02_kg.mesh</mesh_name>
+					<surface name="07 - Default" material="07 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 9.2913e-007 -0.00543385 0.189226 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="648543300" name="gui3_huilu02_hd">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui3_huilu02_hd.mesh</mesh_name>
+					<surface name="09 - Default" material="09 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 9.52441e-007 -0.00543412 0.189226 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1183109512" name="gui3_huilu03_kg">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui3_huilu03_kg.mesh</mesh_name>
+					<surface name="07 - Default" material="07 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 1.14226e-006 -0.00543385 0.378452 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="2049308339" name="gui3_huilu03_hd">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui3_huilu03_hd.mesh</mesh_name>
+					<surface name="09 - Default" material="09 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 1.16557e-006 -0.00543401 0.378452 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1518084066" name="gui3_huilu04_kg">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui3_huilu04_kg.mesh</mesh_name>
+					<surface name="07 - Default" material="07 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 1.24883e-006 -0.00543385 0.567678 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1829294630" name="gui3_huilu04_hd">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui3_huilu04_hd.mesh</mesh_name>
+					<surface name="09 - Default" material="09 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 1.27214e-006 -0.0054339 0.567678 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="358303404" name="gui3_huilu05_kg">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui3_huilu05_kg.mesh</mesh_name>
+					<surface name="07 - Default" material="07 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 1.6751e-006 -0.0054338 0.756904 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="252259254" name="gui3_huilu05_hd">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui3_huilu05_hd.mesh</mesh_name>
+					<surface name="09 - Default" material="09 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 1.69841e-006 -0.00543385 0.756904 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1144304012" name="gui3_huilu06_kg">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui3_huilu06_kg.mesh</mesh_name>
+					<surface name="07 - Default" material="07 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 1.88823e-006 -0.00543374 0.94613 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="822409399" name="gui3_huilu06_hd">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui3_huilu06_hd.mesh</mesh_name>
+					<surface name="09 - Default" material="09 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 1.91154e-006 -0.00543374 0.94613 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="591281347" name="gui3_huilu07_kg">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui3_huilu07_kg.mesh</mesh_name>
+					<surface name="07 - Default" material="07 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 2.10136e-006 -0.00543369 1.13536 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="104853947" name="gui3_huilu07_hd">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui3_huilu07_hd.mesh</mesh_name>
+					<surface name="09 - Default" material="09 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 2.12468e-006 -0.00543374 1.13536 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="144578485" name="gui3_huilu08_kg">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui3_huilu08_kg.mesh</mesh_name>
+					<surface name="07 - Default" material="07 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 2.3145e-006 -0.00543353 1.32458 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1353776283" name="gui3_huilu08_hd">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui3_huilu08_hd.mesh</mesh_name>
+					<surface name="09 - Default" material="09 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 2.23124e-006 -0.00543374 1.32458 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="187741557" name="gui3_huilu09_kg">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui3_huilu09_kg.mesh</mesh_name>
+					<surface name="07 - Default" material="07 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 2.52763e-006 -0.00543353 1.51381 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="122392450" name="gui3_huilu09_hd">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui3_huilu09_hd.mesh</mesh_name>
+					<surface name="09 - Default" material="09 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 2.55094e-006 -0.00543364 1.51381 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="743419209" name="gui3_huilu10_kg">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui3_huilu10_kg.mesh</mesh_name>
+					<surface name="07 - Default" material="07 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 2.74077e-006 -0.00543342 1.70303 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="2118328309" name="gui3_huilu10_hd">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui3_huilu10_hd.mesh</mesh_name>
+					<surface name="09 - Default" material="09 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 2.76408e-006 -0.00543374 1.70303 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="2090575923" name="gui3_huilu11_kg">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui3_huilu11_kg.mesh</mesh_name>
+					<surface name="07 - Default" material="07 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 2.9539e-006 -0.00543364 1.89226 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="240615893" name="gui3_huilu11_hd">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/gui3_huilu11_hd.mesh</mesh_name>
+					<surface name="09 - Default" material="09 - Default" property="surface_base"/>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 2.97721e-006 -0.0054338 1.89226 1</transform>
+				</node>
+			</node>
+			<node type="ObjectMeshStatic" id="1220756856" name="boli">
+				<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/boli.mesh</mesh_name>
+				<surface name="glass" material="glass" property="surface_base"/>
+				<transform>1.09043 0 0 0 0 -7.36049e-009 -0.763764 0 0 0.168388 -3.33852e-008 0 -6.10352e-005 387.724 194.828 1</transform>
+			</node>
+			<node type="NodeDummy" id="1058560110" name="deng">
+				<transform>1 0 0 0 0 0 -1 0 0 1 0 0 0 31.8521 2.02601e-014 1</transform>
+				<node type="ObjectMeshStatic" id="977994028" name="yd_dguan08">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/yd_dguan08.mesh</mesh_name>
+					<surface name="14 - Default" material="14 - Default" property="surface_base"/>
+					<transform>0.636532 0 0 0 0 -2.78237e-008 -0.472985 0 0 0.636532 -2.06748e-008 0 -60.3953 199.906 379.75 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1831958397" name="yd_dguan07">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/yd_dguan07.mesh</mesh_name>
+					<surface name="14 - Default" material="14 - Default" property="surface_base"/>
+					<transform>0.636532 0 0 0 0 -2.78237e-008 -0.472985 0 0 0.636532 -2.06748e-008 0 135.645 199.906 379.75 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="173482678" name="yd_dguan06">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/yd_dguan06.mesh</mesh_name>
+					<surface name="14 - Default" material="14 - Default" property="surface_base"/>
+					<transform>0.636532 0 0 0 0 -2.78237e-008 -0.472985 0 0 0.636532 -2.06748e-008 0 -272.47 199.906 379.75 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1873760309" name="yd_dguan05">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/yd_dguan05.mesh</mesh_name>
+					<surface name="14 - Default" material="14 - Default" property="surface_base"/>
+					<transform>0.636532 0 0 0 0 -2.78237e-008 -0.472985 0 0 0.636532 -2.06748e-008 0 331.685 199.906 379.75 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="493919577" name="yd_dguan04">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/yd_dguan04.mesh</mesh_name>
+					<surface name="14 - Default" material="14 - Default" property="surface_base"/>
+					<transform>0.636532 0 0 0 0 -2.78237e-008 -0.472985 0 0 0.636532 -2.06748e-008 0 -301.589 62.824 379.75 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1179276618" name="yd_dguan03">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/yd_dguan03.mesh</mesh_name>
+					<surface name="14 - Default" material="14 - Default" property="surface_base"/>
+					<transform>0.636532 0 0 0 0 -2.78237e-008 -0.472985 0 0 0.636532 -2.06748e-008 0 358.269 62.824 379.75 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="860815036" name="yd_dguan02">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/yd_dguan02.mesh</mesh_name>
+					<surface name="14 - Default" material="14 - Default" property="surface_base"/>
+					<transform>0.636532 0 0 0 0 -2.78237e-008 -0.472985 0 0 0.636532 -2.06748e-008 0 -272.47 -66.2147 379.75 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1017931257" name="yd_dguan01">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/yd_dguan01.mesh</mesh_name>
+					<surface name="14 - Default" material="14 - Default" property="surface_base"/>
+					<transform>0.636532 0 0 0 0 -2.78237e-008 -0.472985 0 0 0.636532 -2.06748e-008 0 34.6975 -66.2147 379.75 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="262099058" name="yuandeng01">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/yuandeng01.mesh</mesh_name>
+					<surface name="13 - Default" material="13 - Default" property="surface_base"/>
+					<transform>0.75221 0 0 0 0 -3.28801e-008 -0.75221 0 0 0.75221 -3.28801e-008 0 34.6975 -66.2147 381.882 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="314061327" name="yuandeng02">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/yuandeng02.mesh</mesh_name>
+					<surface name="13 - Default" material="13 - Default" property="surface_base"/>
+					<transform>0.75221 0 0 0 0 -3.28801e-008 -0.75221 0 0 0.75221 -3.28801e-008 0 -272.47 -66.2147 381.882 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="432998020" name="yuandeng03">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/yuandeng03.mesh</mesh_name>
+					<surface name="13 - Default" material="13 - Default" property="surface_base"/>
+					<transform>0.75221 0 0 0 0 -3.28801e-008 -0.75221 0 0 0.75221 -3.28801e-008 0 358.269 62.8241 381.882 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="668314096" name="yuandeng04">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/yuandeng04.mesh</mesh_name>
+					<surface name="13 - Default" material="13 - Default" property="surface_base"/>
+					<transform>0.75221 0 0 0 0 -3.28801e-008 -0.75221 0 0 0.75221 -3.28801e-008 0 -301.589 62.8241 381.882 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="265347574" name="yuandeng05">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/yuandeng05.mesh</mesh_name>
+					<surface name="13 - Default" material="13 - Default" property="surface_base"/>
+					<transform>0.75221 0 0 0 0 -3.28801e-008 -0.75221 0 0 0.75221 -3.28801e-008 0 331.685 199.906 381.882 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="523524770" name="yuandeng06">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/yuandeng06.mesh</mesh_name>
+					<surface name="13 - Default" material="13 - Default" property="surface_base"/>
+					<transform>0.75221 0 0 0 0 -3.28801e-008 -0.75221 0 0 0.75221 -3.28801e-008 0 -272.47 199.906 381.882 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="635755088" name="yuandeng07">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/yuandeng07.mesh</mesh_name>
+					<surface name="13 - Default" material="13 - Default" property="surface_base"/>
+					<transform>0.75221 0 0 0 0 -3.28801e-008 -0.75221 0 0 0.75221 -3.28801e-008 0 135.645 199.906 381.882 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="135848403" name="yuandeng08">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/yuandeng08.mesh</mesh_name>
+					<surface name="13 - Default" material="13 - Default" property="surface_base"/>
+					<transform>0.75221 0 0 0 0 -3.28801e-008 -0.75221 0 0 0.75221 -3.28801e-008 0 -60.3953 199.906 381.882 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="828442919" name="yuandeng09">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/yuandeng09.mesh</mesh_name>
+					<surface name="13 - Default" material="13 - Default" property="surface_base"/>
+					<transform>0.75221 0 0 0 0 -3.28801e-008 -0.75221 0 0 0.75221 -3.28801e-008 0 331.685 -66.2147 381.882 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="186404576" name="yd_dguan09">
+					<mesh_name>worlds/PDJ/PDJ_2020-06-18_14-59-24-7/meshes/yd_dguan09.mesh</mesh_name>
+					<surface name="14 - Default" material="14 - Default" property="surface_base"/>
+					<transform>0.636532 0 0 0 0 -2.78237e-008 -0.472985 0 0 0.636532 -2.06748e-008 0 331.685 -66.2147 379.75 1</transform>
+				</node>
+			</node>
+		</node>
+	</editor>
+	<camera transform="0.999945 -0.0104715 -8.33112e-010 0 0.00526738 0.502995 0.864273 0 -0.00905021 -0.864226 0.503023 0 -15.847 -840.935 669.756 1" target="65.1313 42.9633 206.113"/>
+</world>

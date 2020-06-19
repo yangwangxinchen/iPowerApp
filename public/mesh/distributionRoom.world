@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="utf-8"?>
+<world version="1.21">
+	<materials>
+		<library>worlds/PDF/PDF_2020-06-18_15-20-50-8/materials/PDF.mat</library>
+	</materials>
+	<editor>
+		<node type="NodeLayer" id="1510133022" name="日照系统">
+			<layer>nodes/level.node</layer>
+			<transform>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</transform>
+			<node type="LightWorld" id="273078154" name="sun">
+				<scattering>1</scattering>
+				<shadow_range>2000</shadow_range>
+				<shadow_distribute>0.233333</shadow_distribute>
+				<deferred>1</deferred>
+				<color>1 0.88341 0.637142 1</color>
+				<multiplier>1.79847</multiplier>
+				<shadow_size>4</shadow_size>
+				<shadow_softness>2</shadow_softness>
+				<transform>-0.275579 -0.477317 -0.834401 0 0.866026 -0.5 0 0 -0.417201 -0.722612 0.551158 0 -2.56563 -264.813 0.0789404 1</transform>
+			</node>
+			<node type="ObjectSky" id="344549225" collider="0" name="sky">
+				<size>8000 8000 300</size>
+				<min_slices>256</min_slices>
+				<max_slices>512</max_slices>
+				<distribute>4</distribute>
+				<humidity>0.8</humidity>
+				<transition>0.5</transition>
+				<extinction>0.6</extinction>
+				<density_image>textures/environment/clouds.png</density_image>
+				<density_velocity>30 30 0</density_velocity>
+				<density_offset>859.703 859.703 0</density_offset>
+				<density_layer>2</density_layer>
+				<surface name="sphere" material="sky" property="surface_base">
+					<material>
+						<blend src="src_alpha" dest="one_minus_src_alpha"/>
+						<options post_scattering="1"/>
+						<state name="inscattering">1</state>
+					</material>
+				</surface>
+				<surface name="volume" material="sky" property="surface_base">
+					<material>
+						<blend src="src_alpha" dest="one_minus_src_alpha"/>
+						<options post_scattering="1" two_sided="1"/>
+						<state name="surface">1</state>
+						<state name="inscattering">1</state>
+					</material>
+				</surface>
+				<surface name="shadow" enabled="0" material="sky" property="surface_base">
+					<material>
+						<blend src="zero" dest="src_alpha"/>
+						<options/>
+						<state name="surface">2</state>
+					</material>
+				</surface>
+				<transform>1 0 0 0 0 1 0 0 0 0 1 0 0 0 1000 1</transform>
+			</node>
+			<node type="WorldExpression" id="570992271" name="NodesToPlayerBinding1">
+				<size>100000 100000 100000</size>
+				<expression>{
+
+// get player
+Player player = engine.editor.isLoaded() ? engine.editor.getPlayer() : engine.game.getPlayer();
+if(player == 0) return;
+
+// player position
+vec3 offset = vec3(0.0f,0.0f,-15.0f);
+mat4 transform = translate(player.getWorldTransform() * offset);
+
+// transform childs
+Node node = getNode();
+forloop(int i = 0; node.getNumChilds()) {
+Node child = node.getChild(i);
+child.setWorldTransform(transform);
+}
+
+}</expression>
+				<transform>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</transform>
+				<node type="NodeDummy" id="1801365276" name="NodesContainer">
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 4.70708 -257.827 204.724 1</transform>
+					<node type="ObjectParticles" id="1001024305" collider="0" name="rain_drops">
+						<particles_type>3</particles_type>
+						<spawn_rate>0</spawn_rate>
+						<physical_mask>-1</physical_mask>
+						<length_stretch>0.1</length_stretch>
+						<emitter_type>3</emitter_type>
+						<emitter_enabled>1</emitter_enabled>
+						<emitter_size>110 110 0</emitter_size>
+						<emitter_direction>0 0 -20</emitter_direction>
+						<emitter_spread>1 1 0</emitter_spread>
+						<life_mean>1</life_mean>
+						<life_spread>0</life_spread>
+						<velocity_mean>40</velocity_mean>
+						<velocity_spread>27</velocity_spread>
+						<radius_mean>0.06</radius_mean>
+						<radius_spread>0.03</radius_spread>
+						<gravity>0 0 -10</gravity>
+						<force>
+							<attached>1</attached>
+							<transform>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</transform>
+							<radius>80</radius>
+							<attenuation>1</attenuation>
+							<attractor>0</attractor>
+							<rotator>0</rotator>
+						</force>
+						<deflector>
+							<type>1</type>
+							<attached>0</attached>
+							<transform>0.714943 -0.699183 0 0 0.699183 0.714943 0 0 0 0 1 0 -13.8653 -216.974 4.34486 1</transform>
+							<size>5.5 9.9 0</size>
+							<restitution>0.85</restitution>
+							<roughness>0</roughness>
+						</deflector>
+						<surface name="particles" max_fade_distance="1e+008" material="rain_drops" property="surface_base"/>
+						<transform>1 0 0 0 0 1 0 0 0 0 1 0 -2.44066 -4.50647 27.7426 1</transform>
+					</node>
+					<node type="ObjectParticles" id="265811729" collider="0" name="rain_drops_collision1">
+						<particles_type>3</particles_type>
+						<collision>1</collision>
+						<culling>1</culling>
+						<spawn_rate>0</spawn_rate>
+						<physical_mask>-1</physical_mask>
+						<length_stretch>0.3</length_stretch>
+						<emitter_type>3</emitter_type>
+						<emitter_enabled>1</emitter_enabled>
+						<emitter_size>30 30 0</emitter_size>
+						<emitter_direction>0 4.96845 -20</emitter_direction>
+						<emitter_spread>1.33123 2.32492 0</emitter_spread>
+						<life_mean>1</life_mean>
+						<life_spread>0</life_spread>
+						<velocity_mean>60</velocity_mean>
+						<velocity_spread>40</velocity_spread>
+						<radius_mean>0.1</radius_mean>
+						<radius_spread>0.04</radius_spread>
+						<gravity>0 0 -10</gravity>
+						<force>
+							<attached>1</attached>
+							<transform>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</transform>
+							<radius>80</radius>
+							<attenuation>1</attenuation>
+							<attractor>0</attractor>
+							<rotator>0</rotator>
+						</force>
+						<surface name="particles" enabled="0" max_fade_distance="1e+008" material="rain_drops" property="surface_base"/>
+						<transform>1 0 0 0 0 1 0 0 0 0 1 0 0 0 30 1</transform>
+						<node type="ObjectParticles" id="1542552638" collider="0" name="rain_splashes">
+							<variation_x>1</variation_x>
+							<variation_y>1</variation_y>
+							<spawn_rate>1</spawn_rate>
+							<growth_damping>1</growth_damping>
+							<emitter_type>5</emitter_type>
+							<emitter_enabled>1</emitter_enabled>
+							<emitter_direction>0 0 10</emitter_direction>
+							<life_mean>0.3</life_mean>
+							<life_spread>0.1</life_spread>
+							<velocity_mean>0</velocity_mean>
+							<velocity_spread>0.3</velocity_spread>
+							<radius_mean>0.05</radius_mean>
+							<radius_spread>0.025</radius_spread>
+							<growth_mean>0.05</growth_mean>
+							<growth_spread>0.05</growth_spread>
+							<gravity>0 0 -5</gravity>
+							<surface name="particles" material="rain_splash" property="surface_base"/>
+							<transform>1 0 0 0 0 1 0 0 0 0 1 0 3.48336 -2.71939 -0.352833 1</transform>
+						</node>
+						<node type="ObjectParticles" id="115936386" collider="0" name="rain_splashes_fume">
+							<variation_x>1</variation_x>
+							<variation_y>1</variation_y>
+							<texture_atlas>1</texture_atlas>
+							<spawn_rate>1</spawn_rate>
+							<growth_damping>1</growth_damping>
+							<emitter_type>5</emitter_type>
+							<emitter_enabled>1</emitter_enabled>
+							<emitter_direction>0 0 10</emitter_direction>
+							<life_mean>0.8</life_mean>
+							<life_spread>0.1</life_spread>
+							<velocity_mean>0.7</velocity_mean>
+							<velocity_spread>0.3</velocity_spread>
+							<radius_mean>0.2</radius_mean>
+							<radius_spread>0.05</radius_spread>
+							<growth_mean>0.1</growth_mean>
+							<growth_spread>0.05</growth_spread>
+							<gravity>0 0 -2</gravity>
+							<surface name="particles" material="fume" property="surface_base"/>
+							<transform>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</transform>
+						</node>
+					</node>
+					<node type="ObjectParticles" id="1345135637" collider="0" name="rain_drops_collision2">
+						<particles_type>3</particles_type>
+						<collision>1</collision>
+						<culling>1</culling>
+						<spawn_rate>0</spawn_rate>
+						<physical_mask>-1</physical_mask>
+						<length_stretch>0.3</length_stretch>
+						<emitter_type>3</emitter_type>
+						<emitter_enabled>1</emitter_enabled>
+						<emitter_size>70 70 0</emitter_size>
+						<emitter_direction>0 4.96845 -20</emitter_direction>
+						<emitter_spread>1.33123 2.32492 0</emitter_spread>
+						<life_mean>1</life_mean>
+						<life_spread>0</life_spread>
+						<velocity_mean>60</velocity_mean>
+						<velocity_spread>40</velocity_spread>
+						<radius_mean>0.1</radius_mean>
+						<radius_spread>0.04</radius_spread>
+						<gravity>0 0 -10</gravity>
+						<force>
+							<attached>1</attached>
+							<transform>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</transform>
+							<radius>80</radius>
+							<attenuation>1</attenuation>
+							<attractor>0</attractor>
+							<rotator>0</rotator>
+						</force>
+						<surface name="particles" enabled="0" max_fade_distance="1e+008" material="rain_drops" property="surface_base"/>
+						<transform>1 0 0 0 0 1 0 0 0 0 1 0 0 0 30 1</transform>
+						<node type="ObjectParticles" id="2084393000" collider="0" name="rain_fume">
+							<texture_atlas>1</texture_atlas>
+							<spawn_rate>1</spawn_rate>
+							<growth_damping>1</growth_damping>
+							<emitter_type>5</emitter_type>
+							<emitter_enabled>1</emitter_enabled>
+							<life_mean>5</life_mean>
+							<life_spread>0</life_spread>
+							<velocity_mean>0</velocity_mean>
+							<velocity_spread>0</velocity_spread>
+							<rotation_mean>0</rotation_mean>
+							<rotation_spread>20</rotation_spread>
+							<radius_mean>4</radius_mean>
+							<radius_spread>0</radius_spread>
+							<growth_mean>1</growth_mean>
+							<growth_spread>0</growth_spread>
+							<surface name="particles" material="fume" property="surface_base"/>
+							<transform>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</transform>
+						</node>
+					</node>
+				</node>
+				<node type="NodeReference" id="872455522" name="stars">
+					<reference>library/weather/nodes/stars.node</reference>
+					<transform>1 0 0 0 0 1 0 0 0 0 1 0 4.70708 -257.827 204.724 1</transform>
+				</node>
+			</node>
+			<node type="WorldExpression" id="1814417273" name="NodesToPlayerBinding2">
+				<size>100000 100000 100000</size>
+				<expression>{
+
+// get player
+Player player = engine.editor.isLoaded() ? engine.editor.getPlayer() : engine.game.getPlayer();
+if(player == 0) return;
+
+// player position
+mat4 transform = player.getWorldTransform();
+
+// transform childs
+Node node = getNode();
+forloop(int i = 0; node.getNumChilds()) {
+Node child = node.getChild(i);
+child.setWorldTransform(transform);
+}
+
+}</expression>
+				<transform>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</transform>
+				<node type="NodeDummy" id="906836484" name="NodesContainer">
+					<transform>0.999994 0.00349074 -2.50457e-010 0 -0.00170299 0.487857 0.872922 0 0.00304715 -0.872917 0.48786 0 4.75279 -270.921 212.042 1</transform>
+					<node type="ObjectParticles" id="1725178221" collider="0" name="camera_drops">
+						<variation_x>1</variation_x>
+						<texture_atlas>1</texture_atlas>
+						<spawn_rate>0</spawn_rate>
+						<emitter_type>3</emitter_type>
+						<emitter_enabled>1</emitter_enabled>
+						<emitter_based>1</emitter_based>
+						<emitter_continuous>0</emitter_continuous>
+						<emitter_size>2 0 2</emitter_size>
+						<emitter_direction>0 0 -1</emitter_direction>
+						<emitter_spread>0 0 0</emitter_spread>
+						<life_mean>1</life_mean>
+						<life_spread>0.3</life_spread>
+						<velocity_mean>0</velocity_mean>
+						<velocity_spread>0</velocity_spread>
+						<angle_mean>0</angle_mean>
+						<angle_spread>0</angle_spread>
+						<radius_mean>0.07</radius_mean>
+						<radius_spread>0.03</radius_spread>
+						<gravity>0 0 -0.1</gravity>
+						<surface name="particles" material="camera_drop" property="surface_base"/>
+						<transform>1 1.49789e-008 3.44132e-008 0 -2.76195e-008 0 -1 0 5.3551e-009 1 8.9407e-008 0 0.00012207 3.05176e-005 -1 1</transform>
+					</node>
+				</node>
+			</node>
+		</node>
+		<node type="NodeDummy" id="1364663178" name="RootNode">
+			<transform>1 0 0 0 0 -4.37114e-008 1 0 0 -1 -4.37114e-008 0 0 0 0 1</transform>
+			<node type="NodeDummy" id="1111445284" name="">
+				<transform>1 0 0 0 0 0 -1 0 0 1 0 0 0 0 0 1</transform>
+			</node>
+			<node type="NodeDummy" id="1514434893" name="　">
+				<transform>1 0 0 0 0 0 -1 0 0 1 0 0 0 0 0 1</transform>
+			</node>
+			<node type="ObjectMeshStatic" id="544328986" name="byq">
+				<mesh_name>worlds/PDF/PDF_2020-06-18_15-20-50-8/meshes/byq.mesh</mesh_name>
+				<surface name="bianyaqi" material="bianyaqi" property="surface_base"/>
+				<transform>0.837872 0 0 0 0 -0.837872 3.66245e-008 0 0 -3.66245e-008 -0.837872 0 1.43471 -0.349958 0.726043 1</transform>
+			</node>
+			<node type="ObjectMeshStatic" id="112439304" name="waike">
+				<mesh_name>worlds/PDF/PDF_2020-06-18_15-20-50-8/meshes/waike.mesh</mesh_name>
+				<surface name="14 - Default" material="14 - Default" property="surface_base"/>
+				<surface name="06 - Default" material="06 - Default" property="surface_base"/>
+				<transform>0.837872 0 0 0 0 -0.837872 3.66245e-008 0 0 -3.66245e-008 -0.837872 0 1.43471 -0.349955 0.726042 1</transform>
+			</node>
+			<node type="ObjectMeshStatic" id="551705149" name="dyg1">
+				<mesh_name>worlds/PDF/PDF_2020-06-18_15-20-50-8/meshes/dyg1.mesh</mesh_name>
+				<surface name="guiti" material="guiti" property="surface_base"/>
+				<surface name="02 - Default" material="02 - Default" property="surface_base"/>
+				<surface name="bianyaqi" material="bianyaqi" property="surface_base"/>
+				<surface name="03 - Default" material="03 - Default" property="surface_base"/>
+				<surface name="dlq" material="dlq" property="surface_base"/>
+				<surface name="08 - Default" material="08 - Default" property="surface_base"/>
+				<surface name="07 - Default" material="07 - Default" property="surface_base"/>
+				<surface name="13 - Default" material="13 - Default" property="surface_base"/>
+				<surface name="12 - Default" material="12 - Default" property="surface_base"/>
+				<surface name="11 - Default" material="11 - Default" property="surface_base"/>
+				<transform>0.837872 0 0 0 0 -0.837872 3.66245e-008 0 0 -3.66245e-008 -0.837872 0 1.43472 -0.349957 0.726043 1</transform>
+			</node>
+			<node type="ObjectMeshStatic" id="1503055599" name="gyg1">
+				<mesh_name>worlds/PDF/PDF_2020-06-18_15-20-50-8/meshes/gyg1.mesh</mesh_name>
+				<surface name="guiti" material="guiti" property="surface_base"/>
+				<surface name="07 - Default" material="07 - Default" property="surface_base"/>
+				<surface name="08 - Default" material="08 - Default" property="surface_base"/>
+				<surface name="10 - Default" material="10 - Default" property="surface_base"/>
+				<surface name="dlq" material="dlq" property="surface_base"/>
+				<transform>0.837872 0 0 0 0 -0.837872 3.66245e-008 0 0 -3.66245e-008 -0.837872 0 1.43471 -0.349958 0.726045 1</transform>
+			</node>
+			<node type="ObjectMeshStatic" id="1241426997" name="gyg2">
+				<mesh_name>worlds/PDF/PDF_2020-06-18_15-20-50-8/meshes/gyg2.mesh</mesh_name>
+				<surface name="guiti" material="guiti" property="surface_base"/>
+				<surface name="07 - Default" material="07 - Default" property="surface_base"/>
+				<surface name="08 - Default" material="08 - Default" property="surface_base"/>
+				<surface name="10 - Default" material="10 - Default" property="surface_base"/>
+				<surface name="dlq" material="dlq" property="surface_base"/>
+				<transform>0.837872 0 0 0 0 -0.837872 3.66245e-008 0 0 -3.66245e-008 -0.837872 0 1.43471 -0.349958 0.726043 1</transform>
+			</node>
+			<node type="ObjectMeshStatic" id="351692913" name="qiaojia01">
+				<mesh_name>worlds/PDF/PDF_2020-06-18_15-20-50-8/meshes/qiaojia01.mesh</mesh_name>
+				<surface name="14 - Default" material="14 - Default" property="surface_base"/>
+				<transform>0.837872 0 0 0 0 -0.837872 3.66245e-008 0 0 -3.66245e-008 -0.837872 0 1.43472 -0.349964 0.726042 1</transform>
+			</node>
+			<node type="ObjectMeshStatic" id="1873548204" name="qiaojia02">
+				<mesh_name>worlds/PDF/PDF_2020-06-18_15-20-50-8/meshes/qiaojia02.mesh</mesh_name>
+				<surface name="14 - Default" material="14 - Default" property="surface_base"/>
+				<transform>0.837872 0 0 0 0 -0.837872 3.66245e-008 0 0 -3.66245e-008 -0.837872 0 1.43471 -0.349964 0.726042 1</transform>
+			</node>
+			<node type="ObjectMeshStatic" id="503181317" name="wuding">
+				<mesh_name>worlds/PDF/PDF_2020-06-18_15-20-50-8/meshes/wuding.mesh</mesh_name>
+				<surface name="14 - Default" material="14 - Default" property="surface_base"/>
+				<transform>0.947541 0 0 0 0 -0.297061 4.80762e-008 0 0 -1.29849e-008 -1.09985 0 1.43471 116.877 0.726042 1</transform>
+			</node>
+			<node type="ObjectMeshStatic" id="551168150" name="diban">
+				<mesh_name>worlds/PDF/PDF_2020-06-18_15-20-50-8/meshes/diban.mesh</mesh_name>
+				<surface name="14 - Default" material="14 - Default" property="surface_base"/>
+				<transform>1.11404 0 0 0 0 -0.837872 6.04924e-008 0 0 -3.66245e-008 -1.3839 0 1.43471 -0.349957 0.726042 1</transform>
+			</node>
+			<node type="ObjectMeshStatic" id="1660603887" name="geban">
+				<mesh_name>worlds/PDF/PDF_2020-06-18_15-20-50-8/meshes/geban.mesh</mesh_name>
+				<surface name="15 - Default" material="15 - Default" property="surface_base"/>
+				<transform>0.837872 -8.9407e-008 9.54575e-010 0 -8.9407e-008 -0.837872 3.66501e-008 0 9.29691e-010 -3.75791e-008 -0.816034 0 1.43471 -0.349953 0.726043 1</transform>
+			</node>
+			<node type="NodeDummy" id="151023739" name="mingpai">
+				<transform>1 0 0 0 0 0 -1 0 0 1 0 0 0 0 0 1</transform>
+				<node type="ObjectMeshStatic" id="1198623498" name="diyashi01">
+					<mesh_name>worlds/PDF/PDF_2020-06-18_15-20-50-8/meshes/diyashi01.mesh</mesh_name>
+					<surface name="04 - Default" material="04 - Default" property="surface_base"/>
+					<surface name="01 - Default" material="01 - Default" property="surface_base"/>
+					<transform>8.47931e-009 0.71106 -4.23825e-008 0 -0.296035 3.53019e-009 5.2439e-008 0 1.87671e-007 4.23825e-008 0.71106 0 -125.728 -1.15256 90.8612 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1537934268" name="diyashi02">
+					<mesh_name>worlds/PDF/PDF_2020-06-18_15-20-50-8/meshes/diyashi02.mesh</mesh_name>
+					<surface name="04 - Default" material="04 - Default" property="surface_base"/>
+					<surface name="01 - Default" material="01 - Default" property="surface_base"/>
+					<transform>-0.711061 -1.07367e-007 1.77062e-022 0 6.89939e-008 -0.456926 4.33612e-008 0 -1.44765e-014 9.58736e-008 0.711061 0 -94.9465 -54.1773 90.8612 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="152829072" name="jinggao01">
+					<mesh_name>worlds/PDF/PDF_2020-06-18_15-20-50-8/meshes/jinggao01.mesh</mesh_name>
+					<surface name="jg" material="jg" property="surface_base"/>
+					<surface name="01 - Default" material="01 - Default" property="surface_base"/>
+					<transform>-0.711061 -1.07367e-007 1.77062e-022 0 6.89939e-008 -0.456926 3.57484e-008 0 -1.87609e-014 1.24248e-007 0.885221 0 -47.9493 -54.4166 90.8612 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="990067419" name="byqpai">
+					<mesh_name>worlds/PDF/PDF_2020-06-18_15-20-50-8/meshes/byqpai.mesh</mesh_name>
+					<surface name="05 - Default" material="05 - Default" property="surface_base"/>
+					<surface name="01 - Default" material="01 - Default" property="surface_base"/>
+					<transform>-0.711061 -1.07367e-007 1.77062e-022 0 6.89939e-008 -0.456926 4.33612e-008 0 -1.44765e-014 9.58736e-008 0.711061 0 4.94693 -54.1773 90.8612 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="720594400" name="jinggao02">
+					<mesh_name>worlds/PDF/PDF_2020-06-18_15-20-50-8/meshes/jinggao02.mesh</mesh_name>
+					<surface name="jg" material="jg" property="surface_base"/>
+					<surface name="01 - Default" material="01 - Default" property="surface_base"/>
+					<transform>-0.711061 -1.07367e-007 1.77062e-022 0 6.89939e-008 -0.456926 3.57484e-008 0 -1.87609e-014 1.24248e-007 0.885221 0 40.7283 -54.4166 90.8612 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="592925128" name="gaoyashi02">
+					<mesh_name>worlds/PDF/PDF_2020-06-18_15-20-50-8/meshes/gaoyashi02.mesh</mesh_name>
+					<surface name="gys" material="gys" property="surface_base"/>
+					<surface name="01 - Default" material="01 - Default" property="surface_base"/>
+					<transform>-0.711061 -1.07367e-007 1.77062e-022 0 6.89939e-008 -0.456926 4.33612e-008 0 -1.44765e-014 9.58736e-008 0.711061 0 93.5029 -54.1773 90.8612 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1446749511" name="gaoyashi01">
+					<mesh_name>worlds/PDF/PDF_2020-06-18_15-20-50-8/meshes/gaoyashi01.mesh</mesh_name>
+					<surface name="gys" material="gys" property="surface_base"/>
+					<surface name="01 - Default" material="01 - Default" property="surface_base"/>
+					<transform>2.23214e-007 -0.711061 1.23875e-015 0 0.456926 1.43437e-007 9.7831e-008 0 -1.80639e-007 -5.56047e-014 0.711061 0 137.249 -15.3078 90.8612 1</transform>
+				</node>
+				<node type="ObjectMeshStatic" id="1268781600" name="jinggao03">
+					<mesh_name>worlds/PDF/PDF_2020-06-18_15-20-50-8/meshes/jinggao03.mesh</mesh_name>
+					<surface name="jg" material="jg" property="surface_base"/>
+					<surface name="01 - Default" material="01 - Default" property="surface_base"/>
+					<transform>2.23214e-007 -0.711061 1.23875e-015 0 0.456926 1.43437e-007 9.02182e-008 0 -2.29774e-007 -7.25898e-014 0.885221 0 137.249 23.5866 90.8612 1</transform>
+				</node>
+			</node>
+			<node type="ObjectMeshStatic" id="1317428170" name="dyg2">
+				<mesh_name>worlds/PDF/PDF_2020-06-18_15-20-50-8/meshes/dyg2.mesh</mesh_name>
+				<surface name="guiti" material="guiti" property="surface_base"/>
+				<surface name="02 - Default" material="02 - Default" property="surface_base"/>
+				<surface name="bianyaqi" material="bianyaqi" property="surface_base"/>
+				<surface name="03 - Default" material="03 - Default" property="surface_base"/>
+				<surface name="dlq" material="dlq" property="surface_base"/>
+				<surface name="08 - Default" material="08 - Default" property="surface_base"/>
+				<surface name="07 - Default" material="07 - Default" property="surface_base"/>
+				<surface name="13 - Default" material="13 - Default" property="surface_base"/>
+				<surface name="12 - Default" material="12 - Default" property="surface_base"/>
+				<surface name="11 - Default" material="11 - Default" property="surface_base"/>
+				<transform>-0.837872 1.7478e-023 -1.26515e-007 0 5.53015e-015 -0.837872 -3.66245e-008 0 -1.26515e-007 -3.66245e-008 0.837872 0 -145.969 -0.349957 -0.505988 1</transform>
+			</node>
+		</node>
+	</editor>
+	<camera transform="0.999994 0.00349074 -1.11661e-010 0 -0.00170299 0.487857 0.872922 0 0.00304715 -0.872917 0.48786 0 4.75279 -270.921 212.042 1" target="5.71248 -9.22588 67.6082"/>
+</world>

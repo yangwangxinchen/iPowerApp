@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<materials version="1.11">
+	<material name="RootNode_base" parent="vizreal_base"/>
+	<material name="bianyaqi" parent="RootNode_base">
+		<texture name="diffuse">worlds/PDF/PDF_2020-06-18_15-20-50-8/textures/DefaultMaterial_Base_Color.dds</texture>
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="diffuse_color">0.588235 0.588235 0.588235 1</parameter>
+		<parameter name="specular_color">0.702 0.702 0.702 1</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="14 - Default" parent="RootNode_base">
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="diffuse_color">0.588235 0.588235 0.588235 1</parameter>
+		<parameter name="specular_color">0 0 0 1</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="06 - Default" parent="RootNode_base">
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="diffuse_color">0.588235 0.588235 0.588235 1</parameter>
+		<parameter name="specular_color">0.9 0.9 0.9 1</parameter>
+		<parameter name="specular_scale">0</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="guiti" parent="RootNode_base">
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="diffuse_color">0.313726 0.313726 0.313726 1</parameter>
+		<parameter name="specular_color">0 0 0 1</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="02 - Default" parent="RootNode_base">
+		<texture name="diffuse">worlds/PDF/PDF_2020-06-18_15-20-50-8/textures/quanjing2.png</texture>
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="specular_color">0 0 0 1</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="03 - Default" parent="RootNode_base">
+		<texture name="diffuse">worlds/PDF/PDF_2020-06-18_15-20-50-8/textures/kongge.png</texture>
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="specular_color">0 0 0 1</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="dlq" parent="RootNode_base">
+		<texture name="diffuse">worlds/PDF/PDF_2020-06-18_15-20-50-8/textures/duanluqi.png</texture>
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="diffuse_color">0.588235 0.588235 0.588235 1</parameter>
+		<parameter name="specular_color">0.9 0.9 0.9 1</parameter>
+		<parameter name="specular_scale">0</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="08 - Default" parent="RootNode_base">
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="diffuse_color">0.156863 0 0 1</parameter>
+		<parameter name="specular_color">0 0 0 1</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="07 - Default" parent="RootNode_base">
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="diffuse_color">0.0235294 0.156863 0.0235294 1</parameter>
+		<parameter name="specular_color">0 0 0 1</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="13 - Default" parent="RootNode_base">
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="diffuse_color">0.0784314 0.0784314 0.0784314 1</parameter>
+		<parameter name="specular_color">0.9 0.9 0.9 1</parameter>
+		<parameter name="specular_scale">0.96</parameter>
+		<parameter name="specular_power">4.92458</parameter>
+	</material>
+	<material name="12 - Default" parent="RootNode_base">
+		<texture name="diffuse">worlds/PDF/PDF_2020-06-18_15-20-50-8/textures/huilu1.png</texture>
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="diffuse_color">0.588235 0.588235 0.588235 1</parameter>
+		<parameter name="specular_color">0.9 0.9 0.9 1</parameter>
+		<parameter name="specular_scale">0</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="11 - Default" parent="RootNode_base">
+		<texture name="diffuse">worlds/PDF/PDF_2020-06-18_15-20-50-8/textures/huilu2.dds</texture>
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="specular_color">0.9 0.9 0.9 1</parameter>
+		<parameter name="specular_scale">0</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="10 - Default" parent="RootNode_base">
+		<texture name="diffuse">worlds/PDF/PDF_2020-06-18_15-20-50-8/textures/timg.jpg</texture>
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="specular_color">0 0 0 1</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="15 - Default" parent="RootNode_base">
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="diffuse_color">0.588235 0.588235 0.588235 1</parameter>
+		<parameter name="specular_color">0.9 0.9 0.9 1</parameter>
+		<parameter name="specular_scale">0</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="04 - Default" parent="RootNode_base">
+		<texture name="diffuse">worlds/PDF/PDF_2020-06-18_15-20-50-8/textures/b.png</texture>
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="diffuse_color">0.588235 0.588235 0.588235 1</parameter>
+		<parameter name="specular_color">0.9 0.9 0.9 1</parameter>
+		<parameter name="specular_scale">0</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="01 - Default" parent="RootNode_base">
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="diffuse_color">0.588235 0.588235 0.588235 1</parameter>
+		<parameter name="specular_color">0.9 0.9 0.9 1</parameter>
+		<parameter name="specular_scale">0</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="jg" parent="RootNode_base">
+		<texture name="diffuse">worlds/PDF/PDF_2020-06-18_15-20-50-8/textures/d.png</texture>
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="diffuse_color">0.588235 0.588235 0.588235 1</parameter>
+		<parameter name="specular_color">0.9 0.9 0.9 1</parameter>
+		<parameter name="specular_scale">0</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="05 - Default" parent="RootNode_base">
+		<texture name="diffuse">worlds/PDF/PDF_2020-06-18_15-20-50-8/textures/c.png</texture>
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="diffuse_color">0.588235 0.588235 0.588235 1</parameter>
+		<parameter name="specular_color">0.9 0.9 0.9 1</parameter>
+		<parameter name="specular_scale">0</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="gys" parent="RootNode_base">
+		<texture name="diffuse">worlds/PDF/PDF_2020-06-18_15-20-50-8/textures/a.png</texture>
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="diffuse_color">0.588235 0.588235 0.588235 1</parameter>
+		<parameter name="specular_color">0.9 0.9 0.9 1</parameter>
+		<parameter name="specular_scale">0</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+</materials>
