@@ -3,16 +3,26 @@ MakerJS.Effects = function (engine) {
     this.engine = engine;
 
     var params = {
-        edgeStrength: 3.0,
-        edgeGlow: 0,  
+        edgeStrength: 5,
+        edgeGlow: 0.5,  
         edgeThickness: 1,
         pulsePeriod: 0,
         usePatternTexture: false
     };
 
+    var clearParams={
+        edgeStrength: 0,
+        edgeGlow: 0,  
+        edgeThickness: 0,
+        pulsePeriod: 0,
+        usePatternTexture: false
+    }
+
     this.outlinePass = new THREE.OutlinePass(new THREE.Vector2(window.innerWidth, window.innerHeight), this.engine.scene, this.engine.camera);
-    this.outlinePass.visibleEdgeColor.set("#ff0");    
-    this.outlinePass.hiddenEdgeColor.set("#ff0"); //遮挡处颜色
+    this.outlinePass.visibleEdgeColor.set("#00F");    
+    this.outlinePass.hiddenEdgeColor.set("#00F"); //遮挡处颜色
+
+    console.log("外轮廓:"+this.outlinePass)
 
     this.outlinePass.edgeStrength = Number(params.edgeStrength);
     this.outlinePass.edgeGlow = Number(params.edgeGlow);
@@ -81,10 +91,9 @@ MakerJS.Effects.prototype = {
 
         this.outlinePass.selectedObjects = objects;
         this.outlinePass.enabled = objects.length > 0;
-        console.log("外轮廓:"+objects.length)
         this.engine.requestFrame();
     },
-
+   
     setWireframeObjects: function (objects, wireframe_material) {
 
         if(this.wireframes){
@@ -152,10 +161,9 @@ MakerJS.Effects.prototype = {
             if (objects[i] instanceof THREE.Mesh)
             {
                 var wireframe = new THREE.EdgesGeometry(objects[i].geometry); //WireframeGeometry
-                // wireframe.boundingBox = objects[i].geometry.boundingBox;
-                // wireframe.boundingSphere = objects[i].geometry.boundingSphere;
+                wireframe.boundingBox = objects[i].geometry.boundingBox;
+                wireframe.boundingSphere = objects[i].geometry.boundingSphere;
                 var line = new THREE.LineSegments(wireframe, material);
-                // var line = new THREE.Line(wireframe, material);
                 objects[i].add(line);
                 this.lines.push(line);
             }

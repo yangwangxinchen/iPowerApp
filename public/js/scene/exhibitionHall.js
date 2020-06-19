@@ -7,6 +7,19 @@ MakerJS.exhibitionHall=function(){
         this.engine=null;
         var exhibitionHallMeshs=[];
         
+        this.line_material = new THREE.LineBasicMaterial({
+            color: "#fff" ,        //#B0C4DE
+            linewidth: 1,
+            polygonOffset: true,
+            polygonOffsetFactor: 1, // positive value pushes polygon further away
+            polygonOffsetUnits: 1,
+            depthTest: true,
+            opacity: 0.8,
+            transparent: true,
+            lights:false,
+            // alphaTest:0.9
+        });
+
         this.solid_material = new THREE.MeshBasicMaterial({
             color: "#778899",
             // emissive :0x4169E1,
@@ -25,9 +38,7 @@ MakerJS.exhibitionHall=function(){
         });
 
         var  tapeLight_material=new THREE.MeshLambertMaterial({
-            color :0x0000FF,
-            // emissive :0x0000ff,
-            // depthTest:false
+            color :"#000000",
         });
         
         this.lampshade_material = new THREE.MeshLambertMaterial({
@@ -45,7 +56,16 @@ MakerJS.exhibitionHall=function(){
             color: "#00ff00",
             opacity: 0.3,
             transparent: true,
+            side: THREE.DoubleSide
         });
+
+        var thermal_material = new THREE.MeshBasicMaterial({
+            color: "#ff0000",
+            opacity: 0.3,
+            transparent: true,
+            side: THREE.DoubleSide
+        });
+
         
         this.lampClose_material = new THREE.MeshLambertMaterial({
             color: 0xffffff,
@@ -68,6 +88,17 @@ MakerJS.exhibitionHall=function(){
             opacity: 1,
             transparent: true,
             lightMapIntensity:2
+        });
+        var yellow_material = new THREE.MeshLambertMaterial({
+            color: "#FFFF00",
+            emissive :"#FFFF00",
+            // polygonOffset: true,     //多边形偏移
+            // polygonOffsetFactor: 1, // positive value pushes polygon further away
+            // polygonOffsetUnits: 1,
+            depthTest: false,
+            opacity: 1,
+            transparent: true,
+            // lightMapIntensity:2
         });
         
         
@@ -95,18 +126,13 @@ MakerJS.exhibitionHall=function(){
         
         
         //设备开关状态
-        function device_on_off(devices,open){
-            
-            // if(open){ 
-            //     engine.effects.line_material.opacity=0
-            // }
-            // else{
-            //     engine.effects.line_material.opacity=1
-            // }
+        function device_on_off(devices,open,lampMat){
+            //传入参数需要写在前面
+            var lampOpenMaterial=lampMat||_this.lampOpen_material
             for(var de in devices){
                 device=engine.scene.getObjectByName(devices[de]) 
                 if(open){
-                    device.material=_this.lampOpen_material;
+                    device.material=lampOpenMaterial;
                     // engine.blooms.setEnable(true)
                     engine.blooms.addBloomObjects(device)
                 }else{
@@ -183,7 +209,7 @@ MakerJS.exhibitionHall=function(){
         }
 
         function switchHallwayLamp(state){
-        device_on_off(hallwayLights,state)
+        device_on_off(hallwayLights,state,yellow_material)
         }
 
         //配电房筒灯
@@ -197,24 +223,36 @@ MakerJS.exhibitionHall=function(){
         }
         
         function switchDistributionLamp(state){
-            device_on_off(distributionLights,state)
+            device_on_off(distributionLights,state,yellow_material)
         }
 
         //灯带
         var tapelight
+        var tapelights=[]
         function getTapeLights(){
 
             tapelight=engine.scene.getObjectById(53)
-            tapelight.material=tapeLight_material
-
+            tapelight.material=new THREE.MeshLambertMaterial({ color :"#000000"});
+            tapelights.push(tapelight)
         }
         function switchTapeLight(state){
             if(state){
+                outlineObjects.push(tapelight)
+                tapelight.material=new THREE.MeshLambertMaterial({ color :"#00BFFF"});
                 engine.blooms.addBloomObjects(tapelight)
+                engine.effects.setOutlineObjects(tapelights)
             }else{
+
+                tapelight.material=new THREE.MeshLambertMaterial({ color :"#000000"});
                 engine.blooms.removeBloomObjects(tapelight)
+                engine.effects.outlinePass.enabled=false
             }
+
+
         }
+
+        //门禁 access
+        
         
         
         //更改材质   material three 材质类型
@@ -229,15 +267,26 @@ MakerJS.exhibitionHall=function(){
              var walls=[]
              var wall_inside=_this.engine.scene.getObjectByName('bgs_waikuang')
              var wall_out=_this.engine.scene.getObjectByName('5louwaiqiang')
+             change_mesh_material('bgs_waikuang',_this.solid_material)
+             change_mesh_material('5louwaiqiang',_this.solid_material)
 
              var zhantai= engine.scene.getObjectByName('zhantai');
             //  var shapan= engine.scene.getObjectByName('shapan');
+             var access=engine.scene.getObjectByName('boli01');
 
-             walls.push(wall_inside,wall_out,zhantai)
-             change_mesh_material('bgs_waikuang',_this.solid_material)
-             change_mesh_material('5louwaiqiang',_this.solid_material)
+             walls.push(wall_inside,wall_out,zhantai,access)
+             for(var i in monitorings) {
+                let mon=engine.scene.getObjectByName(monitorings[i]) 
+                walls.push(mon)
+             }
+            
+             for(var i in airSwitchs){
+                walls.push(airSwitchs[i])
+             }
+            
              //边缘线
              engine.effects.setEdgesObjects(walls)
+            //  engine.effects.setEdgesObjects(airSwitchs,_this.line_material)
             //线框
             // engine.effects.setWireframeObjects(walls)
             // engine.effects.setSolidObjects(walls)
@@ -267,20 +316,20 @@ MakerJS.exhibitionHall=function(){
         }
        
        
-        //沙盘
-        function setSandTapeLightColor(){
-            var sandTapeLight=engine.scene.getObjectByName('dengdai');
-            sandTapeLight.material=tapeLight_material
-            engine.blooms.addBloomObjects(sandTapeLight)
-             //边缘线
-            var zhantai= engine.scene.getObjectByName('zhantai');
-            var shapan= engine.scene.getObjectByName('shapan');
-            var  zts=[zhantai,shapan]
+        // //沙盘
+        // function setSandTapeLightColor(){
+        //     var sandTapeLight=engine.scene.getObjectByName('dengdai');
+        //     sandTapeLight.material=tapeLight_material
+        //     engine.blooms.addBloomObjects(sandTapeLight)
+        //      //边缘线
+        //     var zhantai= engine.scene.getObjectByName('zhantai');
+        //     var shapan= engine.scene.getObjectByName('shapan');
+        //     var  zts=[zhantai,shapan]
 
-            var linecolor=new THREE.LineBasicMaterial({ color: "#4169E1"})
-            engine.effects.setEdgesObjects(zts,linecolor);
-            // engine.effects.setOutlineObjects(zts)
-        }
+        //     var linecolor=new THREE.LineBasicMaterial({ color: "#4169E1"})
+        //     engine.effects.setEdgesObjects(zts,linecolor);
+        //     // engine.effects.setOutlineObjects(zts)
+        // }
 
         //logo贴图    //镜像材质
         function getLogo(){
@@ -349,6 +398,10 @@ MakerJS.exhibitionHall=function(){
                 if(meshName=='liangzhu'){
                     change_mesh_material(meshName, _this.solid_material)
                 }
+                if(meshName.indexOf("kongtiao")!=-1){
+                    let mesh= engine.scene.getObjectByName(meshName)
+                     airCons.push(mesh)
+                }
 
             }
             getHallLights()
@@ -369,8 +422,8 @@ MakerJS.exhibitionHall=function(){
             engine.blooms.setEnable(true)   //启用辉光
 
             traverseSceneMeshs()
-            engine.effects.setOutlineObjects(airSwitchs)
-            // engine.effects.setEdgesObjects(airSwitchs)  //无效
+            // engine.effects.setOutlineObjects(airSwitchs)
+            // addSolidColor(airSwitchs)
 
             setEdgesEffect()
             volumeLights_visible(false);
@@ -405,17 +458,53 @@ MakerJS.exhibitionHall=function(){
             // return line
         }
         
+        var airCons=[]
+        var outlineObjects=[]
         //空调
         function switchAirC(state,num){
-            if(airs.length==0) return
-            //1 左边 0右边
-            airs[num].visible=state
+          
+        }
+
+        function getAirC(){
+          
         }
         
-        var airs=[]
+        //管道线
+        const list=[
+            [-20,5,-10],
+            [10,5,-9],
+            [10,5,20],
+            [40,5,40]
+        ]
+
+        //获取曲线
+        const getLineGeo=list=>{
+         const l=[]
+         for(let i=0;i<list.length;i++){
+             l.push(new THREE.Vector3())
+         }
+
+
+        }
+
+
+        //管道几何体
+        function tubeCreate(){
+            const tubeGeometry = new THREE.TubeGeometry(res.curve, 1000, 0.1, 30)
+            const texture = new THREE.TextureLoader().load("./textures/red_line.png")
+            texture.wrapS = texture.wrapT = THREE.RepeatWrapping; //每个都重复
+            texture.repeat.set(1, 1);
+            const tubeMesh = new THREE.Mesh(tubeGeometry , new THREE.MeshBasicMaterial({map:texture,side:THREE.BackSide,transparent:true}))
+            texture.needsUpdate = true
+            engine.scene.add(tubeMesh)
+        }
+        
+
+        
+        var airsPlane=[]
         //1.uv贴图修改偏移
         const loader_t  = new THREE.TextureLoader()
-        var texture
+        var texture;
         loader_t.load("textures/arrow.png",t =>{ 
             texture = t
             texture.wrapS = THREE.RepeatWrapping;
@@ -433,8 +522,8 @@ MakerJS.exhibitionHall=function(){
         
             var plane1=plane.clone()
             plane1.position.set(-42,5.5,45)
-            airs.push(plane,plane1)
-            engine.scene.add(plane,plane1)
+            airsPlane.push(plane,plane1)
+            // engine.scene.add(plane,plane1)
         })
         
         //2.着色器中uniform变量更新 每帧更改x y的偏移
@@ -497,7 +586,7 @@ MakerJS.exhibitionHall=function(){
              document.body.appendChild(css3DRenderer.domElement );
         
             //3d物体载体
-            document.getElementById("box3").innerText= "智能配电箱\n"+"回路总数:"+circuitCount+"条\n"+"回路运行:"+circuitRun+"条\n"+"总容量:"+capacity+"kWA"
+            document.getElementById("box3").innerText= "智能配电箱\n"+"回路总数:"+circuitCount+"条\n"+"回路运行:"+circuitRun+"条\n"+"总功率:"+capacity+"kW"
             var label3d2=   _this.css3DObjectCreate(document.getElementById("box3"))
             label3d2.position.set(-84,5,25)
             label3d2.rotation.set(0,Math.PI/2,Math.PI/2)
@@ -556,6 +645,8 @@ MakerJS.exhibitionHall=function(){
         //配电间
         function  roomDistributionMonitor(){
             showHideMonitorView(247)
+            var roomMon= engine.scene.getObjectById(247)
+            roomMon.material=_this.monitoring_material
         }
         //门禁
         function roomAccessMonitor(){
@@ -565,6 +656,8 @@ MakerJS.exhibitionHall=function(){
         //热成像
         function roomThermalMonitor(){
             showHideMonitorView(247)
+            var roomMon= engine.scene.getObjectById(247)
+            roomMon.material=thermal_material  
         }
 
         function monitorRotate(id){
@@ -581,7 +674,7 @@ MakerJS.exhibitionHall=function(){
                         }
                         // monitor.rotation.set(0,0,monitor.rotation.z+angle)
                         var newP={x:monitor.rotation.x,y:monitor.rotation.y,z:monitor.rotation.z+angle}
-                        RotationMonitor(monitor.rotation, newP,2000,monitor)
+                        RotationMonitor(monitor.rotation, newP,1500,monitor)
                 }, 2000);
                 
          }
@@ -618,10 +711,11 @@ MakerJS.exhibitionHall=function(){
                
                 if(css3DRenderer){
                     css3DRenderer.render(engine.scene, engine.camera );
+                    document.getElementById("box3").innerText= "智能配电箱\n"+"回路总数:"+circuitCount+"条\n"+"回路运行:"+circuitRun+"条\n"+"总功率:"+capacity+"kW"
                 }
                 
                 if(texture){
-                    texture.offset.x -= 0.05
+                    // texture.offset.x -= 0.05
                     // texture.offset.y += 0.01
                 }
                 TWEEN.update();
@@ -639,41 +733,46 @@ MakerJS.exhibitionHall=function(){
 
         }
 
-         //接收手机端指令
-        document.addEventListener("message", function (event){
-            var message = JSON.parse(event.data)
-            switch (message.fn) {
-                    //切换对应的监控
-                    case 'roomMonitor':       //展厅监控
-                  
-                    break;
-                    case 'roomDistributionMonitor':       //配电间监控
-                   
-                    break;
-                    case 'roomAccessMonitor':       //展厅门禁监控
-                   
-                    break;
-                    case 'roomThermalMonitor':       //配电间热成像监控
-                   
-                    break;
-                    default:
-                        break;    
-
+        var addSolids=[]
+        function addSolidColor(objects){
+            addSolids = [];
+            let material = new THREE.MeshBasicMaterial({color:"#00ffff",transparent:true,opacity:0.3})
+            //更新当前选中的物体
+            for(var i in objects)
+            {
+                if (objects[i] instanceof THREE.Mesh)
+                {
+                    var solid = new THREE.Mesh(objects[i].geometry,material);
+                    objects[i].add(solid);
+                    addSolids.push(solid);
+                }
             }
-        })
+           
 
+        }
+
+         //接收手机端指令
         window.changhua = {
             roomMonitor:()=>{
-            roomMonitor()
+                roomMonitor()
             },
             roomDistributionMonitor:()=>{
-            roomDistributionMonitor()
+                roomDistributionMonitor()
             },
             roomAccessMonitor:()=>{
-            roomAccessMonitor()
+                roomAccessMonitor()
             },
             roomThermalMonitor:()=>{
-            roomThermalMonitor()
+                roomThermalMonitor()
+            },
+            showHideMonitorView:()=>{
+                showHideMonitorView()
+            },
+            //门禁记录
+            accessRecord:()=>{
+                showHideMonitorView()
+              //描边显示门  TODO
+
             }
 
         }
@@ -885,7 +984,12 @@ MakerJS.exhibitionHall=function(){
         
         // 智能配电箱
         const box_btn=document.getElementById('box')
-        box_btn.onclick=()=> _this.cameraFly('diangui1',-60,-2,20,3);
+        box_btn.onclick=()=> {
+            _this.cameraFly('diangui1',-60,-2,20,3)
+            //出现智能配电箱界面
+            param = {type:'toCircleManage',}
+            window.ReactNativeWebView&&window.ReactNativeWebView.postMessage(JSON.stringify(param)) ; 
+        }
         
         //沙盘
          const sand_btn=document.getElementById('sand')
@@ -915,13 +1019,13 @@ MakerJS.exhibitionHall=function(){
                    roomThermalMonitor()
                    break;   
                 case '7':
-                   
+                    switchTapeLight(true)
                     break;
                 case '8':
-                    
+                    switchTapeLight(false)
                     break;
                 case '9':
-                    
+
                     break;    
                 default:
                    break;
