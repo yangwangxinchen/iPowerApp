@@ -42,12 +42,7 @@ MakerJS.exhibitionHall=function(){
         });
         
         this.monitoring_material = new THREE.MeshBasicMaterial({
-            color: "#1E90FF",
-            // emissive :0xFDE951,
-            polygonOffset: true,
-            //polygonOffsetFactor: 1, // positive value pushes polygon further away
-            polygonOffsetUnits: 1,
-            depthTest: true,
+            color: "#00ff00",
             opacity: 0.3,
             transparent: true,
         });
@@ -99,16 +94,6 @@ MakerJS.exhibitionHall=function(){
             });
         
         
-        //设备显示隐藏   open: 布尔类型
-        function switch_device(lights,open){
-        
-            let device;
-            for(var li in lights){
-                device=_this.engine.scene.getObjectByName(lights[li]) 
-                device.visible=open;
-            }
-        }
-        
         //设备开关状态
         function device_on_off(devices,open){
             
@@ -149,16 +134,7 @@ MakerJS.exhibitionHall=function(){
             cir_light_state=!cir_light_state;
             
         }
-        
-        
-        //监控
-        var monitorings=[];
-        var monitorings_state=false;
-        this.monitorings_show=function(state){
-            monitorings_state=state
-            switch_device(monitorings,state)
-        }
-        
+         
         
         //方灯
         var rectangleState=false;
@@ -290,8 +266,6 @@ MakerJS.exhibitionHall=function(){
             }
         }
        
-
-
        
         //沙盘
         function setSandTapeLightColor(){
@@ -397,14 +371,16 @@ MakerJS.exhibitionHall=function(){
             traverseSceneMeshs()
             engine.effects.setOutlineObjects(airSwitchs)
             // engine.effects.setEdgesObjects(airSwitchs)  //无效
+
             setEdgesEffect()
             volumeLights_visible(false);
-            switch_device(monitorings,false)
-          
+           
+            showHideMonitorView()
+           
             label_3d()
            
             setGlass()
-            // setSandTapeLightColor()
+       
             getMqtt()
             
             engine.addEventListener('update',eveUpdate)
@@ -558,8 +534,41 @@ MakerJS.exhibitionHall=function(){
         }
         
         
-        function monitorRotate(){
-            var monitor=_this.engine.scene.getObjectByName('shexiangtou')
+        var monitorings=[]
+        //显示隐藏监控
+        function showHideMonitorView(id){
+            for (var i in monitorings){
+                let mon=engine.scene.getObjectByName(monitorings[i]) 
+                mon.visible=false
+            }
+            if(arguments.length>0&&!isNaN(id)){
+                var roomMon=engine.scene.getObjectById(id)
+                roomMon.visible=true
+            }
+            
+        }
+
+        // 展厅
+        function roomMonitor(){
+            showHideMonitorView(243)
+            // monitorRotate(242)
+        }
+        //配电间
+        function  roomDistributionMonitor(){
+            showHideMonitorView(247)
+        }
+        //门禁
+        function roomAccessMonitor(){
+            showHideMonitorView(30)
+        }
+
+        //热成像
+        function roomThermalMonitor(){
+            showHideMonitorView(247)
+        }
+
+        function monitorRotate(id){
+            var monitor=engine.scene.getObjectById(id)
                 var yaw=Math.PI/180;
                 var rate=30
                 var angle=yaw*rate;
@@ -567,13 +576,39 @@ MakerJS.exhibitionHall=function(){
                 setInterval(() => {
                     if( monitor.rotation.z>1.37){
                         angle=-yaw*rate
-                        }else if(monitor.rotation.z<-1.37){
+                        }else if(monitor.rotation.z<-1.27){
                         angle=yaw*rate
                         }
-                        monitor.rotation.set(0,0,monitor.rotation.z+angle)
-                }, 2500);
+                        // monitor.rotation.set(0,0,monitor.rotation.z+angle)
+                        var newP={x:monitor.rotation.x,y:monitor.rotation.y,z:monitor.rotation.z+angle}
+                        RotationMonitor(monitor.rotation, newP,2000,monitor)
+                }, 2000);
                 
          }
+
+         function RotationMonitor (oldP, newP, span,monitor) {
+         var tween = new TWEEN.Tween({
+            x1: oldP.x, 
+            y1: oldP.y, 
+            z1: oldP.z, 
+        });
+        tween.to({
+            x1: newP.x,
+            y1: newP.y,
+            z1: newP.z,
+
+        }, span);
+        tween.onUpdate(function(object) {
+            monitor.rotation.x= object.x1;
+            monitor.rotation.y = object.y1;
+            monitor.rotation.z = object.z1;
+    
+        })
+        tween.onComplete(function() {
+        })
+        tween.easing(TWEEN.Easing.Cubic.InOut);
+        tween.start();
+    }
         
         //每帧检测
         function eveUpdate(){
@@ -589,6 +624,7 @@ MakerJS.exhibitionHall=function(){
                     texture.offset.x -= 0.05
                     // texture.offset.y += 0.01
                 }
+                TWEEN.update();
                    
         }
         
@@ -625,6 +661,23 @@ MakerJS.exhibitionHall=function(){
 
             }
         })
+
+        window.changhua = {
+            roomMonitor:()=>{
+            roomMonitor()
+            },
+            roomDistributionMonitor:()=>{
+            roomDistributionMonitor()
+            },
+            roomAccessMonitor:()=>{
+            roomAccessMonitor()
+            },
+            roomThermalMonitor:()=>{
+            roomThermalMonitor()
+            }
+
+        }
+
 
          //关联数据
          function getMqtt(){
@@ -850,25 +903,25 @@ MakerJS.exhibitionHall=function(){
                     _this.switchRoomLamp_S(!rectangleState)
                    break;
                 case '3':
-                    _this.monitorings_show(!monitorings_state)
+                  roomMonitor()
                    break;
                 case '4':
-                    _this.cameraFly('zhantai',60,2,20,3)
+                    roomDistributionMonitor()
                    break;
                 case '5':
-                    _this.cameraFly('diangui1',-60,-2,20,3)
+                    roomAccessMonitor()
                    break;
                 case '6':
-                    cameraFlyHome()
+                   roomThermalMonitor()
                    break;   
                 case '7':
-                   setSandState(true,1)
+                   
                     break;
                 case '8':
-                    setSandState(true,2)
+                    
                     break;
                 case '9':
-                    setSandState(false,1)
+                    
                     break;    
                 default:
                    break;
