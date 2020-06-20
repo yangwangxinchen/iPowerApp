@@ -8,7 +8,7 @@ MakerJS.exhibitionHall=function(){
         var exhibitionHallMeshs=[];
         
         this.line_material = new THREE.LineBasicMaterial({
-            color: "#fff" ,        //#B0C4DE
+            color: "#00f" ,        //#B0C4DE
             linewidth: 1,
             polygonOffset: true,
             polygonOffsetFactor: 1, // positive value pushes polygon further away
@@ -237,17 +237,20 @@ MakerJS.exhibitionHall=function(){
         }
         function switchTapeLight(state){
             if(state){
-                outlineObjects.push(tapelight)
+                pushValue(outlineObjects,tapelight)
                 tapelight.material=new THREE.MeshLambertMaterial({ color :"#00BFFF"});
                 engine.blooms.addBloomObjects(tapelight)
-                engine.effects.setOutlineObjects(tapelights)
-            }else{
+                // engine.effects.setOutlineObjects(tapelights)
 
+            }else{
+                  
+                removeByValue(outlineObjects,tapelight)
                 tapelight.material=new THREE.MeshLambertMaterial({ color :"#000000"});
                 engine.blooms.removeBloomObjects(tapelight)
-                engine.effects.outlinePass.enabled=false
+                // engine.effects.setOutlineObjects(outlineObjects)
+                // engine.effects.outlinePass.enabled=false
             }
-
+            engine.effects.setOutlineObjects(outlineObjects)
 
         }
 
@@ -274,19 +277,23 @@ MakerJS.exhibitionHall=function(){
             //  var shapan= engine.scene.getObjectByName('shapan');
              var access=engine.scene.getObjectByName('boli01');
 
-             walls.push(wall_inside,wall_out,zhantai,access)
+
+             walls.push(wall_inside,wall_out,zhantai)
              for(var i in monitorings) {
                 let mon=engine.scene.getObjectByName(monitorings[i]) 
                 walls.push(mon)
              }
             
              for(var i in airSwitchs){
-                walls.push(airSwitchs[i])
+                // walls.push(airSwitchs[i])
+                engine.effects.addEdgesObject(airSwitchs[i],_this.line_material)
              }
             
              //边缘线
              engine.effects.setEdgesObjects(walls)
-            //  engine.effects.setEdgesObjects(airSwitchs,_this.line_material)
+             
+             engine.effects.addEdgesObject(access,_this.line_material)
+             
             //线框
             // engine.effects.setWireframeObjects(walls)
             // engine.effects.setSolidObjects(walls)
@@ -425,10 +432,11 @@ MakerJS.exhibitionHall=function(){
             // engine.effects.setOutlineObjects(airSwitchs)
             // addSolidColor(airSwitchs)
 
-            setEdgesEffect()
+            setEdgesEffect()  //边缘线
             volumeLights_visible(false);
            
             showHideMonitorView()
+            // createMonitorView(0.5,30,100,4,1,false)
            
             label_3d()
            
@@ -458,11 +466,41 @@ MakerJS.exhibitionHall=function(){
             // return line
         }
         
-        var airCons=[]
+       
+        //外轮廓数组
         var outlineObjects=[]
+         
+        //移除数组元素
+        function removeByValue(arr,val){
+            for(var i=0;i<arr.length;i++){
+                if(arr[i]==val){
+                    arr.splice(i,1);
+                    break;
+                }
+            }
+        }
+        //添加数组元素
+        function pushValue(arr,val){
+            var flag=false;
+            for(var i=0;i<arr.length;i++){
+                if(arr[i]==val){
+                  flag=true
+                }
+            }
+            if(flag==false){
+                arr.push(val)
+            }
+        }
+
+        var airCons=[]
         //空调
-        function switchAirC(state,num){
-          
+        function switchAirC(num,state){
+          if(state){
+            pushValue(outlineObjects,airCons[num])     
+          }else{
+            removeByValue(outlineObjects,airCons[num])
+          }
+          engine.effects.setOutlineObjects(outlineObjects)
         }
 
         function getAirC(){
@@ -486,7 +524,6 @@ MakerJS.exhibitionHall=function(){
 
 
         }
-
 
         //管道几何体
         function tubeCreate(){
@@ -623,6 +660,28 @@ MakerJS.exhibitionHall=function(){
         }
         
         
+        //监控
+        function createMonitorView(radiusTop,radiusBottom,height,radialSegments,heightSegments,openEnded){
+            //圆柱顶部半径   圆柱底部半径  圆柱高  圆柱侧面分段 圆柱高度分段  圆柱底面开放还是封顶
+            var geometry = new THREE.CylinderGeometry( radiusTop,radiusBottom, height, radialSegments,heightSegments,openEnded);
+            var material = new THREE.MeshBasicMaterial( {color: 0x0000ff} );
+            var cylinder = new THREE.Mesh( geometry, material );
+             
+            var m1= engine.scene.getObjectById(242)
+            m1.add( cylinder );
+            // console.log(m1.getWorldDirection())
+            // var po=m1.getWorldDirection()
+            // // console.log(m1.rotation)
+            // cylinder.position.set(0,0,0)
+            //var worldPosition = new THREE.Vector3();
+           // mesh.getWorldPosition(worldPosition);
+           
+            cylinder.rotation.set(0,0,Math.PI)//Math.PI/4
+            // cylinder.setRotationFromAxisAngle(new THREE.Vector3(0,1,1),30)
+            // console.log(cylinder)
+
+        }
+
         var monitorings=[]
         //显示隐藏监控
         function showHideMonitorView(id){
@@ -634,6 +693,7 @@ MakerJS.exhibitionHall=function(){
                 var roomMon=engine.scene.getObjectById(id)
                 roomMon.visible=true
             }
+            
             
         }
 
@@ -831,16 +891,16 @@ MakerJS.exhibitionHall=function(){
                        break;       
                    case 'Room_AirC_1':         //左空调
                        if(value=="1"){
-                          switchAirC(true,1);   
+                          switchAirC(1,true);   
                        }else{
-                           switchAirC(false,1);
+                           switchAirC(1,false);
                        }
                        break;
                    case 'Room_AirC_2':     //右空调
                        if(value=="1"){
-                          switchAirC(true,0);
+                          switchAirC(0,true);
                        }else{
-                           switchAirC(false,0);
+                           switchAirC(0,false);
                        }
                        break;
                                         
@@ -1025,8 +1085,19 @@ MakerJS.exhibitionHall=function(){
                     switchTapeLight(false)
                     break;
                 case '9':
-
-                    break;    
+                    break;  
+                case 'u':
+                    switchAirC(0,true)
+                    break;
+                case 'i':
+                    switchAirC(0,false)
+                    break; 
+                case 'o':
+                    switchAirC(1,true)
+                    break;
+                case 'p':
+                    switchAirC(1,false)
+                    break;                           
                 default:
                    break;
             } 
