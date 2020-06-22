@@ -20,6 +20,7 @@ this.monitoring_material = new THREE.MeshBasicMaterial({
     transparent: true,
 });
 
+
 this.get_meshArray = function (meshPath,meshArray) {
     //get relative path   
     var index1 = meshPath.lastIndexOf("/");
@@ -50,12 +51,14 @@ this.set_meshArray=function(world_name,meshPath){
 }
 
 
+
 this.engine.world.addEventListener('loadEnd', loadEnd)
 //关卡加载完毕
 function loadEnd(){
-
-
+    //加载动画隐藏
     document.getElementById('mask').style.display='none'
+    //总览按钮
+    const view_btn=document.getElementById('view')
     switch(this.world_name) {
         
         case 'distributionRoom':
@@ -63,18 +66,21 @@ function loadEnd(){
             var distributionRoom=new MakerJS.distributionRoom()
             console.log(_this.distributionRoomMeshs)
             distributionRoom.initSceneMeshs(engine,_this.distributionRoomMeshs)
+            if(view_btn)view_btn.onclick=function(){ cameraFlyHome(0,-300,200)} 
         break;
         case 'exhibitionHall':
             this.engine.camera.position.set(0,-100,200)
             console.log(_this.exhibitionHallMeshs)
-            var exhib=new MakerJS.exhibitionHall()
-            exhib.init(engine,_this.exhibitionHallMeshs)
+            var hall=new MakerJS.exhibitionHall()
+            hall.init(engine,_this.exhibitionHallMeshs)
+            if(view_btn)view_btn.onclick=function(){ cameraFlyHome(0,-100,200)} 
         break;
         case 'hallDistribution':
             this.engine.camera.position.set(0,-800,500)
             console.log(_this.hallDistributionMeshs)
             var hallDistribution=new MakerJS.hallDistribution()
             hallDistribution.initSceneMeshs(engine,_this.hallDistributionMeshs)
+            if(view_btn)view_btn.onclick=function(){ cameraFlyHome(0,-800,500)} 
         break;
         
         default:
@@ -82,7 +88,9 @@ function loadEnd(){
       } 
 }
 
-//加载动画
+
+
+//开场加载动画
 var animate_loading = lottie.loadAnimation({
     container: document.getElementById('mask'), // the dom element that will contain the animation
     renderer: 'svg',
@@ -93,6 +101,13 @@ var animate_loading = lottie.loadAnimation({
 
   animate_loading.setSpeed(0.7)
 
+  //主视野
+  function cameraFlyHome(x,y,z){
+    engine.animateCamera(engine.camera.position,engine.controls.target,{x:x,y:y,z:z},{x:0,y:0,z:1})
+}
+
+ 
+ 
 // // gltf模型加载
 //  var loader = new THREE.GLTFLoader();
 //     loader.load('mesh/gltfLight/shapan.gltf', function (gltf) {

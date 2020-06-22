@@ -62,7 +62,7 @@ MakerJS.World = function(engine) {
         this.meshFiles = {};
         this.loaded = false;
 
-        // this.engine.lods.clear();
+        this.engine.lods.clear();
 
         this.numLoading = 0;
         this.numLoaded = 0;
@@ -350,7 +350,7 @@ MakerJS.World = function(engine) {
                                     scope.bound_min.min(node.boundingBox.min.clone().applyMatrix4(node.matrixWorld));
 
                                     node.visible = true;
-                                    // scope.engine.lods.applyNode(node, size);
+                                    scope.engine.lods.applyNode(node, size);
 
                                     scope.dispatchEvent({ type: "nodeLoaded", node: node });
 

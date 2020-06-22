@@ -60,6 +60,8 @@ MakerJS.Engine = function () {
     // this.controls.enablePan=false;  //禁用拖拽
     this.controls.enableDamping = true;
     this.controls.dampingFactor = 0.8;
+    // this.controls.minDistance=100   
+    this.controls.maxDistance=2000    //限制
     this.controls.update();
     // for reset
 	//this.controls.target0 = this.target.clone();
@@ -97,6 +99,11 @@ MakerJS.Engine = function () {
     });
 
     var clock = new THREE.Clock();
+    //性能监测
+    var stats = new Stats();
+    stats.showPanel(0);// 0: fps, 1: ms, 2: mb, 3+: custom
+    document.body.appendChild( stats.dom );
+
     function resizeWindow() {
         const width=screenSize.width
         const height=screenSize.height
@@ -162,7 +169,7 @@ this.cameraFly=function(targetPos,controlsPos,time){
     }
     
     function animate() {
-       
+        stats.begin();
         requestAnimationFrame(animate);  //请求再次渲染函数
         
         //控制实时渲染
@@ -171,6 +178,7 @@ this.cameraFly=function(targetPos,controlsPos,time){
             render();
             // stats.end();
         }
+        stats.end();
     }
     
     animate();
@@ -219,7 +227,7 @@ this.cameraFly=function(targetPos,controlsPos,time){
     
 
     this.world = new MakerJS.World(this);
-    // this.lods = new MakerJS.LODs(this);    //world 里面的lod一同注释掉了,暂时不需要lod
+    this.lods = new MakerJS.LODs(this);    //world 里面的lod一同注释掉了,暂时不需要lod
    
     this.effects = new MakerJS.Effects(this);
     this.blooms = new MakerJS.Bloom(this);
@@ -508,7 +516,7 @@ MakerJS.Engine.prototype.animateCamera = function(oldP, oldT, newP, newT, span =
         scope.controls.enabled = true;
         callBack && callBack()
     })
-    tween.easing(TWEEN.Easing.Cubic.InOut);
+    tween.easing(TWEEN.Easing.Quadratic.InOut);
     tween.start();
     this.addEventListener("update", function() {
         TWEEN.update();

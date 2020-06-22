@@ -22,7 +22,7 @@ MakerJS.Effects = function (engine) {
     this.outlinePass.visibleEdgeColor.set("#00F");    
     this.outlinePass.hiddenEdgeColor.set("#00F"); //遮挡处颜色
 
-    console.log("外轮廓:"+this.outlinePass)
+    // console.log("外轮廓:"+this.outlinePass)
 
     this.outlinePass.edgeStrength = Number(params.edgeStrength);
     this.outlinePass.edgeGlow = Number(params.edgeGlow);
@@ -80,6 +80,14 @@ MakerJS.Effects = function (engine) {
         opacity: 0.7,
         transparent: true,
     });
+
+    //虚化物体的颜色
+    this.unreal_material = new THREE.MeshBasicMaterial({
+        color: 0x778899,
+        depthTest: true,
+        opacity: 0.2,
+        transparent: true,
+        });
 
 }
 
@@ -190,6 +198,16 @@ MakerJS.Effects.prototype = {
      }
      this.aloneLines=[]
 
+    },
+
+    //虚化物体
+    unrealObject:function(object,line_material){
+    let material = line_material || this.line_material;
+    if(object instanceof THREE.Mesh){
+        this.addEdgesObject(object,material);
+        object.material=this.unreal_material;
     }
+
+}
     
 }

@@ -22,7 +22,7 @@
       #box-wrapper {
         width: 100%;
         position: absolute;
-        bottom: 40px;
+        bottom: 30px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -90,18 +90,21 @@
             width: 110px;
             height: 70px;
             padding: 10px;
-            /* width: 363/2px;
-            height: 310/2px; */
             font-family: '楷体';
             font-size:10px;
             text-align:left;
-            /* background-size: contain; */
-            /* font-weight: bold; */
-            /* padding-left: 10px;
-            padding-top: 10px; */
-            /* background-image:url('textures/bg02.png'); 
-            background-size:100% 100%; */
-            /* border-image-source: url('textures/bg02.png'); */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-evenly;
+       }
+
+       .box-child {
+         display: flex;
+         width: 110px;
+         justify-content: space-between;
+         align-items: center;
+        
        }
       
        #mask {
@@ -175,6 +178,8 @@
 
   <!-- 加载动画 -->
   <script src="js/scene/lottie.js"></script>
+   <!-- 性能监测 -->
+   <script src="js/libs/stats.js"></script>
   
 </head>
 
@@ -185,10 +190,12 @@
     </div>
   </div>
 
-  <div id="mask"></div>
-   <!-- <div class="device" id="box2" > </div> -->
-    <div class="device" id="box3"> </div>
-    <div id='box-wrapper'>
+  <!-- 动画遮罩 -->
+  <div id="mask"></div>   
+  <!-- 配电箱ui -->
+  <div class="device" id="box3"> </div>
+  <!-- 按钮 -->
+  <div id='box-wrapper'>
       <div  id='sand' class="wrapper-container"></div>
       <div  id='box' class="wrapper-container"></div>
       <div  id='view' class="wrapper-container"></div>

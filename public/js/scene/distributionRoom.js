@@ -50,7 +50,7 @@ MakerJS.distributionRoom=function(){
     //init
     function init(){
        
-        // setWallVisibility(false)
+        setWallUnreal()
         initCSS3DRenderer()
         getCabinet()
         
@@ -59,16 +59,11 @@ MakerJS.distributionRoom=function(){
     }
     
 
-    //外墙的显示隐藏
-    function setWallVisibility(_visible){
+    //外墙的虚化
+    function setWallUnreal(){
        for(var i in sceneMeshs){ 
-           if(sceneMeshs[i].name=="waike"){
-            sceneMeshs[i].visible=_visible
-            // sceneMeshs[i].material=unreal_material
-           }
-           if(sceneMeshs[i].name=="wuding"){
-            sceneMeshs[i].material=unreal_material
-
+           if(sceneMeshs[i].name=="waike"||sceneMeshs[i].name=="wuding"){
+            engine.effects.unrealObject(sceneMeshs[i])
            }
        }
 
@@ -84,7 +79,7 @@ MakerJS.distributionRoom=function(){
      css3DRenderer.domElement.style.pointerEvents = "none"
      document.body.appendChild(css3DRenderer.domElement );
 
-     setCSS()
+    //  setCSS()
     }
     
     function createCSS3DObject(div){

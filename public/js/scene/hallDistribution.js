@@ -42,28 +42,37 @@ function init(){
     setMonitorVisibel(false)
     setLampBloom()
     initCSS3DRenderer()
+    setWallUnreal()
 
     getMqtt()
     engine.nodeSelection.addEventListener('choose',eveChoose)
-    engine.nodeSelection.addEventListener('chooseMore',eveChooseMore)
+    // engine.nodeSelection.addEventListener('chooseMore',eveChooseMore)
     
     engine.addEventListener('update',eveUpdate)
 }
 
-var meshDic
-var cone
-function getMesh(){
-    
-    meshDic={}
-    for(var i in sceneMeshs){
-        meshDic[sceneMeshs[i].name]=sceneMeshs[i]
 
+function getMesh(){
+
+    for(var i in sceneMeshs){
+        //隐藏掉灯
+        if(sceneMeshs[i].name.indexOf('yd_dguan')!=-1){
+            sceneMeshs[i].visible=false
+        }
+        if(sceneMeshs[i].name.indexOf('yuandeng')!=-1){
+         sceneMeshs[i].visible=false
+        }
     }
 
-    cone=meshDic["shizhui"]
+    monitorCone=engine.scene.getObjectByName('shizhui')
 
 
+}
 
+//设置非监测设备虚化
+function setWallUnreal(){
+var wall=engine.scene.getObjectByName('waiqiang01')
+engine.effects.unrealObject(wall)
 
 }
 
@@ -74,14 +83,15 @@ function setGlassMaterial(){
 
 }
 
+var monitorCone
 function setMonitorMaterial(){
     
-    cone.material=engine.FilterMesh.monitoring_material;
+    monitorCone.material=engine.FilterMesh.monitoring_material;
 
 }
 
 function setMonitorVisibel(state){
-    cone.visible=state
+    monitorCone.visible=state
     if(state){
         // engine.animateCamera(engine.camera.position,engine.controls.target,{x:78,y:270,z:100},{x:78,y:0,z:100})
     }
@@ -90,35 +100,66 @@ function setMonitorVisibel(state){
 
 var greenLights=[]
 var redLights=[]
+var greenLight_defaultMaterial
+var redLight_defaultMaterial
 
-//设置灯的辉光
+//记录灯的默认材质
+function getLightMaterial(){
+    var greenLight=engine.scene.getObjectByName('gui3_huilu01_ld')
+    greenLight_defaultMaterial=greenLight.material
+
+    var redLight=engine.scene.getObjectByName('gui3_huilu01_hd')
+    redLight_defaultMaterial=redLight.material
+
+}
+//设置灯的辉光  
 function setLampBloom(){
-    var lamps=[]
-    
+
+    getLightMaterial()
+
     for(var i in sceneMeshs){
-       if(sceneMeshs[i].name.indexOf('yd_dguan')!=-1){
-           lamps.push(sceneMeshs[i])
-        //    sceneMeshs[i].material= lampOpen_material
-       }
-
-       if(sceneMeshs[i].name.indexOf('ld')!=-1){
+       
+       if(sceneMeshs[i].name.indexOf('ld')!=-1||sceneMeshs[i].name.indexOf('lvd')!=-1){
         greenLights.push(sceneMeshs[i])
-        sceneMeshs[i].material= greenLight_material
+        // sceneMeshs[i].material= greenLight_material
        }
 
-       if(sceneMeshs[i].name.indexOf('hd')!=-1){
+       if(sceneMeshs[i].name.indexOf('hd')!=-1||sceneMeshs[i].name.indexOf('hongd')!=-1){
         redLights.push(sceneMeshs[i])
-        sceneMeshs[i].material= redLight_material
+        // sceneMeshs[i].material= redLight_material
        }
 
     }
     engine.blooms.setEnable(true)
-    engine.blooms.addBloomObjects(lamps)
+    
+    //红绿灯
+    // engine.blooms.addBloomObjects(greenLights)
+    // engine.blooms.addBloomObjects(redLights)
+    for(var i=0;i<greenLights.length;i++){
+        openAndCloseState(true,i)
+    }
+    
+    //测试用 数据那边有点问题
+    // openAndCloseState(false,6)
+    // openAndCloseState(false,9)
+    // openAndCloseState(false,15)
+}
 
-    engine.blooms.addBloomObjects(greenLights)
-    engine.blooms.addBloomObjects(redLights)
+//分闸 合闸区分 红色合闸（开）   绿色分闸（关） open close
+function  openAndCloseState(open,circleNum){
+ if(open){
+    greenLights[circleNum].material=greenLight_material
+    redLights[circleNum].material=redLight_defaultMaterial
 
-    //  engine.blooms.removeBloomObjects(redLights)
+    engine.blooms.addBloomObjects(greenLights[circleNum])
+    engine.blooms.removeBloomObjects(redLights[circleNum])
+ }else{
+    greenLights[circleNum].material=greenLight_defaultMaterial
+    redLights[circleNum].material=redLight_material
+
+    engine.blooms.addBloomObjects(redLights[circleNum])
+    engine.blooms.removeBloomObjects(greenLights[circleNum])
+ }
 }
 
 // 馈线guiD3 11条回路
@@ -131,6 +172,8 @@ function allCircuit(){
 
 }
 
+//
+
 var css3DRenderer
     //创建css3DRenderer 用来渲染css object
     function initCSS3DRenderer(){
@@ -140,8 +183,8 @@ var css3DRenderer
      css3DRenderer.domElement.style.top = 0
      css3DRenderer.domElement.style.pointerEvents = "none"
      document.body.appendChild(css3DRenderer.domElement );
-
-     setCSS()
+     
+    //  setCSS()
     }
     
     function createCSS3DObject(div){
@@ -180,73 +223,69 @@ var css3DRenderer
         '展厅照明4'
     ]
 
-    var circle_1_css
+   
     var A_VOL=232.9,
         A_ELE=0.613,
         UAB_VOL=406,
         TEMP=31.5
     var circleName ='展厅1回路'   
     var device01,device02
+    var circle_css  //回路样式
     //设置css样式
     function setCSS(){
         device01=document.getElementById('device01')
         device01.innerText=circleName+"\nA相电压:"+A_VOL+"V"+"\nA相电流:"+A_ELE+"A"+"\nUAB线电压:"+UAB_VOL+"V"+"\n温度:"+TEMP+"℃"
-        // deviceDiv.innerText="A相电压     A相电流\n"+A_VOL+"V     "+A_ELE+"A"+"\nUAB线电压     温度\n"+UAB_VOL+"V     "+TEMP+"℃"
 
-        circle_1_css=createCSS3DObject(device01)
-        circle_1_css.name='circle_css'
-
-        device02=document.getElementById('device02')
-        device02.innerText=D3CIRCLES[0]
-
-        var group_D3=new THREE.Group();
-        
-        // var circleNode=document.createElement('circle'+i)
-        // circleNode.innerText='456'
-        // var label_01= createCSS3DObject(circleNode)
-        // label_01.position.set(-184,12,320)
-        // engine.scene.add(label_01)
-        for(var i=0;i<11;i++){
-           
-            var circleNode=document.createElement('circle'+i)
-            circleNode.innerText=D3CIRCLES[i]
-            var label_01= createCSS3DObject(circleNode)
-            label_01.position.set(-184,12,305-i*28)
-    
-            group_D3.add(label_01)
-            // engine.scene.add(label_01)
-        }
-        engine.scene.add(group_D3)
-
-        var nameLabel= createCSS3DObject(device02)
-        nameLabel.scale.set(0.2,0.2,0.2)
-        nameLabel.position.set(-184,12,305)
-        // engine.scene.add(nameLabel)
-        
+        circle_css=createCSS3DObject(device01)
+        circle_css.name='circle_css'
     }
 
+    function setNameLable(){
+        // device02=document.getElementById('device02')
+        // device02.innerText=D3CIRCLES[0]
+
+        // var group_D3=new THREE.Group();
+
+        // for(var i=0;i<11;i++){
+           
+        //     var circleNode=document.createElement('circle'+i)
+        //     circleNode.innerText=D3CIRCLES[i]
+        //     var label= createCSS3DObject(circleNode)
+        //     label.position.set(-184,12,305-i*28)
+    
+        //     group_D3.add(label)
+        //     // engine.scene.add(label)
+        // }
+        // engine.scene.add(group_D3)
+
+        // var nameLabel= createCSS3DObject(device02)
+        // nameLabel.scale.set(0.2,0.2,0.2)
+        // nameLabel.position.set(-184,12,305)
+        // // engine.scene.add(nameLabel)
+    }
+     
+    //改变样式内容及位置
     function changeCSS(name,x,y,z){
         if(!engine.scene.getObjectByName('circle_css')){
-             engine.scene.add(circle_1_css)
+             engine.scene.add(circle_css)
          }
          circleName=name
-         circle_1_css.position.set(x,y,z)
+         circle_css.position.set(x,y,z)
     }
 
-    
 
 //update
 function eveUpdate(){
     if(css3DRenderer){
-        css3DRenderer.render(engine.scene, engine.camera );
-        device01.innerText=circleName+"\nA相电压:"+A_VOL+"V"+"\nA相电流:"+A_ELE+"A"+"\nUAB线电压:"+UAB_VOL+"V"+"\n温度:"+TEMP+"℃"
+        // css3DRenderer.render(engine.scene, engine.camera );
+        // device01.innerText=circleName+"\nA相电压:"+A_VOL+"V"+"\nA相电流:"+A_ELE+"A"+"\nUAB线电压:"+UAB_VOL+"V"+"\n温度:"+TEMP+"℃"
     }
    
 }
 
 function eveChooseMore(e){
 
-engine.effects.setOutlineObjects(e.content)
+// engine.effects.setOutlineObjects(e.content)
 }
 
 //choose
@@ -256,45 +295,45 @@ function eveChoose(e){
      
     setColor(e.content)
 
-    if(nameNode=="gui1"){
-        engine.animateCamera(engine.camera.position,engine.controls.target,{x:150,y:-330,z:200},{x:150,y:0,z:200})
-    }else if(nameNode=='gui2'){
-        engine.animateCamera(engine.camera.position,engine.controls.target,{x:0,y:-330,z:200},{x:0,y:0,z:200})
-    }else if(nameNode=='gui3'){
-        engine.animateCamera(engine.camera.position,engine.controls.target,{x:-150,y:-330,z:200},{x:-150,y:0,z:200})
-    }else if(nameNode=='gui3_huilu01'){
-        changeCSS('展厅1回路',-222,10,300)
-    }else if(nameNode=='gui3_huilu02'){
-        changeCSS('展厅2回路',-222,10,270)
-    }else if(nameNode=='gui3_huilu03'){
-        changeCSS('展厅3回路',-222,10,240)
-    }else if(nameNode=='gui3_huilu04'){
-        changeCSS('展厅4回路',-222,10,220)
-    }else if(nameNode=='gui3_huilu05'){
-        changeCSS('展厅5回路',-222,10,190)
-    }else if(nameNode=='gui3_huilu06'){
-        changeCSS('展厅6回路',-222,10,160)
-    }else if(nameNode=='gui3_huilu07'){
-        changeCSS('展厅7回路',-222,10,140)
-    }else if(nameNode=='gui3_huilu08'){
-        changeCSS('展厅8回路',-222,10,110)
-    }else if(nameNode=='gui3_huilu09'){
-        changeCSS('展厅9回路',-222,10,90)
-    }else if(nameNode=='gui3_huilu10'){
-        changeCSS('备用',-222,10,60)
-    }else if(nameNode=='gui3_huilu11'){
-        changeCSS('备用',-222,10,30)
-    }else if(nameNode=='gui2_huilu01'){
-        changeCSS('展厅10回路',140,10,90)
-    }else if(nameNode=='gui2_huilu02'){
-        changeCSS('展厅11回路',140,10,60)
-    }else if(nameNode=='gui2_huilu03'){
-        changeCSS('展厅12回路',140,10,30)
-    }else if(nameNode=='gui2_duanlq'){
-        changeCSS('展厅电源1',140,10,270)
-    }else if(nameNode=='gui2_duanlqge'){
-        changeCSS('展厅电源2',140,10,170)
-    }
+    // if(nameNode=="gui1"){
+    //     engine.animateCamera(engine.camera.position,engine.controls.target,{x:150,y:-330,z:200},{x:150,y:0,z:200})
+    // }else if(nameNode=='gui2'){
+    //     engine.animateCamera(engine.camera.position,engine.controls.target,{x:0,y:-330,z:200},{x:0,y:0,z:200})
+    // }else if(nameNode=='gui3'){
+    //     engine.animateCamera(engine.camera.position,engine.controls.target,{x:-150,y:-330,z:200},{x:-150,y:0,z:200})
+    // }else if(nameNode=='gui3_huilu01'){
+    //     changeCSS('展厅1回路',-222,10,300)
+    // }else if(nameNode=='gui3_huilu02'){
+    //     changeCSS('展厅2回路',-222,10,270)
+    // }else if(nameNode=='gui3_huilu03'){
+    //     changeCSS('展厅3回路',-222,10,240)
+    // }else if(nameNode=='gui3_huilu04'){
+    //     changeCSS('展厅4回路',-222,10,220)
+    // }else if(nameNode=='gui3_huilu05'){
+    //     changeCSS('展厅5回路',-222,10,190)
+    // }else if(nameNode=='gui3_huilu06'){
+    //     changeCSS('展厅6回路',-222,10,160)
+    // }else if(nameNode=='gui3_huilu07'){
+    //     changeCSS('展厅7回路',-222,10,140)
+    // }else if(nameNode=='gui3_huilu08'){
+    //     changeCSS('展厅8回路',-222,10,110)
+    // }else if(nameNode=='gui3_huilu09'){
+    //     changeCSS('展厅9回路',-222,10,90)
+    // }else if(nameNode=='gui3_huilu10'){
+    //     changeCSS('备用',-222,10,60)
+    // }else if(nameNode=='gui3_huilu11'){
+    //     changeCSS('备用',-222,10,30)
+    // }else if(nameNode=='gui2_huilu01'){
+    //     changeCSS('展厅10回路',140,10,90)
+    // }else if(nameNode=='gui2_huilu02'){
+    //     changeCSS('展厅11回路',140,10,60)
+    // }else if(nameNode=='gui2_huilu03'){
+    //     changeCSS('展厅12回路',140,10,30)
+    // }else if(nameNode=='gui2_duanlq'){
+    //     changeCSS('展厅电源1',140,10,270)
+    // }else if(nameNode=='gui2_duanlqge'){
+    //     changeCSS('展厅电源2',140,10,170)
+    // }
 
 }
 
@@ -321,67 +360,67 @@ var index=0
     client.on('message',function (topic, message) {
         index++;   //62
        const deviceName=topic.substring(13)
-    //    console.log(index+':'+deviceName+':'+message.toString())
+       console.log(index+':'+deviceName+':'+message.toString())
        //message.toString().match(/\"SwitchOn\": \d/)   是个数组
        //message.toString().match(/\"SwitchOn\": \d/)[0]   "SwitchOn": 0
     //    let circleState=(message.toString().match(/\"SwitchOn\": \d/)[0])
        let value=message.toString().match(/\d/)[0]    //0  1
+       let open=true;   //默认分闸
        switch(deviceName){
            case 'Room_Circle_1':
                if(value=="1"){
-                greenLights[5].material=greenLight_material
+                openAndCloseState(!open,5)
                }else{
-                redLights[5].material=redLight_material
+                openAndCloseState(open,5)
                }
                break;
             case 'Room_Circle_2':
                 if(value=="1"){
-                 greenLights[6].material=greenLight_material
+                    openAndCloseState(!open,6)
                 }else{
-                 redLights[6].material=redLight_material
-                //  engine.blooms.removeBloomObjects(redLights[6])
+                    openAndCloseState(open,6)
                 }
                 break;   
             case 'Room_Circle_3':
                 if(value=="1"){
-                 greenLights[7].material=greenLight_material
+                    openAndCloseState(!open,7)
                 }else{
-                 redLights[7].material=redLight_material
+                    openAndCloseState(open,7)
                 }
                 break;  
             case 'Room_Circle_4':
                 if(value=="1"){
-                 greenLights[8].material=greenLight_material
+                    openAndCloseState(!open,8)
                 }else{
-                 redLights[8].material=redLight_material
+                    openAndCloseState(open,8)
                 }
                 break;  
             case 'Room_Circle_5':
                 if(value=="1"){
-                 greenLights[9].material=greenLight_material
+                    openAndCloseState(!open,9)
                 }else{
-                 redLights[9].material=redLight_material
+                    openAndCloseState(open,9)
                 }
                 break;
             case 'Room_Circle_6':
                 if(value=="1"){
-                    greenLights[10].material=greenLight_material
+                    openAndCloseState(!open,10)
                 }else{
-                     redLights[10].material=redLight_material
+                    openAndCloseState(open,10)
                 }
                     break;   
             case 'Room_Circle_7':
                 if(value=="1"){
-                    greenLights[11].material=greenLight_material
+                    openAndCloseState(!open,11)
                  }else{
-                     redLights[11].material=redLight_material
+                    openAndCloseState(open,11)
                 }
                 break; 
             case 'Room_Circle_8':
                  if(value=="1"){
-                 greenLights[12].material=greenLight_material
+                    openAndCloseState(!open,12)
                 }else{
-                redLights[12].material=redLight_material
+                    openAndCloseState(open,12)
                 }
                 break;                                                                   
            default:
