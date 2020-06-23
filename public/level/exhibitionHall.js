@@ -117,14 +117,15 @@ MakerJS.exhibitionHall=function(){
         });
         
         //体积光效果
-        var texture_alpha = new THREE.TextureLoader().load( 'mesh/gltfLight/alpha.png' );
+        var texture_alpha = new THREE.TextureLoader().load( '../mesh/gltfLight/alpha.png' );
         // 使用透明纹理进行材质创建alphaMap: texture
         var volumeLight_material = new THREE.MeshPhongMaterial( 
             {
                  alphaMap: texture_alpha, 
                  color:0xADD8E6 ,
                  emissive:0x888888, 
-                 transparent:true, opacity:0.3
+                 transparent:true, 
+                 opacity:0.3
             });
         
         var unreal_material =new THREE.MeshBasicMaterial({
@@ -162,6 +163,7 @@ MakerJS.exhibitionHall=function(){
             for(var i in volumeLights){
                 volumeLights[i].visible=visible
             }
+            // console.log(volumeLights)
         }
         
         
@@ -327,7 +329,7 @@ MakerJS.exhibitionHall=function(){
         //logo贴图    //镜像材质
         function setLogoMaterial(){
            var logo= engine.scene.getObjectByName('logo');
-           var tex=new THREE.TextureLoader().load('textures/logo.PNG');  
+           var tex=new THREE.TextureLoader().load('../textures/logo.PNG');  
             logo.rotateX(Math.PI)
             logo.material[1]=new THREE.MeshBasicMaterial({map:tex})
         }
@@ -419,7 +421,7 @@ MakerJS.exhibitionHall=function(){
 
             traverseSceneMeshs()
             setEdgesEffect()  //边缘线
-            volumeLights_visible(false);
+            volumeLights_visible(false); //隐藏体积光模型
            
             showHideMonitorView()
             
@@ -427,9 +429,9 @@ MakerJS.exhibitionHall=function(){
            
             setGlass()
             setElectricCabinet()
-       
+
+            // this.alarmTips(new THREE.Vector3(-35,70,45))
             getMqtt()
-            
             engine.addEventListener('update',eveUpdate)
             engine.nodeSelection.addEventListener('choose',eveChoose)
         } 
@@ -770,7 +772,11 @@ MakerJS.exhibitionHall=function(){
          
     }
 
-    //红外传感 TODO
+    //红外感应 todo
+    function infrared(){
+    
+
+    }
 
     var cabinets=[];
          //展厅内的配电柜
@@ -936,7 +942,7 @@ MakerJS.exhibitionHall=function(){
            }
            else{
             var stateValue=message.toString().match(/\d/)[0] 
-               console.log(deviceName+':'+stateValue)
+            //    console.log(deviceName+':'+stateValue)
                   switch(deviceName){
                 case '5F_L_Light':     //5F_ML_Light   1F_L_Light  1F_R_Light  WS_R_Light
                 if(stateValue=="1"){
@@ -1054,7 +1060,14 @@ MakerJS.exhibitionHall=function(){
                 }else{
                  
                 }    
-                break;                                      
+                break;
+            case 'InfraredMov1_Alarm':     //红外线
+                if(stateValue=="1"){
+                    _this.alarmTips(new THREE.Vector3(-35,70,45),new THREE.Vector3(1,0.8,0),0.1,16.5,'',0.4,false)
+                }else{
+                    _this.alarmTips(new THREE.Vector3(-35,70,45),new THREE.Vector3(1,0.8,0),0.1,16.5,'',0.4,true)
+                }    
+                break;                                          
                 default:
                     break;
             }
@@ -1087,16 +1100,22 @@ MakerJS.exhibitionHall=function(){
             engine.animateCamera(engine.camera.position,engine.controls.target,{x:60,y:2,z:20},{x:200,y:2,z:20})
             }
         
-        
+            var alarm;
         //键盘按键测试
         document.addEventListener('keydown',myKeyDown)
         function myKeyDown(id) {
+           
             switch(id.key) {
                 case '1':
-                     switchRoomLamp_D(!circleState)
+                    //  switchRoomLamp_D(!circleState)
+                  alarm = _this.alarmTips(new THREE.Vector3(-35,70,45))
+                  console.log(alarm)
                    break;
                 case '2':
-                    _this.switchRoomLamp_S(!rectangleState)
+                    // _this.switchRoomLamp_S(!rectangleState)
+                    console.log(alarm)
+                   alarm.plane.visible=false
+                   alarm.sphere.visible=false
                    break;
                 case '3':
                   roomMonitor()
@@ -1136,7 +1155,92 @@ MakerJS.exhibitionHall=function(){
             } 
         }
         
-     
-       
-        
+}
+
+//红外传感 TODO
+//报警提示
+MakerJS.exhibitionHall.prototype.alarmTips = function(positionVec3,colorVec3,edge,size,name,radius,hidden){
+    var scope = this;
+       //报警提示模式
+       let _position = positionVec3 ||new THREE.Vector3(10,15,50);
+       let _color = colorVec3 || new THREE.Vector3(1,0.8,0);
+       let _edge = edge || 0.1;
+       var uniform = {
+        u_color: { value: _color},    //设置颜色
+        u_r: { value: radius || 0.4 },
+        u_edge: { value: _edge },  //宽
+        u_time: {value: 0.0}
+    };
+    var vertexShader = [
+        "varying vec2 vUv;",
+        "void main(){",
+        "vUv = uv;",
+        "  gl_Position  = projectionMatrix * modelViewMatrix * vec4(position, 1.0);",
+        "}"
+
+    ].join('\n');
+
+    var fragmentShaderYuanhuan = [
+        "varying vec2 vUv;",
+        "uniform vec3 u_color;",
+        "uniform float u_r;",
+        "uniform float u_edge;",
+        "uniform float u_time;",
+
+        "float plot(float d, float pct){",
+        "return  smoothstep( pct-u_edge, pct, d)- ",
+        "smoothstep( pct, pct+u_edge, d);",
+        "}",
+
+        "void main(){",
+        "float pct = distance(vUv,vec2(0.5,0.5));",
+        "float t = plot(pct,u_r*fract(u_time));",  //fract(x)，取x小数部分
+        "gl_FragColor = vec4(u_color,1.0*t*(1.0-u_time));",   //w,透明度计算
+        "}"
+    ].join('\n');
+
+    let width = size || 16.5;
+    var planeGeo = new THREE.CircleGeometry( width, 32 );
+    var material = new THREE.ShaderMaterial({
+        vertexShader: vertexShader,
+        fragmentShader: fragmentShaderYuanhuan ,
+        side: THREE.DoubleSide,
+        uniforms: uniform,
+        transparent: true,
+        depthTest: false,
+        //opacity:0.1,
+    });
+
+    var clock = new THREE.Clock();
+    var plane = new THREE.Mesh(planeGeo, material);
+    plane.position.set(_position.x,_position.y,_position.z);
+    plane.name = name + "_alarmsTips_plane" || "alarm";
+    if(!hidden){
+        scope.engine.scene.add(plane);
+    }
+    
+    var geometryP = new THREE.SphereGeometry(0.2,16,16);   //球体半径，水平分段数，垂直分段数
+    var materialP = new THREE.MeshBasicMaterial( { color: 0xcc3300,side:THREE.DoubleSide} );
+    var circleP = new THREE.Mesh( geometryP, materialP );
+    circleP.position.set(plane.position.x,plane.position.y,plane.position.z);
+    circleP.name = name + "_alarmsTips" || 'alarm';
+    if(!hidden){
+        scope.engine.scene.add(circleP);  //起点小球
+        scope.engine.blooms.addBloomObjects(circleP);
+    }
+   
+    // var geometry = new THREE.TorusBufferGeometry( 6.5, 0.1, 16, 100 );
+    // var material = new THREE.MeshBasicMaterial( { color: 0xff3300,transparent:true,opacity:0.7 } );
+    // var torus = new THREE.Mesh( geometry, material );
+    // torus.position.set(plane.position.x,plane.position.y,plane.position.z);
+    // scope.scene.add( torus );
+
+    scope.engine.addEventListener("update", function () {
+        var t1=clock.getElapsedTime();   //获取自时钟启动后的秒数
+        var t2=t1-Math.floor(t1);
+        plane.material.uniforms.u_time.value = t2;
+    });
+
+    var mesh={plane:plane,sphere:circleP}
+    return mesh
 }

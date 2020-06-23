@@ -76,6 +76,7 @@ function loadEnd(){
             console.log(_this.exhibitionHallMeshs)
             var hall=new MakerJS.exhibitionHall()
             hall.init(engine,_this.exhibitionHallMeshs)
+            // console.log(hall)
             if(view_btn)view_btn.onclick=function(){ cameraFlyHome(0,-100,200)} 
         break;
         case 'hallDistribution':

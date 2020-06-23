@@ -46,7 +46,7 @@ function init(){
     initCSS3DRenderer()
     setWallUnreal()
 
-    // getMqtt()
+    getMqtt()
     engine.nodeSelection.addEventListener('choose',eveChoose)
     // engine.nodeSelection.addEventListener('chooseMore',eveChooseMore)
     
