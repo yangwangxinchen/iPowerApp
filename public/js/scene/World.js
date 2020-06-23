@@ -23,7 +23,7 @@ MakerJS.World = function(engine) {
 
     // 字体
     var scope = this;
-    new THREE.FontLoader().load('./js/fonts/helvetiker_regular.typeface.json', function(font) {
+    new THREE.FontLoader().load('../js/fonts/helvetiker_regular.typeface.json', function(font) {
         scope.font = font;
     });
 

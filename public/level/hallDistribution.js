@@ -46,7 +46,7 @@ function init(){
     initCSS3DRenderer()
     setWallUnreal()
 
-    getMqtt()
+    // getMqtt()
     engine.nodeSelection.addEventListener('choose',eveChoose)
     // engine.nodeSelection.addEventListener('chooseMore',eveChooseMore)
     
@@ -345,6 +345,12 @@ function setColor(_mesh){
     _mesh.add(solid);
      solids.push(solid);
 }
+
+//电流走向按钮
+ const path_btn=document.getElementById('path')
+ path_btn.onclick=()=> {
+       console.log('电流走向')
+    }
 
 var index=0
  //关联数据

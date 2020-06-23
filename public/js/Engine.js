@@ -119,7 +119,7 @@ MakerJS.Engine = function () {
 
     // 环境贴图
     this.scene.background = new THREE.CubeTextureLoader()
-        .setPath('textures/skybox1/')
+        .setPath('../textures/skybox1/')
         .load(['PX.jpg', 'NX.jpg', 'PY.jpg', 'NY.jpg', 'PZ.jpg', 'NZ.jpg']);
     
     

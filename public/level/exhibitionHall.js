@@ -20,7 +20,8 @@ MakerJS.exhibitionHall=function(){
             // alphaTest:0.9
         });
 
-        this.solid_material = new THREE.MeshBasicMaterial({
+        //new THREE.MeshPhongMaterial材质需要添加光照,光照侧才会显示
+        this.solid_material =new THREE.MeshBasicMaterial({
             color: "#778899",
             // emissive :0x4169E1,
             polygonOffset: true,
@@ -32,9 +33,11 @@ MakerJS.exhibitionHall=function(){
         });
 
         var beam_material = new THREE.MeshBasicMaterial({
-            color: "#4169E1",
-            opacity: 0.6,
-            transparent: true,
+            color: "#0000ff",
+            // opacity: 0.6,
+            // transparent: false,
+            // lights:false,
+            // side:THREE.DoubleSide
         });
 
         var  tapeLight_material=new THREE.MeshLambertMaterial({
@@ -105,9 +108,9 @@ MakerJS.exhibitionHall=function(){
         this.glass_material = new THREE.MeshBasicMaterial({
             color: "#778899",
             // emissive :0xFDE951,
-            polygonOffset: true,
+            // polygonOffset: true,
             //polygonOffsetFactor: 1, // positive value pushes polygon further away
-            polygonOffsetUnits: 1,
+            // polygonOffsetUnits: 1,
             depthTest: true,
             opacity: 0.3,
             transparent: true,
@@ -124,13 +127,13 @@ MakerJS.exhibitionHall=function(){
                  transparent:true, opacity:0.3
             });
         
-        var unreal_material = new THREE.MeshBasicMaterial({
+        var unreal_material =new THREE.MeshBasicMaterial({
                 color: 0x778899,
                 // polygonOffset: true,
                 // polygonOffsetFactor: 1, // positive value pushes polygon further away
                 // polygonOffsetUnits: 1,
-                depthTest: true,
-                opacity: 0.8,
+                // depthTest: true,
+                opacity: 0.7,
                 transparent: true,
                 });
         
@@ -290,6 +293,9 @@ MakerJS.exhibitionHall=function(){
                 // walls.push(airSwitchs[i])
                 engine.effects.addEdgesObject(airSwitchs[i],_this.line_material)
             }
+
+            var display=engine.scene.getObjectByName('xianshiqi')
+            engine.effects.unrealObject(display)
             
             //线框
             // engine.effects.setWireframeObjects(walls)
@@ -333,6 +339,7 @@ MakerJS.exhibitionHall=function(){
             let glass_door= engine.scene.getObjectByName('boli01')
             
             glass.push(glass_door,glass_board)
+            // glass_board.visible=false
             // console.log(glass_door)
             
             for(var i in glass){
@@ -377,7 +384,7 @@ MakerJS.exhibitionHall=function(){
                 }
                 if(meshName=='kongkai'){
                     let mesh= engine.scene.getObjectByName(meshName)
-                    // change_mesh_material(meshName,_this.solid_material)
+                    // change_mesh_material(meshName,beam_material)
                     airSwitchs.push(mesh)
                 }
                 if(meshName=='liangzhu'){
@@ -764,7 +771,7 @@ MakerJS.exhibitionHall=function(){
     }
 
     //红外传感 TODO
-        
+
     var cabinets=[];
          //展厅内的配电柜
          function setElectricCabinet(){
@@ -802,10 +809,10 @@ MakerJS.exhibitionHall=function(){
                 `
                 }
                 
-                if(texture){
-                    // texture.offset.x -= 0.05
-                    // texture.offset.y += 0.01
-                }
+                // if(texture){
+                //     // texture.offset.x -= 0.05
+                //     // texture.offset.y += 0.01
+                // }
                 TWEEN.update();     
         }
         
@@ -843,11 +850,12 @@ MakerJS.exhibitionHall=function(){
             //视频监控
             showHideMonitorView:()=>{
                 clearControlTab()
+                roomMonitor()
             },
             //门禁记录
             accessRecord:()=>{
                 clearControlTab()
-                accessRecord(true)//描边显示门  TODO
+                accessRecord(true)//描边显示门  
             }
             
             //控制面板

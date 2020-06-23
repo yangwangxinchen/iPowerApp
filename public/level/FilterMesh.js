@@ -103,7 +103,7 @@ var animate_loading = lottie.loadAnimation({
     renderer: 'svg',
     loop: true,
     autoplay: true,
-    path: 'js/scene/loading.json' // the path to the animation json
+    path: 'libs/loading.json' // the path to the animation json
   });
 
   animate_loading.setSpeed(0.7)
