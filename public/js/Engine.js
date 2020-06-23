@@ -11,7 +11,7 @@ MakerJS.Engine = function () {
     this.canvas = canvas;
     
     this.renderEnabled = false;
-    this.realtime = false;  //true
+    this.realtime = true;  //true 如果不实时渲染 1.灯光状态无法立即同步 2.报警动画不会一直执行
 
     this.needReset = false;
 
@@ -132,7 +132,7 @@ MakerJS.Engine = function () {
  
     function update() {
         scope.controls.update(clock.getDelta()); //更新控制器
-        TWEEN.update()  //更新补间动画
+        // TWEEN.update()  //更新补间动画
         scope.dispatchEvent({ type: "update" });
     }
 
