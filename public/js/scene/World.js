@@ -62,7 +62,7 @@ MakerJS.World = function(engine) {
         this.meshFiles = {};
         this.loaded = false;
 
-        this.engine.lods.clear();
+        // this.engine.lods.clear();
 
         this.numLoading = 0;
         this.numLoaded = 0;
@@ -266,9 +266,9 @@ MakerJS.World = function(engine) {
                         var xml = nodeXml.childNodes[i];
                         if (xml.nodeName == 'mesh_name') {
                             //过滤模型
-                           var x=nodeXml.getElementsByTagName("mesh_name");
-                           var meshPath=x[0].childNodes[0].nodeValue
-                           this.engine.FilterMesh.set_meshArray(this.world_name,meshPath)
+                        //    var x=nodeXml.getElementsByTagName("mesh_name");
+                        //    var meshPath=x[0].childNodes[0].nodeValue
+                        //    this.engine.FilterMesh.set_meshArray(this.world_name,meshPath)
 
                             let scope = this;
                             function check_loaded() {
@@ -350,7 +350,7 @@ MakerJS.World = function(engine) {
                                     scope.bound_min.min(node.boundingBox.min.clone().applyMatrix4(node.matrixWorld));
 
                                     node.visible = true;
-                                    scope.engine.lods.applyNode(node, size);
+                                    // scope.engine.lods.applyNode(node, size);
 
                                     scope.dispatchEvent({ type: "nodeLoaded", node: node });
 

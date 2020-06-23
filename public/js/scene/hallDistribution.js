@@ -35,6 +35,8 @@ init()
 
 }
 
+
+//init
 function init(){
     getMesh()
     setGlassMaterial();
@@ -83,6 +85,7 @@ function setGlassMaterial(){
 
 }
 
+//视锥
 var monitorCone
 function setMonitorMaterial(){
     
@@ -139,10 +142,9 @@ function setLampBloom(){
         openAndCloseState(true,i)
     }
     
-    //测试用 数据那边有点问题
-    // openAndCloseState(false,6)
-    // openAndCloseState(false,9)
-    // openAndCloseState(false,15)
+    //无数据  默认合闸
+    openAndCloseState(false,1)
+    openAndCloseState(false,15)
 }
 
 //分闸 合闸区分 红色合闸（开）   绿色分闸（关） open close
@@ -162,17 +164,6 @@ function  openAndCloseState(open,circleNum){
  }
 }
 
-// 馈线guiD3 11条回路
-// 馈线guiD2  5条回路
-// 进线guiD1   
-
-function allCircuit(){
-
-
-
-}
-
-//
 
 var css3DRenderer
     //创建css3DRenderer 用来渲染css object
@@ -195,6 +186,10 @@ var css3DRenderer
         // engine.scene.add(label3d)
         return  label3d
     }
+
+    // 馈线guiD3 11条回路
+    // 馈线guiD2  5条回路
+    // 进线guiD1   
 
     const D3CIRCLES=[
         '电动窗帘一、二正转',

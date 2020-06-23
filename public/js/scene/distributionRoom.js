@@ -13,15 +13,6 @@ MakerJS.distributionRoom=function(){
     transparent: true,
     });
 
-    var trans_material = new THREE.MeshBasicMaterial({
-        color: 0x87cefa,
-        polygonOffset: true,
-        polygonOffsetFactor: 1, // positive value pushes polygon further away
-        polygonOffsetUnits: 1,
-        depthTest: true,
-        opacity: 0.8,
-        transparent: true,
-        });
     
     //线材质
     var line_material = new THREE.LineBasicMaterial({
@@ -97,36 +88,36 @@ MakerJS.distributionRoom=function(){
 
     //设置css样式
     function setCSS(){
-        var device01=document.getElementById('device01')
-        device01.innerText="进线柜\n"+"A相电压:"+A_VOL+"V"+"\nA相电流:"+A_ELE+"A"+"\nUAB线电压:"+UAB_VOL+"V"+"\n温度:"+TEMP+"℃"
-        // deviceDiv.innerText="A相电压     A相电流\n"+A_VOL+"V     "+A_ELE+"A"+"\nUAB线电压     温度\n"+UAB_VOL+"V     "+TEMP+"℃"
-        low_p01_css=createCSS3DObject(device01)
-        low_p01_css.position.set(-135,-20,50)
-        low_p01_css.rotation.set(-Math.PI/2,0,Math.PI)
+        // var device01=document.getElementById('device01')
+        // device01.innerText="进线柜\n"+"A相电压:"+A_VOL+"V"+"\nA相电流:"+A_ELE+"A"+"\nUAB线电压:"+UAB_VOL+"V"+"\n温度:"+TEMP+"℃"
+        // // deviceDiv.innerText="A相电压     A相电流\n"+A_VOL+"V     "+A_ELE+"A"+"\nUAB线电压     温度\n"+UAB_VOL+"V     "+TEMP+"℃"
+        // low_p01_css=createCSS3DObject(device01)
+        // low_p01_css.position.set(-135,-20,50)
+        // low_p01_css.rotation.set(-Math.PI/2,0,Math.PI)
         
-        var device02=document.getElementById('device02')
-        device02.innerText="进线柜\n"+"A相电压:"+A_VOL+"V"+"\nA相电流:"+A_ELE+"A"+"\nUAB线电压:"+UAB_VOL+"V"+"\n温度:"+TEMP+"℃"
-        low_p02_css=createCSS3DObject(device02)
-        low_p02_css.position.set(-135,20,50)
-        low_p02_css.rotation.set(Math.PI/2,0,0)
+        // var device02=document.getElementById('device02')
+        // device02.innerText="进线柜\n"+"A相电压:"+A_VOL+"V"+"\nA相电流:"+A_ELE+"A"+"\nUAB线电压:"+UAB_VOL+"V"+"\n温度:"+TEMP+"℃"
+        // low_p02_css=createCSS3DObject(device02)
+        // low_p02_css.position.set(-135,20,50)
+        // low_p02_css.rotation.set(Math.PI/2,0,0)
 
-        var device03=document.getElementById('device03')
-        device03.innerText="门卫加路灯回路\n"+"A相电压:"+A_VOL+"V"+"\nA相电流:"+A_ELE+"A"+"\nUAB线电压:"+UAB_VOL+"V"+"\n温度:"+TEMP+"℃"
-        high_p03_css=createCSS3DObject(device03)
-        high_p03_css.position.set(142,20,50)
-        high_p03_css.rotation.set(Math.PI/2,0,0)
+        // var device03=document.getElementById('device03')
+        // device03.innerText="门卫加路灯回路\n"+"A相电压:"+A_VOL+"V"+"\nA相电流:"+A_ELE+"A"+"\nUAB线电压:"+UAB_VOL+"V"+"\n温度:"+TEMP+"℃"
+        // high_p03_css=createCSS3DObject(device03)
+        // high_p03_css.position.set(142,20,50)
+        // high_p03_css.rotation.set(Math.PI/2,0,0)
 
-        var device04=document.getElementById('device04')
-        device04.innerText="大楼车间回路\n"+"A相电压:"+A_VOL+"V"+"\nA相电流:"+A_ELE+"A"+"\nUAB线电压:"+UAB_VOL+"V"+"\n温度:"+TEMP+"℃"
-        high_p04_css=createCSS3DObject(device04)
-        high_p04_css.position.set(142,-20,50)
-        high_p04_css.rotation.set(-Math.PI/2,0,Math.PI)
+        // var device04=document.getElementById('device04')
+        // device04.innerText="大楼车间回路\n"+"A相电压:"+A_VOL+"V"+"\nA相电流:"+A_ELE+"A"+"\nUAB线电压:"+UAB_VOL+"V"+"\n温度:"+TEMP+"℃"
+        // high_p04_css=createCSS3DObject(device04)
+        // high_p04_css.position.set(142,-20,50)
+        // high_p04_css.rotation.set(-Math.PI/2,0,Math.PI)
 
-        var device05=document.getElementById('device05')
-        device05.innerText="变压器\n"+"回路总数:"+8+"条"+"\n输出容量:"+"60kWA"+"\n设备总数:"+21+"个"
-        change_p05_css=createCSS3DObject(device05)
-        change_p05_css.position.set(26,-40,46)
-        change_p05_css.rotation.set(Math.PI/2,0,0)
+        // var device05=document.getElementById('device05')
+        // device05.innerText="变压器\n"+"回路总数:"+8+"条"+"\n输出容量:"+"60kWA"+"\n设备总数:"+21+"个"
+        // change_p05_css=createCSS3DObject(device05)
+        // change_p05_css.position.set(26,-40,46)
+        // change_p05_css.rotation.set(Math.PI/2,0,0)
 
 
     }
@@ -168,7 +159,6 @@ MakerJS.distributionRoom=function(){
             engine.effects.addEdgesObject(low_p01,line_material)
             engine.effects.addEdgesObject(low_p02)
             low_p02.material=unreal_material
-            // low_p01.material=trans_material
             //相机动画
             engine.animateCamera(engine.camera.position,engine.controls.target,{x:-78,y:170,z:100},{x:-78,y:0,z:100})
            
@@ -198,25 +188,13 @@ MakerJS.distributionRoom=function(){
         }
         
     }
-    
-    var timer=0
+
     //update
     function eveUpdate(){
 
     if(css3DRenderer){
         css3DRenderer.render(engine.scene, engine.camera );
     }
-    // timer++;
-    // if(timer%120==0){
-    //     A_VOL=230+parseFloat( (Math.random()*2 + 0.5).toFixed(2)) 
-    //     A_ELE=parseFloat( (Math.random()*0.5 + 0.3).toFixed(2)) 
-    //     UAB_VOL=410+parseFloat( (Math.random()*2 + 0.4).toFixed(2)) 
-    //     // TEMP=30
-    //     // device01.innerText="进线柜\n"+"A相电压:"+A_VOL+"V"+"\nA相电流:"+A_ELE+"A"+"\nUAB线电压:"+UAB_VOL+"V"+"\n温度:"+TEMP+"℃"
-    // }
-    
-
-
     } 
 
 }  

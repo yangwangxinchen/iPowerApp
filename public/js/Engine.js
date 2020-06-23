@@ -4,14 +4,14 @@ var Public_Engine;
 
 MakerJS.Engine = function () {
     // // @ 单例控制
+    var scope = this;
     const canvas = document.querySelector('#Maker_Render_Canvas');
     const MakerJS_div = document.getElementById("MakerJS");
     this.div = MakerJS_div;
     this.canvas = canvas;
     
-
     this.renderEnabled = false;
-    this.realtime = true;
+    this.realtime = false;  //true
 
     this.needReset = false;
 
@@ -27,12 +27,13 @@ MakerJS.Engine = function () {
     this.height=screenSize.height
 
     var devicePixelRatio = window.devicePixelRatio || 1;
-
+    
+    //scene
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(0x040306); //new THREE.Color(0x212121); // 0x7f7f7f
-
+    var scene=this.scene
+    //camera
      this.camera = new THREE.PerspectiveCamera(60, this.width / this.height, 1, 10000);
-    //  this.camera.position.set(0,800,100)
      this.camera.up.set(0, 0, 1);  //设置相机以z轴为上方  默认y轴为上方
     
 
@@ -40,14 +41,14 @@ MakerJS.Engine = function () {
     // this.axesHelper = new THREE.AxesHelper( 1000 );
     // this.scene.add( this.axesHelper );
 
-    
+    //renderer
     this.renderer = new THREE.WebGLRenderer({
         canvas: canvas,
         antialias:true,
-        alpha:true
+        // alpha:true
     });
     this.renderer.autoClear = false;   //让后处理有效果,关闭自动清除,后面需要手动清除
-    this.renderer.setClearColor(0xffffff,0);  //背景透明
+    this.renderer.setClearColor(0xffffff);  //背景透明
     this.renderer.setSize(this.width, this.height);
     this.renderer.setPixelRatio(devicePixelRatio);
     
@@ -63,11 +64,26 @@ MakerJS.Engine = function () {
     // this.controls.minDistance=100   
     this.controls.maxDistance=2000    //限制
     this.controls.update();
-    // for reset
-	//this.controls.target0 = this.target.clone();
-    
+   
+   
+    // console.log(scope)
+    //控制器监听事件
+    this.controls.addEventListener('change', function (event) {
+        // scope.directionalLight.rotation.copy(scope.camera.rotation);
+        // // scope.directionalLight.position.set(scope.camera.position.x, scope.camera.position.y, scope.camera.position.z);
+        // scope.directionalLight.position.copy(scope.camera.position);
+        scope.requestFrame();
+    });
+
+    this.controls.addEventListener('end',function(){
+        // console.log('更新位置信息')
+        //更新场景矩阵 可以获得更新的(位置等)数据
+        scope.scene.updateMatrixWorld();  
+    })
+
     // console.log(this.controls)
 
+    //后处理
     this.composer = new THREE.EffectComposer(this.renderer);
     this.composer.setPixelRatio(devicePixelRatio);
 
@@ -86,24 +102,7 @@ MakerJS.Engine = function () {
     this.taaRenderPass.sampleLevel = 2;
 
     window.addEventListener('resize', resizeWindow, false);
-
-    var scope = this;
-    //字体
-    new THREE.FontLoader().load('./js/fonts/helvetiker_regular.typeface.json', function (font) {
-        scope.font = font;
-    });
-
-    //中文字体，简宋
-    new THREE.FontLoader().load('./js/fonts/STSong_Regular.json', function (font) {
-        scope.hanfont = font;
-    });
-
-    var clock = new THREE.Clock();
-    //性能监测
-    var stats = new Stats();
-    stats.showPanel(0);// 0: fps, 1: ms, 2: mb, 3+: custom
-    document.body.appendChild( stats.dom );
-
+    
     function resizeWindow() {
         const width=screenSize.width
         const height=screenSize.height
@@ -115,48 +114,31 @@ MakerJS.Engine = function () {
         scope.composer.setSize(width,height);
         scope.blooms.setSize(width,height);
 
-        // scope.renderer.render(scope.scene, scope.camera);//执行渲染操作
-     
         scope.requestFrame();
     }
 
-   
-
-this.cameraFly=function(targetPos,controlsPos,time){
-   
-    //相机起始位置需要在外面定义 如果以参数传入,相机最后的位置会异常
-    var currentCameraPos=scope.camera.position
-
-    function fly (targetPos,controlsPos,time){
-        //缓动方式:四次方的缓动   类型:前半段加速 后半段减速
-        var tween=new TWEEN.Tween(currentCameraPos).to(targetPos,1000*time).easing(TWEEN.Easing.Quadratic.InOut)
-        var update =function(){
-            scope.camera.position.set(currentCameraPos.x,currentCameraPos.y,currentCameraPos.z)
-            scope.controls.target=controlsPos    //控制器中心点
-        }
-        tween.onUpdate(update)
-        return tween;
-    }
+    // 环境贴图
+    this.scene.background = new THREE.CubeTextureLoader()
+        .setPath('textures/skybox1/')
+        .load(['PX.jpg', 'NX.jpg', 'PY.jpg', 'NY.jpg', 'PZ.jpg', 'NZ.jpg']);
     
-    var tw=fly(targetPos,controlsPos,time)
-
-    return tw
     
-}
+  
+    var clock = new THREE.Clock();
+    //性能监测
+    // var stats = new Stats();
+    // stats.showPanel(0);// 0: fps, 1: ms, 2: mb, 3+: custom
+    // document.body.appendChild( stats.dom );
  
-
-// console.log(scope.camera)
     function update() {
-        
         scope.controls.update(clock.getDelta()); //更新控制器
-        scope.scene.updateMatrixWorld();  //更新场景矩阵 可以获得实时更新的(位置等)数据
         TWEEN.update()  //更新补间动画
         scope.dispatchEvent({ type: "update" });
     }
 
     
     function render() {
-        update();
+       
         // scope.renderer.autoClear = false;
         scope.renderer.clear();  //渲染器清除颜色、深度,模板缓存.
         scope.renderer.render(scope.scene, scope.camera);//执行渲染操作
@@ -167,22 +149,22 @@ this.cameraFly=function(targetPos,controlsPos,time){
 
         scope.dispatchEvent({ type: "render" });
     }
-    
+   
     function animate() {
-        stats.begin();
-        requestAnimationFrame(animate);  //请求再次渲染函数
         
+        requestAnimationFrame(animate);  //请求再次渲染函数
         //控制实时渲染
         if (scope.renderEnabled) {
             // stats.begin();
             render();
             // stats.end();
         }
-        stats.end();
+       update();
+        
     }
     
     animate();
-   
+
     this.requestFrame();
    
     
@@ -196,16 +178,7 @@ this.cameraFly=function(targetPos,controlsPos,time){
     this.ambientLight = new THREE.AmbientLight('#fff', 0.3);
     this.scene.add(this.ambientLight);
 
-    //根据相机位置改变光照位置
-    this.controls.addEventListener('change', function (event) {
-        // scope.directionalLight.rotation.copy(scope.camera.rotation);
-        // // scope.directionalLight.position.set(scope.camera.position.x, scope.camera.position.y, scope.camera.position.z);
-        // scope.directionalLight.position.copy(scope.camera.position);
-        scope.requestFrame();
-    });
-
-    //  console.log(this.controls)
-
+   
     //directional light
     var SHADOW_MAP_WIDTH = 1024 * 4,
         SHADOW_MAP_HEIGHT = 1024 * 2;
@@ -213,7 +186,7 @@ this.cameraFly=function(targetPos,controlsPos,time){
     // this.renderer.shadowMapEnabled = false; // 开启阴影，加上阴影渲染
     // this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-    var size = 20;
+    // var size = 20;
     // this.directionalLight.castShadow = true; // 投射阴影
     // this.directionalLight.shadow.camera.near = 0.1;
     // this.directionalLight.shadow.camera.far = 800;
@@ -225,50 +198,38 @@ this.cameraFly=function(targetPos,controlsPos,time){
     // this.directionalLight.shadow.mapSize.height = SHADOW_MAP_HEIGHT;
 
     
-
     this.world = new MakerJS.World(this);
-    this.lods = new MakerJS.LODs(this);    //world 里面的lod一同注释掉了,暂时不需要lod
-   
+    // this.lods = new MakerJS.LODs(this);    //world 里面的lod一同注释掉了,暂时不需要lod
     this.effects = new MakerJS.Effects(this);
     this.blooms = new MakerJS.Bloom(this);
     this.nodeSelection = new MakerJS.NodeSelection(this);
     //过滤模型
     this.FilterMesh=new MakerJS.FilterMesh(this);
 
-    // 环境贴图
-    this.scene.background = new THREE.CubeTextureLoader()
-        .setPath('textures/skybox1/')
-        .load(['PX.jpg', 'NX.jpg', 'PY.jpg', 'NY.jpg', 'PZ.jpg', 'NZ.jpg']);
 
-    this.world.addEventListener('loadEnd', function (event) {
-
-        // Public_Engine.focusWorld(true);
-        // if (scope.world.world_name == "morenshitu") {
-        //     // scope.controls.target0.set(154.07286071777344, 117.0617904663086, 50);
-        //     // scope.controls.target0.set(0, 100, 50);
-
-        //     scope.controls.reset();
-        // }
-        // else if (scope.world.world_name == "jijianguan") {
-        //     var objs = scope.helper.getObjectsByName("网格");
-        //     if (objs.length > 0) {
-        //         var center = scope.helper.getWorldCenter(objs[0]);
-        //         scope.controls.target0.set(center.x, center.y, center.z);
-        //         scope.controls.reset();
-        //     }
-        // }
-        // else if (scope.world.world_name == "jiudian") {
-        //     var objs = scope.helper.getObjectsByName("酒店01");
-        //     if (objs.length > 0) {
-        //         var center = scope.helper.getWorldCenter(objs[0]);
-        //         scope.controls.target0.set(center.x, center.y, center.z);
-        //         scope.controls.reset();
-        //     }
-        // }
-    });
-
+    //相机飞行动画
+    this.cameraFly=function(targetPos,controlsPos,time){
+   
+        //相机起始位置需要在外面定义 如果以参数传入,相机最后的位置会异常
+        var currentCameraPos=scope.camera.position
+    
+        function fly (targetPos,controlsPos,time){
+            //缓动方式:四次方的缓动   类型:前半段加速 后半段减速
+            var tween=new TWEEN.Tween(currentCameraPos).to(targetPos,1000*time).easing(TWEEN.Easing.Quadratic.InOut)
+            var update =function(){
+                scope.camera.position.set(currentCameraPos.x,currentCameraPos.y,currentCameraPos.z)
+                scope.controls.target=controlsPos    //控制器中心点
+            }
+            tween.onUpdate(update)
+            return tween;
+        }
+        
+        var tw=fly(targetPos,controlsPos,time)
+    
+        return tw
+        
+    }
 };
-
 
 MakerJS.Engine.prototype = Object.create(THREE.EventDispatcher.prototype);
 MakerJS.Engine.prototype.constructor = MakerJS.Engine;
@@ -282,7 +243,7 @@ MakerJS.Engine.prototype.clear = function () {
     // Public_Engine = null;
 };
 
-
+//需要渲染的时候调用
 MakerJS.Engine.prototype.requestFrame = function () {
     this.renderEnabled = true;
 
@@ -292,8 +253,9 @@ MakerJS.Engine.prototype.requestFrame = function () {
 
     if (!this.realtime) {
         var scope = this;
-        // 请求式渲染 - 延迟渲染1.5秒
+       
         this.renderTimeout = setTimeout(function () {
+             // console.log('关闭渲染')
             scope.renderEnabled = false;
         }, 1500);
     }
@@ -467,20 +429,6 @@ MakerJS.Engine.prototype.getMqtt=function(){
 			console.log("connected。。。。");
 			client.subscribe("changhua/get/#");
 		});
-
-		// client.on("message", function (topic, message) {
-		// 	if(!/Room/.test(topic)) return
-		// 	// if(/Humi_VAL|CO2_VAL|Temp_VAL/.test(topic)) return
-		// 	// if(/InfraredMov1_Alarm/.test(topic)) return
-		// 	message = message.toString();
-		// 	// console.log(topic.substring(13) + ":" + message);
-		// 	// if (/\"SwitchOn\": \d/.test(message)) {
-		// 	// 	value = message.match(/\"SwitchOn\": \d/)[0].match(/\d/)[0];
-		// 	// 	// console.log(topic+":  "+value)
-		// 	// } else if (Number(message) !== NaN) {
-		// 	// 	// console.log(topic+":  "+message)
-		// 	// } else console.log(topic + ":  " + message);
-        // });
         return client;
 }
 

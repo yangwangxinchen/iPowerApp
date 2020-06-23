@@ -262,17 +262,12 @@ MakerJS.exhibitionHall=function(){
             engine.effects.setOutlineObjects(outlineObjects)
 
         }
-
-        //门禁 access
-        
-        
         
         //更改材质   material three 材质类型
         function  change_mesh_material(meshName,material){
           let meshNode= engine.scene.getObjectByName(meshName)
           meshNode.material=material
         }
-        
         
         //设置边缘线效果
         function setEdgesEffect(){
@@ -282,28 +277,22 @@ MakerJS.exhibitionHall=function(){
              change_mesh_material('bgs_waikuang',_this.solid_material)
              change_mesh_material('5louwaiqiang',_this.solid_material)
 
-             var zhantai= engine.scene.getObjectByName('zhantai');
-            //  var shapan= engine.scene.getObjectByName('shapan');
-           
-
-
-             walls.push(wall_inside,wall_out,zhantai)
+             var stand= engine.scene.getObjectByName('zhantai');
+             walls.push(wall_inside,wall_out,stand)
              for(var i in monitorings) {
                 let mon=engine.scene.getObjectByName(monitorings[i]) 
                 walls.push(mon)
-             }
+            }
+            //边缘线
+            engine.effects.setEdgesObjects(walls)
             
              for(var i in airSwitchs){
                 // walls.push(airSwitchs[i])
                 engine.effects.addEdgesObject(airSwitchs[i],_this.line_material)
-             }
+            }
             
-             //边缘线
-             engine.effects.setEdgesObjects(walls)
-             
             //线框
             // engine.effects.setWireframeObjects(walls)
-            // engine.effects.setSolidObjects(walls)
         }
         
       
@@ -328,22 +317,6 @@ MakerJS.exhibitionHall=function(){
        
             }
         }
-       
-       
-        // //沙盘
-        // function setSandTapeLightColor(){
-        //     var sandTapeLight=engine.scene.getObjectByName('dengdai');
-        //     sandTapeLight.material=tapeLight_material
-        //     engine.blooms.addBloomObjects(sandTapeLight)
-        //      //边缘线
-        //     var zhantai= engine.scene.getObjectByName('zhantai');
-        //     var shapan= engine.scene.getObjectByName('shapan');
-        //     var  zts=[zhantai,shapan]
-
-        //     var linecolor=new THREE.LineBasicMaterial({ color: "#4169E1"})
-        //     engine.effects.setEdgesObjects(zts,linecolor);
-        //     // engine.effects.setOutlineObjects(zts)
-        // }
 
         //logo贴图    //镜像材质
         function setLogoMaterial(){
@@ -394,7 +367,6 @@ MakerJS.exhibitionHall=function(){
                     change_mesh_material(meshName,_this.lampClose_material)
                 }
                 if(meshName.indexOf("yd_dguan")!=-1){
-                    // circleLights.push(meshName);   存的是名字数组
                     change_mesh_material(meshName,_this.lampClose_material)
                 }
 
@@ -426,7 +398,6 @@ MakerJS.exhibitionHall=function(){
             getHallwayLights()
             getDistributionLights()
             getTapeLights()
-
             getSand()
             
         }
@@ -440,16 +411,11 @@ MakerJS.exhibitionHall=function(){
             engine.blooms.setEnable(true)   //启用辉光
 
             traverseSceneMeshs()
-            // engine.effects.setOutlineObjects(airSwitchs)
-            // addSolidColor(airSwitchs)
-
             setEdgesEffect()  //边缘线
             volumeLights_visible(false);
            
             showHideMonitorView()
-            // createMonitorView(0.5,30,100,4,1,false)
-           
-           
+            
             label_3d()
            
             setGlass()
@@ -461,6 +427,7 @@ MakerJS.exhibitionHall=function(){
             engine.nodeSelection.addEventListener('choose',eveChoose)
         } 
         
+        //添加指示线
         function addNormalLine(x1,y1,z1,x2,y2,z2){
             const p1 =  new THREE.Vector3(x1,y1,z1)
             const p2 =  new THREE.Vector3(x2,y2,z2)
@@ -520,7 +487,7 @@ MakerJS.exhibitionHall=function(){
           
         }
         
-        //管道线
+    /*    //管道线
         const list=[
             [-20,5,-10],
             [10,5,-9],
@@ -548,10 +515,10 @@ MakerJS.exhibitionHall=function(){
             texture.needsUpdate = true
             engine.scene.add(tubeMesh)
         }
-        
+      */  
 
         
-        var airsPlane=[]
+     /*   var airsPlane=[]
         //1.uv贴图修改偏移
         const loader_t  = new THREE.TextureLoader()
         var texture;
@@ -577,9 +544,9 @@ MakerJS.exhibitionHall=function(){
         })
         
         //2.着色器中uniform变量更新 每帧更改x y的偏移
+        */
         
-        
-        function createSprite(){
+       /*   function createSprite(){
                 //精灵
                 var textured = new THREE.TextureLoader().load("dropBg.png");
                 var spriteMaterial = new THREE.SpriteMaterial({
@@ -602,7 +569,7 @@ MakerJS.exhibitionHall=function(){
                 
                 engine.scene.add(group);
                
-        }
+        } */
         
         var labelRenderer
         //样式 类似billboard 
@@ -634,30 +601,13 @@ MakerJS.exhibitionHall=function(){
              css3DRenderer.domElement.style.top = 0
              css3DRenderer.domElement.style.pointerEvents = "none"
              document.body.appendChild(css3DRenderer.domElement );
-        
-            //3d物体载体 "智能配电箱\n"+"回路总数:"+circuitCount+"条\n"+"回路运行:"+circuitRun+"条\n"+"总功率:"+capacity+"kW"
-            // document.getElementById("box3").innerHTML= `
-            //     <div class='box3-text'>智能配电箱</div>
-            //     <div class='box-child'>
-            //         <span class='box3-text'>回路总数:</span>
-            //         <span class='box3-text'>${circuitCount}条</span>
-            //     </div>
-            //     <div class='box-child'>
-            //         <span class='box3-text'>回路运行:</span>
-            //         <span class='box3-text'>${circuitRun}条</span>
-            //     </div>
-            //     <div class='box-child'>
-            //         <span class='box3-text'>总功率:</span>
-            //         <span class='box3-text'>${capacity}kW</span>
-            //     </div>
-            // `
-            var label3d2=   _this.css3DObjectCreate(document.getElementById("box3"))
-            label3d2.position.set(-84,5,25)
-            label3d2.rotation.set(0,Math.PI/2,Math.PI/2)
+            var smartBox= _this.css3DObjectCreate(document.getElementById("box3"))
+            smartBox.position.set(-84,5,25)
+            smartBox.rotation.set(0,Math.PI/2,Math.PI/2)
             addNormalLine( -84,5,20,-84,5,24) 
         }
         
-        
+        //创建css3DObject
         this.css3DObjectCreate=function(div){
          
          if(!css3DRenderer) console.error('css3DRenderer 未定义')
@@ -681,13 +631,13 @@ MakerJS.exhibitionHall=function(){
             })
         }
         
-        //主相机
-        function cameraFlyHome(){
-            engine.animateCamera(engine.camera.position,engine.controls.target,{x:0,y:-100,z:200},{x:0,y:0,z:1})
-        }
+        //主视野
+        // function cameraFlyHome(){
+        //     engine.animateCamera(engine.camera.position,engine.controls.target,{x:0,y:-100,z:200},{x:0,y:0,z:1})
+        // }
         
         
-        //监控
+        //监控视锥
         function createMonitorView(radiusTop,radiusBottom,height,radialSegments,heightSegments,openEnded){
             //圆柱顶部半径   圆柱底部半径  圆柱高  圆柱侧面分段 圆柱高度分段  圆柱底面开放还是封顶
             var geometry = new THREE.CylinderGeometry( radiusTop,radiusBottom, height, radialSegments,heightSegments,openEnded);
@@ -706,11 +656,10 @@ MakerJS.exhibitionHall=function(){
             cylinder.rotation.set(0,0,Math.PI)//Math.PI/4
             // cylinder.setRotationFromAxisAngle(new THREE.Vector3(0,1,1),30)
             // console.log(cylinder)
-
         }
 
         var monitorings=[]
-        //显示隐藏监控
+        //显示隐藏监控视锥
         function showHideMonitorView(id){
             for (var i in monitorings){
                 let mon=engine.scene.getObjectByName(monitorings[i]) 
@@ -720,14 +669,11 @@ MakerJS.exhibitionHall=function(){
                 var roomMon=engine.scene.getObjectById(id)
                 roomMon.visible=true
             }
-            
-            
         }
 
         // 展厅
         function roomMonitor(){
             showHideMonitorView(243)
-            // monitorRotate(242)
         }
         //配电间
         function  roomDistributionMonitor(){
@@ -747,7 +693,7 @@ MakerJS.exhibitionHall=function(){
             roomMon.material=thermal_material  
         }
 
-        function monitorRotate(id){
+    /*   function monitorRotate(id){
             var monitor=engine.scene.getObjectById(id)
                 var yaw=Math.PI/180;
                 var rate=30
@@ -790,23 +736,21 @@ MakerJS.exhibitionHall=function(){
         })
         tween.easing(TWEEN.Easing.Cubic.InOut);
         tween.start();
-    }
+    }  */
 
     //透明度渐变
     function opacityChange(from,to){
         _this.line_material.opacity=from
         var tween=new TWEEN.Tween(_this.line_material)
-        tween.to({opacity:to},3000)
+        tween.to({opacity:to},1500)
         tween.onUpdate(function(object) {
            
         })
         tween.easing(TWEEN.Easing.Cubic.InOut);
         tween.start();
-
     }
 
-
-
+    //门禁记录
     function  accessRecord(state){
         var access=engine.scene.getObjectByName('boli01');
         if(state){
@@ -862,8 +806,7 @@ MakerJS.exhibitionHall=function(){
                     // texture.offset.x -= 0.05
                     // texture.offset.y += 0.01
                 }
-                TWEEN.update();
-                   
+                TWEEN.update();     
         }
         
         function eveChoose(e){
@@ -877,9 +820,7 @@ MakerJS.exhibitionHall=function(){
 
         }
 
-        var addSolids=[]
-   
-
+        //切换tab时 清除其他tab的显示状态
         function clearControlTab(){
             showHideMonitorView()
             accessRecord(false)
@@ -912,8 +853,6 @@ MakerJS.exhibitionHall=function(){
             //控制面板
             //接线图
             //资产管理
-            
-
         }
 
 
@@ -928,7 +867,7 @@ MakerJS.exhibitionHall=function(){
                //test() 方法用于检测一个字符串是否匹配某个模式
                // if(!/Room/.test(topic)) return
                //1开 0关
-               console.log(topic.substring(13)+":"+message.toString())
+            //    console.log(topic.substring(13)+":"+message.toString())
            if(/\"SwitchOn\": \d/.test(message)){
                let value=message.toString().match(/\"SwitchOn\": \d/)[0].match(/\d/)[0]
                // console.log(deviceName+message.toString())

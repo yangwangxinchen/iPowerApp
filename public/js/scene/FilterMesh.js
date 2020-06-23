@@ -9,17 +9,6 @@ this.distributionRoomMeshs=[];
 this.exhibitionHallMeshs=[];
 this.hallDistributionMeshs=[];
 
-this.monitoring_material = new THREE.MeshBasicMaterial({
-    color: "#1E90FF",
-    // emissive :0xFDE951,
-    polygonOffset: true,
-    //polygonOffsetFactor: 1, // positive value pushes polygon further away
-    polygonOffsetUnits: 1,
-    depthTest: true,
-    opacity: 0.3,
-    transparent: true,
-});
-
 
 this.get_meshArray = function (meshPath,meshArray) {
     //get relative path   
@@ -51,25 +40,39 @@ this.set_meshArray=function(world_name,meshPath){
 }
 
 
+//遍历场景 将场景物体名存入数组
+function  traverseScene(arr){
+    engine.scene.traverse(
+        function(obj){
+        //  console.log(obj.name)
+         arr.push(obj.name)
+        }
+    )
+}
 
-this.engine.world.addEventListener('loadEnd', loadEnd)
+
 //关卡加载完毕
+this.engine.world.addEventListener('loadEnd', loadEnd)
+
 function loadEnd(){
+    this.world_name=engine.world.world_name
+    console.log(this.world_name)
     //加载动画隐藏
     document.getElementById('mask').style.display='none'
     //总览按钮
     const view_btn=document.getElementById('view')
     switch(this.world_name) {
-        
         case 'distributionRoom':
             this.engine.camera.position.set(0,-300,200)
-            var distributionRoom=new MakerJS.distributionRoom()
+            traverseScene(_this.distributionRoomMeshs)
             console.log(_this.distributionRoomMeshs)
+            var distributionRoom=new MakerJS.distributionRoom()
             distributionRoom.initSceneMeshs(engine,_this.distributionRoomMeshs)
             if(view_btn)view_btn.onclick=function(){ cameraFlyHome(0,-300,200)} 
         break;
         case 'exhibitionHall':
             this.engine.camera.position.set(0,-100,200)
+            traverseScene(_this.exhibitionHallMeshs)
             console.log(_this.exhibitionHallMeshs)
             var hall=new MakerJS.exhibitionHall()
             hall.init(engine,_this.exhibitionHallMeshs)
@@ -77,11 +80,15 @@ function loadEnd(){
         break;
         case 'hallDistribution':
             this.engine.camera.position.set(0,-800,500)
+            traverseScene(_this.hallDistributionMeshs)
             console.log(_this.hallDistributionMeshs)
             var hallDistribution=new MakerJS.hallDistribution()
             hallDistribution.initSceneMeshs(engine,_this.hallDistributionMeshs)
             if(view_btn)view_btn.onclick=function(){ cameraFlyHome(0,-800,500)} 
         break;
+        case 'test':
+            this.engine.camera.position.set(0,-100,200)
+            break;
         
         default:
         break;
