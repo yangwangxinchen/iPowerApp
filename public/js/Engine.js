@@ -51,8 +51,8 @@ MakerJS.Engine = function () {
     this.renderer.setClearColor(0xffffff);  //背景透明
     this.renderer.setSize(this.width, this.height);
     this.renderer.setPixelRatio(devicePixelRatio);
-    
-    
+    this.renderer.sortObjects=false   //物体的渲染顺序将会由他们添加到场景中的顺序所决定
+    // this.renderer.setFaceCulling(THREE.CullFaceFront,THREE.FrontFaceDirectionCW);
     //轨道控制器
     this.controls = new THREE.OrbitControls(this.camera, MakerJS_div);
     // this.controls.autoRotate=false
@@ -68,12 +68,12 @@ MakerJS.Engine = function () {
    
     // console.log(scope)
     //控制器监听事件
-    this.controls.addEventListener('change', function (event) {
-        // scope.directionalLight.rotation.copy(scope.camera.rotation);
-        // // scope.directionalLight.position.set(scope.camera.position.x, scope.camera.position.y, scope.camera.position.z);
-        // scope.directionalLight.position.copy(scope.camera.position);
-        scope.requestFrame();
-    });
+    // this.controls.addEventListener('change', function (event) {
+    //     // scope.directionalLight.rotation.copy(scope.camera.rotation);
+    //     // // scope.directionalLight.position.set(scope.camera.position.x, scope.camera.position.y, scope.camera.position.z);
+    //     // scope.directionalLight.position.copy(scope.camera.position);
+    //     // scope.requestFrame();
+    // });
 
     this.controls.addEventListener('end',function(){
         // console.log('更新位置信息')
@@ -169,7 +169,7 @@ MakerJS.Engine = function () {
    
     
     //add light
-    this.directionalLight = new THREE.DirectionalLight('#fff',0.7); 
+    this.directionalLight = new THREE.DirectionalLight('#fff'); 
     this.directionalLight.position.set(30,-100,200).normalize();
     //console.log(this.directionalLight)
     //this.directionalLight.lookAt(new THREE.Vector3(50, 100, 75));

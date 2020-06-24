@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<noi:DOCUMENT xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:noi="NOISchema.xsd">
+<noi:VERSION info_1="2005" info_2="2005.0" info_3="" />
+<noi:MODEL_SECTION>
+<noi:BASIS_LINE3D>
+<noi:UUID drawingId="00000000-0000-0000-0000-000000000000" elementId="0" />
+<noi:NAMED_UUID name="样条" /><noi:GEOMETRY>
+<noi:GEO_POLYHEDRON3D orientation="e_POSITIVE" dimension="e_HAS_EDGES">
+<noi:GEO_POINT_LIST_3D>
+<noi:GEO_POINT x="-2755.344" y="1153.249" z="0" />
+<noi:GEO_POINT x="-2774.676" y="-1408.267" z="0" />
+<noi:GEO_POINT x="1207.756" y="-1669.251" z="0" />
+<noi:GEO_POINT x="1507.405" y="292.966" z="0" />
+<noi:GEO_POINT x="5199.855" y="428.292" z="0" />
+</noi:GEO_POINT_LIST_3D>
+<noi:GEO_EDGE_LIST>
+<noi:GEO_EDGE e1="1" e2="2" />
+<noi:GEO_EDGE e1="2" e2="3" />
+<noi:GEO_EDGE e1="3" e2="4" />
+<noi:GEO_EDGE e1="4" e2="5" />
+</noi:GEO_EDGE_LIST>
+</noi:GEO_POLYHEDRON3D>
+</noi:GEOMETRY>
+<noi:COMMON_STYLE alpha="0" r="125" g="125" b="125" layerId="0" strokeId="1" penId="2" colorByLayer="false" strokeByLayer="false" penByLayer="false" byLayerAllowed="false" useConstructionLineMode="false" drawOrder="15" />
+</noi:BASIS_LINE3D>
+</noi:MODEL_SECTION>
+</noi:DOCUMENT>

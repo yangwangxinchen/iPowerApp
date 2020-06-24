@@ -24,11 +24,11 @@ MakerJS.exhibitionHall=function(){
         this.solid_material =new THREE.MeshBasicMaterial({
             color: "#778899",
             // emissive :0x4169E1,
-            polygonOffset: true,
+            // polygonOffset: true,
             //polygonOffsetFactor: 1, // positive value pushes polygon further away
-            polygonOffsetUnits: 1,
+            // polygonOffsetUnits: 1,
             depthTest: true,
-            opacity: 0.5,
+            opacity: 0.8,
             transparent: true,
         });
 
@@ -117,7 +117,7 @@ MakerJS.exhibitionHall=function(){
         });
         
         //体积光效果
-        var texture_alpha = new THREE.TextureLoader().load( '../mesh/gltfLight/alpha.png' );
+        var texture_alpha =  textureLoad( '../textures/alpha.png' );
         // 使用透明纹理进行材质创建alphaMap: texture
         var volumeLight_material = new THREE.MeshPhongMaterial( 
             {
@@ -125,18 +125,20 @@ MakerJS.exhibitionHall=function(){
                  color:0xADD8E6 ,
                  emissive:0x888888, 
                  transparent:true, 
-                 opacity:0.3
+                 opacity:0.3,
             });
         
         var unreal_material =new THREE.MeshBasicMaterial({
                 color: 0x778899,
-                // polygonOffset: true,
-                // polygonOffsetFactor: 1, // positive value pushes polygon further away
-                // polygonOffsetUnits: 1,
-                // depthTest: true,
-                opacity: 0.7,
-                transparent: true,
+                //当发生两个面深度值相同时，设置了polygonOffset的面便会向前或向后偏移一小段距离，这样就能区分谁前谁后了
+                // polygonOffset:true, //是否开启多边形偏移
+                // polygonOffsetFactor:1,// 多边形偏移因子,正值向远离相机的方向偏移
+                // polygonOffsetUnits:1, //多边形偏移单位
+                // opacity: 0.7,
+                // transparent: true,   //透明材质 会被其他材质遮挡
+                // depthWrite:false,
                 });
+
         
         //设备开关状态
         function device_on_off(devices,open,lampMat){
@@ -326,10 +328,16 @@ MakerJS.exhibitionHall=function(){
             }
         }
 
+        //贴图加载
+        function textureLoad(path){
+            var tex= new THREE.TextureLoader().load(path);
+            return tex
+        }
+
         //logo贴图    //镜像材质
         function setLogoMaterial(){
            var logo= engine.scene.getObjectByName('logo');
-           var tex=new THREE.TextureLoader().load('../textures/logo.PNG');  
+           var tex= textureLoad('../textures/logo.PNG');  
             logo.rotateX(Math.PI)
             logo.material[1]=new THREE.MeshBasicMaterial({map:tex})
         }
@@ -408,6 +416,7 @@ MakerJS.exhibitionHall=function(){
             getDistributionLights()
             getTapeLights()
             getSand()
+            getScreen()
             
         }
 
@@ -426,11 +435,9 @@ MakerJS.exhibitionHall=function(){
             showHideMonitorView()
             
             label_3d()
-           
             setGlass()
             setElectricCabinet()
 
-            // this.alarmTips(new THREE.Vector3(-35,70,45))
             getMqtt()
             engine.addEventListener('update',eveUpdate)
             engine.nodeSelection.addEventListener('choose',eveChoose)
@@ -492,9 +499,27 @@ MakerJS.exhibitionHall=function(){
           engine.effects.setOutlineObjects(outlineObjects)
         }
 
-        function getAirC(){
-          
-        }
+        
+        var screen_material=new THREE.MeshBasicMaterial({color:0x778899,emissive:0xffffff})
+         //大屏
+         function switchScreen(state){
+            screen=engine.scene.getObjectById(26)
+            if(state){
+                screen.material=screen_material
+                engine.blooms.addBloomObjects(screen)
+            }else{
+                screen.material=screen_defaultMaterial
+                engine.blooms.removeBloomObjects(screen)
+            }
+        
+         }
+
+         var screen
+         var screen_defaultMaterial
+         function getScreen(){
+            screen=engine.scene.getObjectById(26)
+            screen_defaultMaterial=screen.material
+         }
         
     /*    //管道线
         const list=[
@@ -510,8 +535,6 @@ MakerJS.exhibitionHall=function(){
          for(let i=0;i<list.length;i++){
              l.push(new THREE.Vector3())
          }
-
-
         }
 
         //管道几何体
@@ -772,10 +795,18 @@ MakerJS.exhibitionHall=function(){
          
     }
 
+    var alarm;
     //红外感应 todo
-    function infrared(){
-    
-
+    function infrared(state){
+         var red= engine.scene.getObjectByName('infrared_alarmsTips_plane')
+         if(red==undefined){
+            alarm=_this.alarmTips(new THREE.Vector3(0,70,45),new THREE.Vector3(1,0.8,0),0.05,16.5,'infrared',0.4,false)
+         }
+         
+         if(alarm!=undefined){
+            alarm.plane.visible=state
+            alarm.sphere.visible=state
+         } 
     }
 
     var cabinets=[];
@@ -786,6 +817,44 @@ MakerJS.exhibitionHall=function(){
               engine.effects.addEdgesObject(cabinets[i])
           }
          }
+
+    //fbx模型加载
+    const fbxLoader = new THREE.FBXLoader()
+  
+    const lineMat= new THREE.LineBasicMaterial({
+        color: "#000" ,        //#B0C4DE
+        linewidth: 1,
+        opacity: 0.2,
+        transparent: true,
+    });
+    const unrealMat = new THREE.MeshBasicMaterial({
+        color: 0x778899,
+        depthTest: true,
+        opacity: 0.05,
+        transparent: true,
+        depthWrite:false,  //分层
+        side:THREE.DoubleSide
+        });
+
+    fbxLoader.load('../mesh/fbx/floor.FBX',function(object){
+        object.position.set(0,28,-15)
+        engine.scene.add( object )
+        var di= engine.scene.getObjectByName('DiBan')
+        // var diTexture=textureLoad('../mesh/fbx/floor.png');
+        di.material[1]=new THREE.MeshBasicMaterial({color:0x778899,transparent:true,opacity:0.3})
+        var build= engine.scene.getObjectByName('5F_WaiQiang')
+        engine.effects.unrealObject(build,lineMat,unrealMat)
+        var floor= engine.scene.getObjectByName('diban')
+        engine.effects.unrealObject(floor,lineMat,unrealMat)
+    })   
+
+    fbxLoader.load('../mesh/fbx/allfloor.FBX',function(object){
+        object.position.set(0,28,-15)
+        engine.scene.add( object )
+        var build= engine.scene.getObjectByName('1Fdiban')
+        engine.effects.unrealObject(build,lineMat,unrealMat)
+    })   
+    
 
         //每帧检测
         function eveUpdate(){
@@ -876,7 +945,7 @@ MakerJS.exhibitionHall=function(){
             var client=engine.getMqtt()
             
             client.on('message',function (topic, message) {
-               // console.log("topic:",topic.toString())
+            //    console.log("topic:",topic.toString())
                const deviceName=topic.substring(13)
                //test() 方法用于检测一个字符串是否匹配某个模式
                // if(!/Room/.test(topic)) return
@@ -884,7 +953,7 @@ MakerJS.exhibitionHall=function(){
             //    console.log(topic.substring(13)+":"+message.toString())
            if(/\"SwitchOn\": \d/.test(message)){
                let value=message.toString().match(/\"SwitchOn\": \d/)[0].match(/\d/)[0]
-               // console.log(deviceName+message.toString())
+            //    console.log(deviceName+message.toString())
                switch(deviceName){
                    case 'Room_S_Lamp':    //平板灯
                        if(value=="1"){
@@ -935,6 +1004,13 @@ MakerJS.exhibitionHall=function(){
                            switchAirC(0,false);
                        }
                        break;
+                   case 'Room_Screen':    //展厅大屏
+                       if(value=="1"){
+                          switchScreen(true)
+                       }else{
+                          switchScreen(false)
+                       }
+                       break;    
                                         
                    default:
                        break;
@@ -1063,9 +1139,9 @@ MakerJS.exhibitionHall=function(){
                 break;
             case 'InfraredMov1_Alarm':     //红外线
                 if(stateValue=="1"){
-                    _this.alarmTips(new THREE.Vector3(-35,70,45),new THREE.Vector3(1,0.8,0),0.1,16.5,'',0.4,false)
+                    infrared(true)
                 }else{
-                    _this.alarmTips(new THREE.Vector3(-35,70,45),new THREE.Vector3(1,0.8,0),0.1,16.5,'',0.4,true)
+                    infrared(false)
                 }    
                 break;                                          
                 default:
@@ -1108,14 +1184,12 @@ MakerJS.exhibitionHall=function(){
             switch(id.key) {
                 case '1':
                     //  switchRoomLamp_D(!circleState)
-                  alarm = _this.alarmTips(new THREE.Vector3(-35,70,45))
-                  console.log(alarm)
+                 
+                    infrared(true)
                    break;
                 case '2':
                     // _this.switchRoomLamp_S(!rectangleState)
-                    console.log(alarm)
-                   alarm.plane.visible=false
-                   alarm.sphere.visible=false
+                    infrared(false)
                    break;
                 case '3':
                   roomMonitor()

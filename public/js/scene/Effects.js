@@ -43,7 +43,7 @@ MakerJS.Effects = function (engine) {
     this.engine.addPass(this.outlinePass);
     
     this.line_material = new THREE.LineBasicMaterial({
-        color: "#000" ,        //#B0C4DE
+        color: "#101010" ,        //#B0C4DE
         linewidth: 1,
         polygonOffset: true,
         polygonOffsetFactor: 1, // positive value pushes polygon further away
@@ -52,7 +52,6 @@ MakerJS.Effects = function (engine) {
         opacity: 0.8,
         transparent: true,
         lights:false,
-        // alphaTest:0.9
     });
 
     // this.solids = [];
@@ -87,6 +86,8 @@ MakerJS.Effects = function (engine) {
         depthTest: true,
         opacity: 0.2,
         transparent: true,
+        depthWrite:false,
+        side:THREE.DoubleSide
         });
 
 }
@@ -201,11 +202,11 @@ MakerJS.Effects.prototype = {
     },
 
     //虚化物体
-    unrealObject:function(object,line_material){
+    unrealObject:function(object,line_material,unreal_material){
     let material = line_material || this.line_material;
     if(object instanceof THREE.Mesh){
         this.addEdgesObject(object,material);
-        object.material=this.unreal_material;
+        object.material=unreal_material||this.unreal_material;
     }
 
 }
