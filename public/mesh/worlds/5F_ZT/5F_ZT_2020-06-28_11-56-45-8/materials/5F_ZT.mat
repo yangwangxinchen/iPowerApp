@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8"?>
+<materials version="1.11">
+	<material name="RootNode_base" parent="vizreal_base"/>
+	<material name="电梯门" parent="RootNode_base">
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="diffuse_color">0.588235 0.588235 0.588235 1</parameter>
+		<parameter name="specular_color">0.9 0.9 0.9 1</parameter>
+		<parameter name="specular_scale">0.99</parameter>
+		<parameter name="specular_power">12.1257</parameter>
+	</material>
+	<material name="Material #360" parent="RootNode_base">
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="diffuse_color">0.588 0.588 0.588 1</parameter>
+		<parameter name="specular_color">0.9 0.9 0.9 1</parameter>
+		<parameter name="specular_scale">0</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="bangonglou" parent="RootNode_base">
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="diffuse_color">0.466667 0.505882 0.686275 1</parameter>
+		<parameter name="specular_color">0.9 0.9 0.9 1</parameter>
+		<parameter name="specular_scale">0</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="10 - Default" parent="RootNode_base">
+		<texture name="diffuse">worlds/5F_ZT/5F_ZT_2020-06-28_11-56-45-8/textures/ditan2.png</texture>
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="diffuse_color">0.588235 0.588235 0.588235 1</parameter>
+		<parameter name="specular_color">0.9 0.9 0.9 1</parameter>
+		<parameter name="specular_scale">0</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="Default" parent="RootNode_base">
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="diffuse_color">0.588235 0.588235 0.588235 1</parameter>
+		<parameter name="specular_color">0.9 0.9 0.9 1</parameter>
+		<parameter name="specular_scale">0</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="02 - Default" parent="RootNode_base">
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="diffuse_color">0.231373 0.266667 1 1</parameter>
+		<parameter name="specular_color">0.9 0.9 0.9 1</parameter>
+		<parameter name="specular_scale">0.73</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="logo" parent="RootNode_base">
+		<texture name="diffuse">worlds/5F_ZT/5F_ZT_2020-06-28_11-56-45-8/textures/logo.dds</texture>
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="diffuse_color">0.588235 0.588235 0.588235 1</parameter>
+		<parameter name="specular_color">0.9 0.9 0.9 1</parameter>
+		<parameter name="specular_scale">0</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="mingpai" parent="RootNode_base">
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="diffuse_color">0.843137 0.843137 0.843137 1</parameter>
+		<parameter name="specular_color">0.9 0.9 0.9 1</parameter>
+		<parameter name="specular_scale">0</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="ziti" parent="RootNode_base">
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="diffuse_color">0.341176 0.356863 0.686275 1</parameter>
+		<parameter name="specular_color">0.9 0.9 0.9 1</parameter>
+		<parameter name="specular_scale">0</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="13 - Default" parent="RootNode_base">
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="diffuse_color">0.105882 0.105882 1 1</parameter>
+		<parameter name="specular_color">0.9 0.9 0.9 1</parameter>
+		<parameter name="specular_scale">0</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="lightB" parent="RootNode_base">
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="specular_scale">0</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="22 - Default" parent="RootNode_base">
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="diffuse_color">0.196078 0.196078 0.196078 1</parameter>
+		<parameter name="specular_color">0.9 0.9 0.9 1</parameter>
+		<parameter name="specular_scale">0</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="16 - Default" parent="RootNode_base">
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="diffuse_color">0.74902 0.74902 0.74902 1</parameter>
+		<parameter name="specular_color">0.9 0.9 0.9 1</parameter>
+		<parameter name="specular_scale">0.75</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="17 - Default" parent="RootNode_base">
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="diffuse_color">0.0666667 0.0666667 0.0666667 1</parameter>
+		<parameter name="specular_color">0.9 0.9 0.9 1</parameter>
+		<parameter name="specular_scale">0.92</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="15 - Default" parent="RootNode_base">
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="diffuse_color">0.341176 0.396078 0.47451 1</parameter>
+		<parameter name="specular_color">0.9 0.9 0.9 1</parameter>
+		<parameter name="specular_scale">0</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="08 - Default" parent="RootNode_base">
+		<texture name="diffuse">worlds/5F_ZT/5F_ZT_2020-06-28_11-56-45-8/textures/daping2.dds</texture>
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="diffuse_color">0.588235 0.588235 0.588235 1</parameter>
+		<parameter name="specular_color">0.9 0.9 0.9 1</parameter>
+		<parameter name="specular_scale">0</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="14 - Default" parent="RootNode_base">
+		<texture name="diffuse">worlds/5F_ZT/5F_ZT_2020-06-28_11-56-45-8/textures/kongtiao.jpg</texture>
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="diffuse_color">0.588235 0.588235 0.588235 1</parameter>
+		<parameter name="specular_color">0.9 0.9 0.9 1</parameter>
+		<parameter name="specular_scale">0</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="07 - Default" parent="RootNode_base">
+		<texture name="diffuse">worlds/5F_ZT/5F_ZT_2020-06-28_11-56-45-8/textures/changkaiguan.dds</texture>
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="diffuse_color">0.588 0.588 0.588 1</parameter>
+		<parameter name="specular_color">0.9 0.9 0.9 1</parameter>
+		<parameter name="specular_scale">0</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="XiaoPing" parent="RootNode_base">
+		<texture name="diffuse">worlds/5F_ZT/5F_ZT_2020-06-28_11-56-45-8/textures/daping2.dds</texture>
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="diffuse_color">0.588235 0.588235 0.588235 1</parameter>
+		<parameter name="specular_color">0.9 0.9 0.9 1</parameter>
+		<parameter name="specular_scale">0</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="12 - Default" parent="RootNode_base">
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="diffuse_color">0.588235 0.588235 0.588235 1</parameter>
+		<parameter name="specular_color">0.9 0.9 0.9 1</parameter>
+		<parameter name="specular_scale">0</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="18 - Default" parent="RootNode_base">
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="diffuse_color">0.4 0.423529 0.745098 1</parameter>
+		<parameter name="specular_color">0.9 0.9 0.9 1</parameter>
+		<parameter name="specular_scale">0</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="配电柜\1m_default" parent="RootNode_base">
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="diffuse_color">0.588 0.588 0.588 1</parameter>
+		<parameter name="specular_color">0.9 0.9 0.9 1</parameter>
+		<parameter name="specular_scale">0</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="06 - Default" parent="RootNode_base">
+		<texture name="diffuse">worlds/5F_ZT/5F_ZT_2020-06-28_11-56-45-8/textures/jingshi.png</texture>
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="diffuse_color">0.588235 0.588235 0.588235 1</parameter>
+		<parameter name="specular_color">0.9 0.9 0.9 1</parameter>
+		<parameter name="specular_scale">0</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="waikuang" parent="RootNode_base">
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="diffuse_color">0.588235 0.588235 0.588235 1</parameter>
+		<parameter name="specular_color">0.9 0.9 0.9 1</parameter>
+		<parameter name="specular_scale">0.6</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="jiexiantu" parent="RootNode_base">
+		<texture name="diffuse">worlds/5F_ZT/5F_ZT_2020-06-28_11-56-45-8/textures/jiexian.png</texture>
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="diffuse_color">0.588235 0.588235 0.588235 1</parameter>
+		<parameter name="specular_color">0.9 0.9 0.9 1</parameter>
+		<parameter name="specular_scale">0</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="jiankong" parent="RootNode_base">
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="diffuse_color">0.588235 0.588235 0.588235 1</parameter>
+		<parameter name="specular_color">0.9 0.9 0.9 1</parameter>
+		<parameter name="specular_scale">0</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="tantou" parent="RootNode_base">
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="diffuse_color">0.027451 0.027451 0.027451 1</parameter>
+		<parameter name="specular_color">0.9 0.9 0.9 1</parameter>
+		<parameter name="specular_scale">0.92</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="21 - Default" parent="RootNode_base">
+		<texture name="diffuse">worlds/5F_ZT/5F_ZT_2020-06-28_11-56-45-8/textures/shouze.png</texture>
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="diffuse_color">0.588235 0.588235 0.588235 1</parameter>
+		<parameter name="specular_color">0.9 0.9 0.9 1</parameter>
+		<parameter name="specular_scale">0</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="lightA" parent="RootNode_base">
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="specular_color">0.9 0.9 0.9 1</parameter>
+		<parameter name="specular_scale">0</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="fangdeng" parent="RootNode_base">
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="diffuse_color">0.0980392 0.0980392 0.0980392 1</parameter>
+		<parameter name="specular_color">0.9 0.9 0.9 1</parameter>
+		<parameter name="specular_scale">0</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="23 - Default" parent="RootNode_base">
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="diffuse_color">0.588235 0.588235 0.588235 1</parameter>
+		<parameter name="specular_color">0.9 0.9 0.9 1</parameter>
+		<parameter name="specular_scale">0</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="04 - Default" parent="RootNode_base">
+		<texture name="diffuse">worlds/5F_ZT/5F_ZT_2020-06-28_11-56-45-8/textures/quanjing2.png</texture>
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="diffuse_color">0.588235 0.588235 0.588235 1</parameter>
+		<parameter name="specular_color">0.9 0.9 0.9 1</parameter>
+		<parameter name="specular_scale">0</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="5fff" parent="RootNode_base">
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="diffuse_color">0.588235 0.588235 0.588235 1</parameter>
+		<parameter name="specular_color">0.9 0.9 0.9 1</parameter>
+		<parameter name="specular_scale">0</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="墙" parent="RootNode_base">
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="diffuse_color">0.588 0.588 0.588 1</parameter>
+		<parameter name="specular_color">0.9 0.9 0.9 1</parameter>
+		<parameter name="specular_scale">0</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+	<material name="Text" parent="RootNode_base">
+		<parameter name="emission_color">0 0 0 1</parameter>
+		<parameter name="emission_scale">0</parameter>
+		<parameter name="diffuse_color">0.588235 0.588235 0.588235 1</parameter>
+		<parameter name="specular_color">0.9 0.9 0.9 1</parameter>
+		<parameter name="specular_scale">0</parameter>
+		<parameter name="specular_power">2</parameter>
+	</material>
+</materials>

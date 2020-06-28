@@ -7,6 +7,8 @@ MakerJS.exhibitionHall=function(){
         this.engine=null;
         var exhibitionHallMeshs=[];
         
+        var myColor={gray:"#778899"}
+
         this.line_material = new THREE.LineBasicMaterial({
             color: "#00f" ,        //#B0C4DE
             linewidth: 1,
@@ -21,8 +23,8 @@ MakerJS.exhibitionHall=function(){
         });
 
         //new THREE.MeshPhongMaterial材质需要添加光照,光照侧才会显示
-        this.solid_material =new THREE.MeshBasicMaterial({
-            color: "#778899",
+        this.wall_material =new THREE.MeshBasicMaterial({
+            color:myColor.gray,
             // emissive :0x4169E1,
             // polygonOffset: true,
             //polygonOffsetFactor: 1, // positive value pushes polygon further away
@@ -31,19 +33,7 @@ MakerJS.exhibitionHall=function(){
             opacity: 0.8,
             transparent: true,
         });
-
-        var beam_material = new THREE.MeshBasicMaterial({
-            color: "#0000ff",
-            // opacity: 0.6,
-            // transparent: false,
-            // lights:false,
-            // side:THREE.DoubleSide
-        });
-
-        var  tapeLight_material=new THREE.MeshLambertMaterial({
-            color :"#000000",
-        });
-        
+  
         this.lampshade_material = new THREE.MeshLambertMaterial({
             color: 0x000000,
             // emissive :0xFDE951,
@@ -106,11 +96,14 @@ MakerJS.exhibitionHall=function(){
         
         
         this.glass_material = new THREE.MeshBasicMaterial({
-            color: "#778899",
-            // emissive :0xFDE951,
-            // polygonOffset: true,
-            //polygonOffsetFactor: 1, // positive value pushes polygon further away
-            // polygonOffsetUnits: 1,
+            color: myColor.gray,
+            //当发生两个面深度值相同时，设置了polygonOffset的面便会向前或向后偏移一小段距离，这样就能区分谁前谁后了
+                // polygonOffset:true, //是否开启多边形偏移
+                // polygonOffsetFactor:1,// 多边形偏移因子,正值向远离相机的方向偏移
+                // polygonOffsetUnits:1, //多边形偏移单位
+                // opacity: 0.7,
+                // transparent: true,   //透明材质 会被其他材质遮挡
+                // depthWrite:false,
             depthTest: true,
             opacity: 0.3,
             transparent: true,
@@ -128,18 +121,7 @@ MakerJS.exhibitionHall=function(){
                  opacity:0.3,
             });
         
-        var unreal_material =new THREE.MeshBasicMaterial({
-                color: 0x778899,
-                //当发生两个面深度值相同时，设置了polygonOffset的面便会向前或向后偏移一小段距离，这样就能区分谁前谁后了
-                // polygonOffset:true, //是否开启多边形偏移
-                // polygonOffsetFactor:1,// 多边形偏移因子,正值向远离相机的方向偏移
-                // polygonOffsetUnits:1, //多边形偏移单位
-                // opacity: 0.7,
-                // transparent: true,   //透明材质 会被其他材质遮挡
-                // depthWrite:false,
-                });
-
-        
+       
         //设备开关状态
         function device_on_off(devices,open,lampMat){
             //传入参数需要写在前面
@@ -193,15 +175,7 @@ MakerJS.exhibitionHall=function(){
         var circleLights=[]
 
         function getHallLights(){
-            for(var i=8;i<44;i++){
-                var light;
-                if(i<10){
-                    light= 'yd_dguan0'+i
-                }else{
-                    light= 'yd_dguan'+i
-                }   
-                circleLights.push(light)
-              }
+            getDevicesByName('ZT_YD_DengGuan',circleLights)
         //   console.log(circleLights)
         }
 
@@ -212,18 +186,23 @@ MakerJS.exhibitionHall=function(){
             device_on_off(circleLights,state)
         }
 
+        function getDevicesByName(name,devicesArr){
+            for(var i in exhibitionHallMeshs){
+                let nameNode=exhibitionHallMeshs[i]
+                if(nameNode.indexOf(name)!=-1){
+                    devicesArr.push(nameNode)
+                }
+            }
+
+        }
+
         //走廊筒灯
         var hallwayLights=[]
         function getHallwayLights(){
-
-        for(var i=1;i<8;i++){
-          var light= 'yd_dguan0'+i
-          hallwayLights.push(light)
+            getDevicesByName('ZL_YD_DengGuan',hallwayLights)
         }
         
-        // console.log(hallwayLights)
-        }
-
+       
         function switchHallwayLamp(state){
         device_on_off(hallwayLights,state,yellow_material)
         }
@@ -231,11 +210,7 @@ MakerJS.exhibitionHall=function(){
         //配电房筒灯
         var distributionLights=[]
         function getDistributionLights(){
-        for(var i=44;i<53;i++){
-                var light= 'yd_dguan'+i
-                distributionLights.push(light)
-        }
-        //   console.log(distributionLights)
+            getDevicesByName('PD_YD_DengGuan',distributionLights)
         }
         
         function switchDistributionLamp(state){
@@ -247,7 +222,7 @@ MakerJS.exhibitionHall=function(){
         var tapelights=[]
         function getTapeLights(){
 
-            tapelight=engine.scene.getObjectById(53)
+            tapelight=engine.scene.getObjectByName("ZT_DengDai")
             tapelight.material=new THREE.MeshLambertMaterial({ color :"#000000"});
             tapelights.push(tapelight)
         }
@@ -275,34 +250,39 @@ MakerJS.exhibitionHall=function(){
           let meshNode= engine.scene.getObjectByName(meshName)
           meshNode.material=material
         }
-        
+       
         //设置边缘线效果
         function setEdgesEffect(){
-             var walls=[]
-             var wall_inside=_this.engine.scene.getObjectByName('bgs_waikuang')
-             var wall_out=_this.engine.scene.getObjectByName('5louwaiqiang')
-             change_mesh_material('bgs_waikuang',_this.solid_material)
-             change_mesh_material('5louwaiqiang',_this.solid_material)
+             var edges=[]
+            getHallWall()
+             var stand= engine.scene.getObjectByName('SP_ZhanTai');
+            edges.push(wall_inside,wall_out, stand)
 
-             var stand= engine.scene.getObjectByName('zhantai');
-             walls.push(wall_inside,wall_out,stand)
              for(var i in monitorings) {
                 let mon=engine.scene.getObjectByName(monitorings[i]) 
-                walls.push(mon)
-            }
+                edges.push(mon)
+             }
             //边缘线
-            engine.effects.setEdgesObjects(walls)
+            engine.effects.setEdgesObjects(edges)
             
              for(var i in airSwitchs){
-                // walls.push(airSwitchs[i])
                 engine.effects.addEdgesObject(airSwitchs[i],_this.line_material)
             }
+        }
 
-            var display=engine.scene.getObjectByName('xianshiqi')
-            engine.effects.unrealObject(display)
+        var wall_inside,wall_out
+        var hallWallPos;
+        function getHallWall(){
+            wall_inside=_this.engine.scene.getObjectByName('ZhanTingWaiQiang')
+            hallWallPos=wall_inside.position
+            wall_inside.material=_this.wall_material
+
+            wall_out=_this.engine.scene.getObjectByName("5F_ZLWQ")
+            wall_out.material=_this.wall_material
             
-            //线框
-            // engine.effects.setWireframeObjects(walls)
+            // engine.scene.getObjectByName("diantimen1").material=_this.wall_material
+            // engine.scene.getObjectByName("diantimen2").material=_this.wall_material
+
         }
         
       
@@ -310,7 +290,7 @@ MakerJS.exhibitionHall=function(){
         var sandFloorDefaultMaterial;
         var sandFloorBloomMaterial=new THREE.MeshPhongMaterial({color: 0xffffff,emissive :0xffffff});
         function getSand(){
-           var sand= engine.scene.getObjectByName('shapan')
+           var sand= engine.scene.getObjectByName('ShaPan')
            sands=sand.children
            sandFloorDefaultMaterial=sands[0].material
 
@@ -338,24 +318,20 @@ MakerJS.exhibitionHall=function(){
         function setLogoMaterial(){
            var logo= engine.scene.getObjectByName('logo');
            var tex= textureLoad('../textures/logo.PNG');  
-            logo.rotateX(Math.PI)
-            logo.material[1]=new THREE.MeshBasicMaterial({map:tex})
+           logo.rotateX(Math.PI)
+           logo.material=new THREE.MeshBasicMaterial({map:tex})
         }
         
         //更改玻璃材质
         function setGlass(){
             let glass=[]
             let glass_board= engine.scene.getObjectByName('boli02')
-            let glass_door= engine.scene.getObjectByName('boli01')
-            
-            glass.push(glass_door,glass_board)
-            // glass_board.visible=false
-            // console.log(glass_door)
-            
+            let glass_door= engine.scene.getObjectByName('boli004')
+            let glass_door_frame= engine.scene.getObjectByName('boli003')
+            glass=[ glass_board,glass_door,glass_door_frame]
             for(var i in glass){
                 glass[i].material=_this.glass_material
             }
-            setLogoMaterial()
         }
         
     
@@ -366,45 +342,44 @@ MakerJS.exhibitionHall=function(){
             for(var ex in exhibitionHallMeshs)
             {
                 let meshName=exhibitionHallMeshs[ex]
-                if(meshName.indexOf("fd_waike")!=-1){
+                if(meshName.indexOf("FD_WaiKe")!=-1){
                     change_mesh_material(meshName,_this.lampshade_material)
                 }
 
-                if(meshName.indexOf=='yd_waike'){
+                if(meshName.indexOf=='ZT_YD_WaiKe'){
                     change_mesh_material(meshName,_this.lampshade_material)
                 }
 
-                if(meshName.indexOf("shizhui")!=-1){
+                if(meshName.indexOf("ShiZhui")!=-1){
                     monitorings.push(meshName);
                     change_mesh_material(meshName,_this.monitoring_material)
                 }
 
-                if(meshName.indexOf("fd_dguan")!=-1){
+                if(meshName.indexOf("FD_DengGuan")!=-1){
                     rectangleLights.push(meshName);
                     change_mesh_material(meshName,_this.lampClose_material)
                 }
-                if(meshName.indexOf("yd_dguan")!=-1){
+                if(meshName.indexOf("ZT_YD_DengGuan")!=-1){
                     change_mesh_material(meshName,_this.lampClose_material)
                 }
 
-                if(meshName.indexOf("fd_tijiguang")!=-1){
+                if(meshName.indexOf("FD_TiJiGuan")!=-1){
                     let mesh= engine.scene.getObjectByName(meshName)
                     mesh.material=volumeLight_material 
                     volumeLights.push(mesh);
                 }
-                if(meshName=='kongkai'){
+                if(meshName=='KongKai'){
                     let mesh= engine.scene.getObjectByName(meshName)
-                    // change_mesh_material(meshName,beam_material)
                     airSwitchs.push(mesh)
                 }
-                if(meshName=='liangzhu'){
-                    change_mesh_material(meshName, _this.solid_material)
+                if(meshName=='HengLiang'){
+                    change_mesh_material(meshName, _this.wall_material)
                 }
-                if(meshName.indexOf("kongtiao")!=-1){
+                if(meshName.indexOf("KongTiao")!=-1){
                     let mesh= engine.scene.getObjectByName(meshName)
                      airCons.push(mesh)
                 }
-                if(meshName.indexOf("diangui")!=-1){
+                if(meshName.indexOf("DianGui")!=-1){
                     let mesh= engine.scene.getObjectByName(meshName)
                     cabinets.push(mesh)
                 }
@@ -436,7 +411,9 @@ MakerJS.exhibitionHall=function(){
             
             label_3d()
             setGlass()
+            setLogoMaterial()
             setElectricCabinet()
+            unrealObject()
 
             getMqtt()
             engine.addEventListener('update',eveUpdate)
@@ -500,10 +477,9 @@ MakerJS.exhibitionHall=function(){
         }
 
         
-        var screen_material=new THREE.MeshBasicMaterial({color:0x778899,emissive:0xffffff})
+        var screen_material=new THREE.MeshBasicMaterial({color:myColor.gray,emissive:0xffffff})
          //大屏
          function switchScreen(state){
-            screen=engine.scene.getObjectById(26)
             if(state){
                 screen.material=screen_material
                 engine.blooms.addBloomObjects(screen)
@@ -517,7 +493,7 @@ MakerJS.exhibitionHall=function(){
          var screen
          var screen_defaultMaterial
          function getScreen(){
-            screen=engine.scene.getObjectById(26)
+            screen=engine.scene.getObjectByName('DaPingMu')
             screen_defaultMaterial=screen.material
          }
         
@@ -603,22 +579,6 @@ MakerJS.exhibitionHall=function(){
                
         } */
         
-        var labelRenderer
-        //样式 类似billboard 
-        function label_2d(){
-            var obj=_this.engine.scene.getObjectByName('kongtiao01')
-            var objDiv = document.createElement( 'div' );
-            objDiv.className = 'label';
-            objDiv.textContent = '室内圆灯';
-            var objLabel = new THREE.CSS2DObject( objDiv );
-            obj.add( objLabel );
-            labelRenderer = new THREE.CSS2DRenderer();
-            labelRenderer.setSize( window.innerWidth, window.innerHeight );
-            labelRenderer.domElement.style.position = 'absolute';
-            labelRenderer.domElement.style.top = '0px';
-            document.body.appendChild( labelRenderer.domElement );
-            _this.engine.controls = new THREE.OrbitControls(_this.engine.camera, labelRenderer.domElement);
-        }
         
         //通过样式实现3d效果
         var css3DRenderer
@@ -634,9 +594,9 @@ MakerJS.exhibitionHall=function(){
              css3DRenderer.domElement.style.pointerEvents = "none"
              document.body.appendChild(css3DRenderer.domElement );
             var smartBox= _this.css3DObjectCreate(document.getElementById("box3"))
-            smartBox.position.set(-84,5,25)
+            smartBox.position.set(-77,-21,38)
             smartBox.rotation.set(0,Math.PI/2,Math.PI/2)
-            addNormalLine( -84,5,20,-84,5,24) 
+            addNormalLine( -77,-21,30,-77,-21,36) 
         }
         
         //创建css3DObject
@@ -692,36 +652,36 @@ MakerJS.exhibitionHall=function(){
 
         var monitorings=[]
         //显示隐藏监控视锥
-        function showHideMonitorView(id){
+        function showHideMonitorView(name){
             for (var i in monitorings){
                 let mon=engine.scene.getObjectByName(monitorings[i]) 
                 mon.visible=false
             }
-            if(arguments.length>0&&!isNaN(id)){
-                var roomMon=engine.scene.getObjectById(id)
+            if(arguments.length>0){
+                var roomMon=engine.scene.getObjectByName(name)
                 roomMon.visible=true
             }
         }
 
         // 展厅
         function roomMonitor(){
-            showHideMonitorView(243)
+            showHideMonitorView('SXT_ShiZhui1')
         }
         //配电间
         function  roomDistributionMonitor(){
-            showHideMonitorView(247)
-            var roomMon= engine.scene.getObjectById(247)
+            showHideMonitorView('SXT_ShiZhui2')
+            var roomMon= engine.scene.getObjectByName('SXT_ShiZhui2')
             roomMon.material=_this.monitoring_material
         }
-        //门禁
+        //走廊门禁监控
         function roomAccessMonitor(){
-            showHideMonitorView(30)
+            showHideMonitorView('ZL_JK_ShiZhui')
         }
 
         //热成像
         function roomThermalMonitor(){
-            showHideMonitorView(247)
-            var roomMon= engine.scene.getObjectById(247)
+            showHideMonitorView('SXT_ShiZhui2')
+            var roomMon= engine.scene.getObjectByName('SXT_ShiZhui2')
             roomMon.material=thermal_material  
         }
 
@@ -784,7 +744,7 @@ MakerJS.exhibitionHall=function(){
 
     //门禁记录
     function  accessRecord(state){
-        var access=engine.scene.getObjectByName('boli01');
+        var access=engine.scene.getObjectByName('boli004');
         if(state){
          //单独物体的边缘线
          engine.effects.addEdgesObject(access,_this.line_material)
@@ -800,7 +760,7 @@ MakerJS.exhibitionHall=function(){
     function infrared(state){
          var red= engine.scene.getObjectByName('infrared_alarmsTips_plane')
          if(red==undefined){
-            alarm=_this.alarmTips(new THREE.Vector3(0,70,45),new THREE.Vector3(1,0.8,0),0.05,16.5,'infrared',0.4,false)
+            alarm=_this.alarmTips(new THREE.Vector3(0,50,55),new THREE.Vector3(1,0.8,0),0.05,16.5,'infrared',0.4,false)
          }
          
          if(alarm!=undefined){
@@ -809,26 +769,27 @@ MakerJS.exhibitionHall=function(){
          } 
     }
 
+
     var cabinets=[];
          //展厅内的配电柜
          function setElectricCabinet(){
           for(var i in cabinets){
-              cabinets[i].material=unreal_material
+              cabinets[i].material=new THREE.MeshBasicMaterial({color: myColor.gray});
               engine.effects.addEdgesObject(cabinets[i])
           }
          }
 
     //fbx模型加载
-    const fbxLoader = new THREE.FBXLoader()
+    // const fbxLoader = new THREE.FBXLoader()
   
-    const lineMat= new THREE.LineBasicMaterial({
+    var lineMat= new THREE.LineBasicMaterial({
         color: "#000" ,        //#B0C4DE
         linewidth: 1,
-        opacity: 0.2,
+        opacity: 0.25,
         transparent: true,
     });
-    const unrealMat = new THREE.MeshBasicMaterial({
-        color: 0x778899,
+    var unrealMat = new THREE.MeshBasicMaterial({
+        color: myColor.gray,
         depthTest: true,
         opacity: 0.05,
         transparent: true,
@@ -836,32 +797,32 @@ MakerJS.exhibitionHall=function(){
         side:THREE.DoubleSide
         });
 
-    fbxLoader.load('../mesh/fbx/floor.FBX',function(object){
-        object.position.set(0,28,-15)
-        engine.scene.add( object )
-        var di= engine.scene.getObjectByName('DiBan')
-        // var diTexture=textureLoad('../mesh/fbx/floor.png');
-        di.material[1]=new THREE.MeshBasicMaterial({color:0x778899,transparent:true,opacity:0.3})
-        var build= engine.scene.getObjectByName('5F_WaiQiang')
-        engine.effects.unrealObject(build,lineMat,unrealMat)
-        var floor= engine.scene.getObjectByName('diban')
-        engine.effects.unrealObject(floor,lineMat,unrealMat)
-    })   
+    function unrealObject(){
+        var builds=['5F_WaiQiang','1Fdiban',"Gongchang","DiBan","dianti",'shizhui002','DianShi']
 
-    fbxLoader.load('../mesh/fbx/allfloor.FBX',function(object){
-        object.position.set(0,28,-15)
-        engine.scene.add( object )
-        var build= engine.scene.getObjectByName('1Fdiban')
-        engine.effects.unrealObject(build,lineMat,unrealMat)
-    })   
+        builds.forEach(e => {
+            let build=engine.scene.getObjectByName(e)
+            engine.effects.unrealObject(build,lineMat,unrealMat)
+            if(e=='shizhui002'){build.visible=false}
+        });
+        setText()
+    }
     
+    var textMat=new THREE.MeshPhongMaterial({color:0x6495ED,transparent:true,opacity:0.5})
+    function setText(){
+        var textParent=engine.scene.getObjectByName('Text2')
+        // textParent.translateZ(200)
+        var textArr=[]
+        getDevicesByName('Text',textArr)
+        textArr.forEach(e=>{
+            let text=engine.scene.getObjectByName(e)
+            text.material=textMat
+        })
+
+    }
 
         //每帧检测
         function eveUpdate(){
-                // if(labelRenderer){
-                //   // labelRenderer.render(engine.scene, engine.camera );
-                // }
-               
                 if(css3DRenderer){
                     css3DRenderer.render(engine.scene, engine.camera );
                     document.getElementById("box3").innerHTML= `
@@ -883,12 +844,27 @@ MakerJS.exhibitionHall=function(){
                     </div>
                 `
                 }
-                
-                // if(texture){
-                //     // texture.offset.x -= 0.05
-                //     // texture.offset.y += 0.01
-                // }
-                TWEEN.update();     
+                // TWEEN.update(); 
+                //根据距离改变外墙的透明度
+                if(hallWallPos){
+                   var distance= engine.camera.position.distanceTo(hallWallPos)
+                //    console.log( distance)    //220
+                   if(distance<220){
+                    unrealMat.opacity=0
+                    lineMat.opacity=0
+                    textMat.opacity=0
+                   }else if(distance>500){
+                    unrealMat.opacity=0.05
+                    lineMat.opacity=0.25
+                    textMat.opacity=0.5
+                   }
+                   else{
+                    unrealMat.opacity=distance/10000           //0.05
+                    lineMat.opacity=distance/2000              //0.25
+                    textMat.opacity=distance/1000         //0.5
+                   }
+                }
+            
         }
         
         function eveChoose(e){
