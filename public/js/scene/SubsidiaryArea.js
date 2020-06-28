@@ -5,7 +5,7 @@ MakerJS.SubsidiaryArea = function(engine) {
 
     this.showGrid = function(){
 
-        var gridHelper = new THREE.GridHelper( 1000, 50  );
+        var gridHelper = new THREE.GridHelper( 2000, 100  );
         gridHelper.rotateX(Math.PI * 90/180);
         this.engine.scene.add( gridHelper );
     }
@@ -21,6 +21,7 @@ MakerJS.SubsidiaryArea = function(engine) {
                 var path = event.content;
                 var geometry = path.geometry;
                 var geo = new THREE.LineGeometry();
+                // var geo=new THREE.Geometry();
                 var pointarr = [];
 
                 for(var i = 0; i < geometry.vertices.length; i++)
@@ -34,8 +35,9 @@ MakerJS.SubsidiaryArea = function(engine) {
                         pointarr.push(geometry.vertices[0].z);
                     }
                 }
-
+                // console.log(pointarr)
                 geo.setPositions(pointarr);
+                // geo.setFromPoints (pointarr)
 
                 var materials = [];
                 
@@ -49,7 +51,7 @@ MakerJS.SubsidiaryArea = function(engine) {
 
                 for(var i in materials)
                 {
-                    materials[i].resolution.set(w,h);
+                    materials[i].resolution.set(window.innerWidth, window.innerHeight);
                 }
 
                 var numFloors = 1;

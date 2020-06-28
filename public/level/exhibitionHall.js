@@ -30,7 +30,7 @@ MakerJS.exhibitionHall=function(){
             //polygonOffsetFactor: 1, // positive value pushes polygon further away
             // polygonOffsetUnits: 1,
             depthTest: true,
-            opacity: 0.8,
+            opacity: 0.6,
             transparent: true,
         });
   
@@ -280,8 +280,8 @@ MakerJS.exhibitionHall=function(){
             wall_out=_this.engine.scene.getObjectByName("5F_ZLWQ")
             wall_out.material=_this.wall_material
             
-            // engine.scene.getObjectByName("diantimen1").material=_this.wall_material
-            // engine.scene.getObjectByName("diantimen2").material=_this.wall_material
+            engine.scene.getObjectByName("diantimen1").material=_this.wall_material
+            engine.scene.getObjectByName("diantimen2").material=_this.wall_material
 
         }
         
@@ -296,13 +296,18 @@ MakerJS.exhibitionHall=function(){
 
         }
         
-         // 沙盘楼层    灯带
-        function setSandState(state,floor){
-            if(!isNaN(floor)){
+        var sandSide={left:'Zuo',right:'You',middle:'Zhong',middle_left:'ZhongZuo',middle_right:'ZhongYou'}
+         // 沙盘楼层 
+        function setSandState(state,floor,side){
+            //"SP_1F_Zhong"
+            var sandfloorName='SP_'+floor+'F_'+side
+            var sandfloor=engine.scene.getObjectByName(sandfloorName)  
+            // console.log(sandfloorName+':'+sandfloor)  
+            if(!isNaN(floor)&&side!=undefined){
             if(state){
-                sands[floor-1].material=sandFloorBloomMaterial
+                sandfloor.material=sandFloorBloomMaterial
             }else{
-                sands[floor-1].material=sandFloorDefaultMaterial
+                sandfloor.material=sandFloorDefaultMaterial
             }
        
             }
@@ -392,6 +397,7 @@ MakerJS.exhibitionHall=function(){
             getTapeLights()
             getSand()
             getScreen()
+            // createSprite()
             
         }
 
@@ -554,30 +560,32 @@ MakerJS.exhibitionHall=function(){
         //2.着色器中uniform变量更新 每帧更改x y的偏移
         */
         
-       /*   function createSprite(){
+          function createSprite(){
                 //精灵
-                var textured = new THREE.TextureLoader().load("dropBg.png");
+                var textured = new THREE.TextureLoader().load("../textures/test.png");
                 var spriteMaterial = new THREE.SpriteMaterial({
-                // color: 0xffffff,
-                map: textured
+                color: 0x000000,
+                map: textured,
+                transparent:true,
+                // opacity:0.6
                 });
         
                 var group=new THREE.Group();
               
-                var obj=_this.engine.scene.getObjectByName('方灯体积光15')
-                for(var i=0;i<5;i++)
+                var obj=engine.scene.getObjectByName("Text002")
+                for(var i=0;i<1;i++)
                 {
                     var sprite = new THREE.Sprite(spriteMaterial);
-                    sprite.position.set(obj.position.x,obj.position.y+i*17,obj.position.z+5)
+                    sprite.position.set(-130,-30,50)
                     // console.log(sprite);
-                    sprite.scale.x = 10;
-                    sprite.scale.y = 5; 
+                    sprite.scale.x = 20;
+                    sprite.scale.y = 10; 
                     group.add(sprite)
                 }
                 
                 engine.scene.add(group);
                
-        } */
+        } 
         
         
         //通过样式实现3d效果
@@ -817,6 +825,7 @@ MakerJS.exhibitionHall=function(){
         textArr.forEach(e=>{
             let text=engine.scene.getObjectByName(e)
             text.material=textMat
+            // engine.effects.addEdgesObject(text,lineMat)
         })
 
     }
@@ -994,125 +1003,116 @@ MakerJS.exhibitionHall=function(){
            }
            else{
             var stateValue=message.toString().match(/\d/)[0] 
-            //    console.log(deviceName+':'+stateValue)
+               console.log(deviceName+':'+stateValue)
                   switch(deviceName){
                 case '5F_L_Light':     //5F_ML_Light   1F_L_Light  1F_R_Light  WS_R_Light
                 if(stateValue=="1"){
-                  setSandState(true,5)
+                  setSandState(true,5,sandSide.left)   //会调用右灯与中右
+                // console.log('5楼左灯')
                 }else{
-                  setSandState(false,5)
+                  setSandState(false,5,sandSide.left)
                 }
              case '5F_R_Light':     
                 if(stateValue=="1"){
-                  setSandState(true,5)
+                  setSandState(true,5,sandSide.right)
+                 //会调用右灯与中右
+                //   console.log('5楼右灯')
                 }else{
-                  setSandState(false,5)
+                  setSandState(false,5,sandSide.right)
                 }
              case '5F_ML_Light':     
                 if(stateValue=="1"){
-                  setSandState(true,5)
+                  setSandState(true,5,sandSide.middle_right)
+                //   console.log('5楼中左灯')
                 }else{
-                  setSandState(false,5)
+                  setSandState(false,5,sandSide.middle_right)
                 }    
                 break;
              case '5F_MR_Light':     
                 if(stateValue=="1"){
-                  setSandState(true,5)
+                  setSandState(true,5,sandSide.middle_left)
+                //   console.log('5楼中右灯')
                 }else{
-                  setSandState(false,5)
+                  setSandState(false,5,sandSide.middle_left)
                 }    
                 break;
              case '4F_R_Light':     
                 if(stateValue=="1"){
-                  setSandState(true,4)
+                  setSandState(true,4,sandSide.right)
                 }else{
-                  setSandState(false,4)
+                  setSandState(false,4,sandSide.right)
                 }    
                 break;
              case '4F_L_Light':     
                 if(stateValue=="1"){
-                  setSandState(true,4)
+                  setSandState(true,4,sandSide.left)
                 }else{
-                  setSandState(false,4)
+                  setSandState(false,4,sandSide.left)
                 }    
                 break;
              case '4F_M_Light':     
                 if(stateValue=="1"){
-                  setSandState(true,4)
+                  setSandState(true,4,sandSide.middle)
                 }else{
-                  setSandState(false,4)
+                  setSandState(false,4,sandSide.middle)
                 }    
                 break; 
              case '3F_R_Light':     
                 if(stateValue=="1"){
-                  setSandState(true,3)
+                  setSandState(true,3,sandSide.right)
                 }else{
-                  setSandState(false,3)
+                  setSandState(false,3,sandSide.right)
                 }    
                 break;
              case '3F_M_Light':     
                 if(stateValue=="1"){
-                  setSandState(true,3)
+                  setSandState(true,3,sandSide.middle)
                 }else{
-                  setSandState(false,3)
+                  setSandState(false,3,sandSide.middle)
                 }    
                 break;
              case '3F_L_Light':     
                 if(stateValue=="1"){
-                  setSandState(true,3)
+                  setSandState(true,3,sandSide.left)
                 }else{
-                  setSandState(false,3)
+                  setSandState(false,3,sandSide.left)
                 }    
                 break;
              case '2F_L_Light':     
                 if(stateValue=="1"){
-                  setSandState(true,2)
+                  setSandState(true,2,sandSide.left)
                 }else{
-                  setSandState(false,2)
+                  setSandState(false,2,sandSide.left)
                 }    
                 break;
              case '2F_M_Light':     
                 if(stateValue=="1"){
-                  setSandState(true,2)
+                  setSandState(true,2,sandSide.middle)
                 }else{
-                  setSandState(false,2)
+                  setSandState(false,2,sandSide.middle)
                 }    
                 break;
              case '2F_R_Light':     
                 if(stateValue=="1"){
-                  setSandState(true,2)
+                  setSandState(true,2,sandSide.right)
                 }else{
-                  setSandState(false,2)
+                  setSandState(false,2,sandSide.right)
                 }    
                 break;
              case '1F_R_Light':     
                 if(stateValue=="1"){
-                  setSandState(true,1)
+                  setSandState(true,1,sandSide.right)
                 }else{
-                  setSandState(false,1)
+                  setSandState(false,1,sandSide.right)
                 }    
                 break;
              case '1F_L_Light':     
                 if(stateValue=="1"){
-                  setSandState(true,1)
+                  setSandState(true,1,sandSide.left)
                 }else{
-                  setSandState(false,1)
+                  setSandState(false,1,sandSide.left)
                 }    
                 break; 
-            case 'WS_R_Light':     //车间灯
-                if(stateValue=="1"){
-                  
-                }else{
-                 
-                }    
-                break;   
-            case 'WS_L_Light':     //车间灯
-                if(stateValue=="1"){
-                  
-                }else{
-                 
-                }    
-                break;
             case 'InfraredMov1_Alarm':     //红外线
                 if(stateValue=="1"){
                     infrared(true)
@@ -1137,7 +1137,7 @@ MakerJS.exhibitionHall=function(){
         const box_btn=document.getElementById('box')
         box_btn.onclick=()=> {
             // _this.cameraFly('diangui1',-60,-2,20,3)
-            engine.animateCamera(engine.camera.position,engine.controls.target,{x:-60,y:4,z:20},{x:-200,y:4,z:20},3000, 
+            engine.animateCamera(engine.camera.position,engine.controls.target,{x:-50,y:-22,z:30},{x:-200,y:-22,z:30},3000, 
                function(){opacityChange(1,0)} )
             
             //出现智能配电箱界面
@@ -1149,7 +1149,7 @@ MakerJS.exhibitionHall=function(){
          const sand_btn=document.getElementById('sand')
          sand_btn.onclick=()=> {
             //  _this.cameraFly('zhantai',60,2,20,3)
-            engine.animateCamera(engine.camera.position,engine.controls.target,{x:60,y:2,z:20},{x:200,y:2,z:20})
+            engine.animateCamera(engine.camera.position,engine.controls.target,{x:60,y:-22,z:30},{x:200,y:-22,z:30})
             }
         
             var alarm;
@@ -1199,7 +1199,10 @@ MakerJS.exhibitionHall=function(){
                     break;
                 case 'p':
                     switchAirC(1,false)
-                    break;                           
+                    break;
+                case 'j':
+                    // setSandState(true,1,sandSide.left)
+                    break;                             
                 default:
                    break;
             } 

@@ -9,6 +9,13 @@ this.distributionRoomMeshs=[];
 this.exhibitionHallMeshs=[];
 this.hallDistributionMeshs=[];
 
+var sideMaterial={
+    color:0X0000FF,
+    width:1,
+    transparent:true
+}
+
+var lineStyle=[sideMaterial]
 
 this.get_meshArray = function (meshPath,meshArray) {
     //get relative path   
@@ -62,6 +69,9 @@ function loadEnd(){
     //总览按钮
     const view_btn=document.getElementById('view')
     // var xmlPath=new MakerJS.xmlPath(engine)  //xml  解析路径
+    var sidiary=new MakerJS.SubsidiaryArea(engine)
+    // sidiary.showGrid()
+    // sidiary.showSubsidiary('../mesh/path/电流.PATH',lineStyle)
     // var ele=new MakerJS.ElectricEffect(engine)
     // ele.electricPower('../mesh/path',100)
     switch(this.world_name) {
@@ -114,10 +124,6 @@ var animate_loading = lottie.loadAnimation({
     engine.animateCamera(engine.camera.position,engine.controls.target,{x:x,y:y,z:z},{x:0,y:0,z:1})
 }
 
- //线
- var material = new THREE.LineBasicMaterial({
-	color: 0x0000ff
-});
 
 // // gltf模型加载
 //  var loader = new THREE.GLTFLoader();

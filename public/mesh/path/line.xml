@@ -7,17 +7,27 @@
 <noi:NAMED_UUID name="样条" /><noi:GEOMETRY>
 <noi:GEO_POLYHEDRON3D orientation="e_POSITIVE" dimension="e_HAS_EDGES">
 <noi:GEO_POINT_LIST_3D>
-<noi:GEO_POINT x="-2755.344" y="1153.249" z="0" />
-<noi:GEO_POINT x="-2774.676" y="-1408.267" z="0" />
-<noi:GEO_POINT x="1207.756" y="-1669.251" z="0" />
-<noi:GEO_POINT x="1507.405" y="292.966" z="0" />
-<noi:GEO_POINT x="5199.855" y="428.292" z="0" />
+<noi:GEO_POINT x="5995.157" y="18181.01" z="-1455.545" />
+<noi:GEO_POINT x="5995.153" y="-4622.078" z="-1455.545" />
+<noi:GEO_POINT x="5995.153" y="-4622.078" z="-1455.545" />
+<noi:GEO_POINT x="5995.153" y="-4622.078" z="-1455.545" />
+<noi:GEO_POINT x="-5897.537" y="-4622.076" z="-1455.545" />
+<noi:GEO_POINT x="-5897.537" y="-4622.076" z="-1455.545" />
+<noi:GEO_POINT x="-5897.537" y="-4622.076" z="-1455.545" />
+<noi:GEO_POINT x="-5897.533" y="18181.014" z="-1455.545" />
+<noi:GEO_POINT x="5995.157" y="18181.01" z="-1455.545" />
+<noi:GEO_POINT x="-5897.533" y="18181.014" z="-1455.545" />
 </noi:GEO_POINT_LIST_3D>
 <noi:GEO_EDGE_LIST>
 <noi:GEO_EDGE e1="1" e2="2" />
 <noi:GEO_EDGE e1="2" e2="3" />
 <noi:GEO_EDGE e1="3" e2="4" />
 <noi:GEO_EDGE e1="4" e2="5" />
+<noi:GEO_EDGE e1="5" e2="6" />
+<noi:GEO_EDGE e1="6" e2="7" />
+<noi:GEO_EDGE e1="7" e2="8" />
+<noi:GEO_EDGE e1="8" e2="9" />
+<noi:GEO_EDGE e1="9" e2="10" />
 </noi:GEO_EDGE_LIST>
 </noi:GEO_POLYHEDRON3D>
 </noi:GEOMETRY>
