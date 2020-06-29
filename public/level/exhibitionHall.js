@@ -120,6 +120,8 @@ MakerJS.exhibitionHall=function(){
                  transparent:true, 
                  opacity:0.3,
             });
+        var texture_airSwitch=textureLoad('../textures/changkaiguan.png')
+        var airSwitch_material=new THREE.MeshPhongMaterial({color:0xffffff,map:texture_airSwitch})
         
        
         //设备开关状态
@@ -251,6 +253,7 @@ MakerJS.exhibitionHall=function(){
           meshNode.material=material
         }
        
+
         //设置边缘线效果
         function setEdgesEffect(){
              var edges=[]
@@ -266,9 +269,12 @@ MakerJS.exhibitionHall=function(){
             engine.effects.setEdgesObjects(edges)
             
              for(var i in airSwitchs){
+                 //空开黑块 改了个材质
+                airSwitchs[i].material[1]=airSwitch_material
                 engine.effects.addEdgesObject(airSwitchs[i],_this.line_material)
             }
         }
+         
 
         var wall_inside,wall_out
         var hallWallPos;
@@ -420,7 +426,7 @@ MakerJS.exhibitionHall=function(){
             setLogoMaterial()
             setElectricCabinet()
             unrealObject()
-
+            var xmlPath=new MakerJS.xmlPath(engine)  //xml  解析路径
             getMqtt()
             engine.addEventListener('update',eveUpdate)
             engine.nodeSelection.addEventListener('choose',eveChoose)
@@ -755,11 +761,14 @@ MakerJS.exhibitionHall=function(){
         var access=engine.scene.getObjectByName('boli004');
         if(state){
          //单独物体的边缘线
-         engine.effects.addEdgesObject(access,_this.line_material)
-         opacityChange(0,1)
+        //  engine.effects.addEdgesObject(access,_this.line_material)
+        //  opacityChange(0,1)
+        pushValue(outlineObjects,access) 
         }else{
-         engine.effects.removeEdgesObject(access)
+        //  engine.effects.removeEdgesObject(access)
+        removeByValue(outlineObjects,access)
         }
+        engine.effects.setOutlineObjects(outlineObjects)
          
     }
 
@@ -796,6 +805,7 @@ MakerJS.exhibitionHall=function(){
         opacity: 0.25,
         transparent: true,
     });
+   
     var unrealMat = new THREE.MeshBasicMaterial({
         color: myColor.gray,
         depthTest: true,
@@ -817,6 +827,12 @@ MakerJS.exhibitionHall=function(){
     }
     
     var textMat=new THREE.MeshPhongMaterial({color:0x6495ED,transparent:true,opacity:0.5})
+    var lineMat1= new THREE.LineBasicMaterial({
+        color: 0xffffff ,        //#B0C4DE
+        linewidth: 1,
+        opacity: 0.25,
+        transparent: true,
+    });
     function setText(){
         var textParent=engine.scene.getObjectByName('Text2')
         // textParent.translateZ(200)
@@ -825,7 +841,7 @@ MakerJS.exhibitionHall=function(){
         textArr.forEach(e=>{
             let text=engine.scene.getObjectByName(e)
             text.material=textMat
-            // engine.effects.addEdgesObject(text,lineMat)
+            engine.effects.addEdgesObject(text,lineMat1)
         })
 
     }
@@ -862,15 +878,18 @@ MakerJS.exhibitionHall=function(){
                     unrealMat.opacity=0
                     lineMat.opacity=0
                     textMat.opacity=0
+                    lineMat1.opacity=0
                    }else if(distance>500){
                     unrealMat.opacity=0.05
                     lineMat.opacity=0.25
                     textMat.opacity=0.5
+                    lineMat1.opacity=0.25
                    }
                    else{
                     unrealMat.opacity=distance/10000           //0.05
                     lineMat.opacity=distance/2000              //0.25
-                    textMat.opacity=distance/1000         //0.5
+                    textMat.opacity=distance/1000   
+                    lineMat1.opacity=distance/2000          //0.5
                    }
                 }
             
@@ -879,7 +898,7 @@ MakerJS.exhibitionHall=function(){
         function eveChoose(e){
             var nameNode;
             if(e.content instanceof THREE.Mesh)nameNode=e.content.name
-           if(nameNode=="kongkai"){
+           if(nameNode=="KongKai"){
              //TODO  跳转到智能配电箱(回路(资产)管理)  向手机端发送指令
              param = {type:'toCircleManage',}
              window.ReactNativeWebView&&window.ReactNativeWebView.postMessage(JSON.stringify(param)) ; 
@@ -1022,18 +1041,18 @@ MakerJS.exhibitionHall=function(){
                 }
              case '5F_ML_Light':     
                 if(stateValue=="1"){
-                  setSandState(true,5,sandSide.middle_right)
+                  setSandState(true,5,sandSide.middle_left)
                 //   console.log('5楼中左灯')
                 }else{
-                  setSandState(false,5,sandSide.middle_right)
+                  setSandState(false,5,sandSide.middle_left)
                 }    
                 break;
              case '5F_MR_Light':     
                 if(stateValue=="1"){
-                  setSandState(true,5,sandSide.middle_left)
+                  setSandState(true,5,sandSide.middle_right)
                 //   console.log('5楼中右灯')
                 }else{
-                  setSandState(false,5,sandSide.middle_left)
+                  setSandState(false,5,sandSide.middle_right)
                 }    
                 break;
              case '4F_R_Light':     
@@ -1183,7 +1202,8 @@ MakerJS.exhibitionHall=function(){
                     switchTapeLight(true)
                     break;
                 case '8':
-                    switchTapeLight(false)
+                    // switchTapeLight(false)
+                    accessRecord(false)
                     break;
                 case '9':
                     accessRecord(true)

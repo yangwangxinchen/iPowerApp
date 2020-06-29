@@ -66,30 +66,40 @@ MakerJS.xmlPath=function(engine){
         closed — Boolean 管道的两端是否闭合，默认值为false。
     */
         var pipeSpline = new THREE.CatmullRomCurve3(pointarr);
-        var tubeGeometry = new THREE.TubeGeometry(pipeSpline, 128, 1, 16, true);
+        var tubeGeometry = new THREE.TubeGeometry(pipeSpline, 128, 10, 16, true);
         var textureLoader = new THREE.TextureLoader();
         var texture = textureLoader.load('../textures/' +'halfYellow' + '.png');
                 texture.wrapS = THREE.RepeatWrapping;
                 texture.wrapT = THREE.RepeatWrapping;
-                texture.repeat.x = 150;
+                texture.repeat.x = 100;
                 var tubeMaterial = new THREE.MeshPhongMaterial({
-                    map: texture,
-                    transparent: true,
-                    emissive: 0x0033ff,
-                    emissiveIntensity: 10,
-                    depthTest: false,
-                    color: 0x0033ff
+                    // map: texture,
+                    // transparent: true,
+                    // emissive: 0x0033ff,
+                    // emissiveIntensity: 10,
+                    // depthTest: false,
+                    color: '#4169E1'
                 }); 
                 var tube = new THREE.Mesh(tubeGeometry, tubeMaterial);
                 // tube.scale.set(0.1,0.1,0.1)
-                var outGeo = new THREE.TubeGeometry(pipeSpline, 128, 1, 16, true);
-                var outMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.15 });
+                var outGeo = new THREE.TubeGeometry(pipeSpline, 128, 10, 16, true);
+                var outMaterial = new THREE.MeshBasicMaterial({ color: '#4169E1', transparent: true, opacity: 0.15 });
                 var outCube = new THREE.Mesh(outGeo, outMaterial);
                 outCube.scale.set(0.1,0.1,0.1)
+                outCube.position.set(0,0,-140)
                 engine.scene.add(outCube);
                 outCube.add(tube);
+                var lineMat= new THREE.LineBasicMaterial({
+                    color: '#4169E1'  ,      //#B0C4DE
+                    linewidth: 1,
+                    opacity: 0.25,
+                    transparent: true,
+                });
+                // engine.effects.addEdgesObject(outCube,lineMat)
+                // engine.blooms.setEnable(true)
+                engine.blooms.addBloomObjects(tube)
                 engine.addEventListener("update", function () {
-                    texture.offset.x -= 0.02;
+                    // texture.offset.x -= 0.02;
                 });
     }
 

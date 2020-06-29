@@ -68,8 +68,8 @@ function loadEnd(){
     document.getElementById('mask').style.display='none'
     //总览按钮
     const view_btn=document.getElementById('view')
-    // var xmlPath=new MakerJS.xmlPath(engine)  //xml  解析路径
-    var sidiary=new MakerJS.SubsidiaryArea(engine)
+    
+    // var sidiary=new MakerJS.SubsidiaryArea(engine)
     // sidiary.showGrid()
     // sidiary.showSubsidiary('../mesh/path/电流.PATH',lineStyle)
     // var ele=new MakerJS.ElectricEffect(engine)

@@ -45,7 +45,7 @@ function init(){
     setLampBloom()
     initCSS3DRenderer()
     setWallUnreal()
-
+    setCircleMaterial()
     getMqtt()
     engine.nodeSelection.addEventListener('choose',eveChoose)
     // engine.nodeSelection.addEventListener('chooseMore',eveChooseMore)
@@ -99,6 +99,17 @@ function setMonitorVisibel(state){
         // engine.animateCamera(engine.camera.position,engine.controls.target,{x:78,y:270,z:100},{x:78,y:0,z:100})
     }
   
+}
+
+var texture_circle=new THREE.TextureLoader().load('../textures/huilu2.png')
+var circle_material=new THREE.MeshPhongMaterial({color:0xffffff,map:texture_circle})
+function setCircleMaterial(){
+
+    var gui2_huilus=['gui2_huilu03','gui2_huilu02','gui2_huilu01']
+    gui2_huilus.forEach(e => {
+       var huilu=engine.scene.getObjectByName(e)
+       huilu.material=circle_material
+    });
 }
 
 var greenLights=[]
@@ -361,7 +372,7 @@ var index=0
     client.on('message',function (topic, message) {
         index++;   //62
        const deviceName=topic.substring(13)
-       console.log(index+':'+deviceName+':'+message.toString())
+    //    console.log(index+':'+deviceName+':'+message.toString())
        //message.toString().match(/\"SwitchOn\": \d/)   是个数组
        //message.toString().match(/\"SwitchOn\": \d/)[0]   "SwitchOn": 0
     //    let circleState=(message.toString().match(/\"SwitchOn\": \d/)[0])
