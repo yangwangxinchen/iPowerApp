@@ -204,9 +204,10 @@ MakerJS.Engine = function () {
     this.blooms = new MakerJS.Bloom(this);
     this.nodeSelection = new MakerJS.NodeSelection(this);
     //过滤模型
-    this.FilterMesh=new MakerJS.FilterMesh(this);
+    this.filterMesh=new MakerJS.FilterMesh(this);
 
-
+    // this.subsidiaryArea=new MakerJS.SubsidiaryArea(this)
+    
     //相机飞行动画
     this.cameraFly=function(targetPos,controlsPos,time){
    

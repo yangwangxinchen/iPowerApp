@@ -265,10 +265,10 @@ MakerJS.World = function(engine) {
                     for (var i = 0; i < nodeXml.childNodes.length; i++) {
                         var xml = nodeXml.childNodes[i];
                         if (xml.nodeName == 'mesh_name') {
-                            //过滤模型
+                        //过滤模型
                         //    var x=nodeXml.getElementsByTagName("mesh_name");
                         //    var meshPath=x[0].childNodes[0].nodeValue
-                        //    this.engine.FilterMesh.set_meshArray(this.world_name,meshPath)
+                        //    this.engine.filterMesh.set_meshArray(this.world_name,meshPath)
 
                             let scope = this;
                             function check_loaded() {
@@ -302,7 +302,9 @@ MakerJS.World = function(engine) {
 
                             let mesh_url = xml.textContent;
                             // console.log(mesh_url)
+                           
                             let isMergeNode = this.merger.isMergeNode(query);
+                            console.log(isMergeNode)
                             let source = this.meshFiles[mesh_url];
                             if (source == undefined) {
                                 source = this.meshFiles[mesh_url] = {};

@@ -289,6 +289,9 @@ MakerJS.exhibitionHall=function(){
             engine.scene.getObjectByName("diantimen1").material=_this.wall_material
             engine.scene.getObjectByName("diantimen2").material=_this.wall_material
 
+            var tv=engine.scene.getObjectByName("DianShi")
+            engine.effects.unrealObject(tv)
+
         }
         
       
@@ -318,6 +321,7 @@ MakerJS.exhibitionHall=function(){
        
             }
         }
+
 
         //贴图加载
         function textureLoad(path){
@@ -416,6 +420,7 @@ MakerJS.exhibitionHall=function(){
             engine.blooms.setEnable(true)   //启用辉光
 
             traverseSceneMeshs()
+           
             setEdgesEffect()  //边缘线
             volumeLights_visible(false); //隐藏体积光模型
            
@@ -427,6 +432,9 @@ MakerJS.exhibitionHall=function(){
             setElectricCabinet()
             unrealObject()
             var xmlPath=new MakerJS.xmlPath(engine)  //xml  解析路径
+            xmlPath.parseXML("../mesh/path/line.xml");  //园区边界
+
+            // engine.subsidiaryArea.showGrid()
             getMqtt()
             engine.addEventListener('update',eveUpdate)
             engine.nodeSelection.addEventListener('choose',eveChoose)
@@ -489,15 +497,15 @@ MakerJS.exhibitionHall=function(){
         }
 
         
-        var screen_material=new THREE.MeshBasicMaterial({color:myColor.gray,emissive:0xffffff})
+        var screen_material=new THREE.MeshBasicMaterial({color:0x0000ff})
          //大屏
          function switchScreen(state){
             if(state){
                 screen.material=screen_material
-                engine.blooms.addBloomObjects(screen)
+                // engine.blooms.addBloomObjects(screen)
             }else{
                 screen.material=screen_defaultMaterial
-                engine.blooms.removeBloomObjects(screen)
+                // engine.blooms.removeBloomObjects(screen)
             }
         
          }
@@ -508,65 +516,9 @@ MakerJS.exhibitionHall=function(){
             screen=engine.scene.getObjectByName('DaPingMu')
             screen_defaultMaterial=screen.material
          }
-        
-    /*    //管道线
-        const list=[
-            [-20,5,-10],
-            [10,5,-9],
-            [10,5,20],
-            [40,5,40]
-        ]
-
-        //获取曲线
-        const getLineGeo=list=>{
-         const l=[]
-         for(let i=0;i<list.length;i++){
-             l.push(new THREE.Vector3())
-         }
-        }
-
-        //管道几何体
-        function tubeCreate(){
-            const tubeGeometry = new THREE.TubeGeometry(res.curve, 1000, 0.1, 30)
-            const texture = new THREE.TextureLoader().load("./textures/red_line.png")
-            texture.wrapS = texture.wrapT = THREE.RepeatWrapping; //每个都重复
-            texture.repeat.set(1, 1);
-            const tubeMesh = new THREE.Mesh(tubeGeometry , new THREE.MeshBasicMaterial({map:texture,side:THREE.BackSide,transparent:true}))
-            texture.needsUpdate = true
-            engine.scene.add(tubeMesh)
-        }
-      */  
 
         
-     /*   var airsPlane=[]
-        //1.uv贴图修改偏移
-        const loader_t  = new THREE.TextureLoader()
-        var texture;
-        loader_t.load("textures/arrow.png",t =>{ 
-            texture = t
-            texture.wrapS = THREE.RepeatWrapping;
-            texture.wrapT = THREE.RepeatWrapping;
-            texture.repeat.set(4,4)
-            var plane =  new THREE.Mesh(new THREE.PlaneBufferGeometry(10,10),new THREE.MeshBasicMaterial({
-                // color:"#f00",
-                map:texture,
-                transparent:true,
-                side:THREE.DoubleSide,
-                opacity:0.5,
-            }))
-            plane.position.set(65,-1.5,45)
-            plane.rotateY(Math.PI/2)
-        
-            var plane1=plane.clone()
-            plane1.position.set(-42,5.5,45)
-            airsPlane.push(plane,plane1)
-            // engine.scene.add(plane,plane1)
-        })
-        
-        //2.着色器中uniform变量更新 每帧更改x y的偏移
-        */
-        
-          function createSprite(){
+        function createSprite(){
                 //精灵
                 var textured = new THREE.TextureLoader().load("../textures/test.png");
                 var spriteMaterial = new THREE.SpriteMaterial({
@@ -677,11 +629,11 @@ MakerJS.exhibitionHall=function(){
             }
         }
 
-        // 展厅
+        // 展厅监控
         function roomMonitor(){
             showHideMonitorView('SXT_ShiZhui1')
         }
-        //配电间
+        //配电间监控
         function  roomDistributionMonitor(){
             showHideMonitorView('SXT_ShiZhui2')
             var roomMon= engine.scene.getObjectByName('SXT_ShiZhui2')
@@ -692,7 +644,7 @@ MakerJS.exhibitionHall=function(){
             showHideMonitorView('ZL_JK_ShiZhui')
         }
 
-        //热成像
+        //热成像监控
         function roomThermalMonitor(){
             showHideMonitorView('SXT_ShiZhui2')
             var roomMon= engine.scene.getObjectByName('SXT_ShiZhui2')
@@ -768,6 +720,7 @@ MakerJS.exhibitionHall=function(){
         //  engine.effects.removeEdgesObject(access)
         removeByValue(outlineObjects,access)
         }
+        //外轮廓
         engine.effects.setOutlineObjects(outlineObjects)
          
     }
@@ -816,7 +769,7 @@ MakerJS.exhibitionHall=function(){
         });
 
     function unrealObject(){
-        var builds=['5F_WaiQiang','1Fdiban',"Gongchang","DiBan","dianti",'shizhui002','DianShi']
+        var builds=['5F_WaiQiang','1Fdiban',"Gongchang","DiBan","dianti",'shizhui002']
 
         builds.forEach(e => {
             let build=engine.scene.getObjectByName(e)
@@ -827,7 +780,7 @@ MakerJS.exhibitionHall=function(){
     }
     
     var textMat=new THREE.MeshPhongMaterial({color:0x6495ED,transparent:true,opacity:0.5})
-    var lineMat1= new THREE.LineBasicMaterial({
+    var textLineMat= new THREE.LineBasicMaterial({
         color: 0xffffff ,        //#B0C4DE
         linewidth: 1,
         opacity: 0.25,
@@ -841,7 +794,7 @@ MakerJS.exhibitionHall=function(){
         textArr.forEach(e=>{
             let text=engine.scene.getObjectByName(e)
             text.material=textMat
-            engine.effects.addEdgesObject(text,lineMat1)
+            engine.effects.addEdgesObject(text,textLineMat)
         })
 
     }
@@ -878,18 +831,18 @@ MakerJS.exhibitionHall=function(){
                     unrealMat.opacity=0
                     lineMat.opacity=0
                     textMat.opacity=0
-                    lineMat1.opacity=0
+                    textLineMat.opacity=0
                    }else if(distance>500){
                     unrealMat.opacity=0.05
                     lineMat.opacity=0.25
                     textMat.opacity=0.5
-                    lineMat1.opacity=0.25
+                    textLineMat.opacity=0.25
                    }
                    else{
                     unrealMat.opacity=distance/10000           //0.05
                     lineMat.opacity=distance/2000              //0.25
                     textMat.opacity=distance/1000   
-                    lineMat1.opacity=distance/2000          //0.5
+                    textLineMat.opacity=distance/2000          //0.5
                    }
                 }
             
@@ -929,7 +882,7 @@ MakerJS.exhibitionHall=function(){
             //视频监控
             showHideMonitorView:()=>{
                 clearControlTab()
-                roomMonitor()
+                roomMonitor()    //默认显示展厅监控
             },
             //门禁记录
             accessRecord:()=>{

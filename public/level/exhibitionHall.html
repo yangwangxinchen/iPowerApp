@@ -223,9 +223,19 @@
   <script>
     var Public_Engine = new MakerJS.Engine();
     //文件路径  是否合并 回调函数
-    Public_Engine.load('../mesh/exhibitionHall.world', false, function () {})
-    // Public_Engine.load('../mesh/5F_ZT.world', false, function () {})
+    Public_Engine.load('../mesh/exhibitionHall.world', false)
+  //   Public_Engine.load('../mesh/exhibitionHall.world',{
+  //     matches:{
+  //     name: { type:'contains',data:['diantimen','Text']},
+  //     // uuid : { type : 'equals' , data:[]},
+  //   }
+  // })
 
+  </script>
+  <script>
+    // Public_Engine.world.addEventListener('loadEnd',()=>{
+    //   window.changhua.accessRecord()
+    // })
   </script>
 </body>
 

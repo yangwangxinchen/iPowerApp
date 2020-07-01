@@ -17,6 +17,13 @@ var select_material=new THREE.MeshBasicMaterial({
     transparent: true,
 });
 
+var monitoring_material = new THREE.MeshBasicMaterial({
+    color: "#00ff00",
+    opacity: 0.3,
+    transparent: true,
+    side: THREE.DoubleSide
+});
+
 
 var greenLight_material= new THREE.MeshLambertMaterial({color:0x00ff00, emissive:0x00ff00 });
 
@@ -89,7 +96,8 @@ function setGlassMaterial(){
 var monitorCone
 function setMonitorMaterial(){
     
-    monitorCone.material=engine.FilterMesh.monitoring_material;
+    monitorCone.material=monitoring_material
+    engine.effects.addEdgesObject(monitorCone)
 
 }
 

@@ -1,17 +1,17 @@
 
 MakerJS.xmlPath=function(engine){
 
-    parseXML();
-    function parseXML(){
+    //path    "../mesh/path/line.xml"
+    this.parseXML=function(path){
         if (window.XMLHttpRequest)
         {// code for IE7+, Firefox, Chrome, Opera, Safari
         xmlhttp=new XMLHttpRequest();
         //  console.log(xmlhttp)
         }
-        xmlhttp.open("GET","../mesh/path/line.xml",false);
+        xmlhttp.open("GET",path,false);
         xmlhttp.send();
         xmlDoc=xmlhttp.responseXML;
-        console.log(xmlDoc)
+        // console.log(xmlDoc)
         var listArr=[]
         // console.log(xmlDoc.getElementsByTagName('noi:GEO_POINT_LIST_3D')[0].children[0].attributes[0].nodeValue)
          var list= xmlDoc.getElementsByTagName('noi:GEO_POINT_LIST_3D')
@@ -55,7 +55,7 @@ MakerJS.xmlPath=function(engine){
             // pointarr.push(pointvec3);
 
         }
-        console.log(pointarr)
+        // console.log(pointarr)
     
     /*
         TubeGeometry(path : Curve, tubularSegments : Integer, radius : Float, radialSegments : Integer, closed : Boolean)

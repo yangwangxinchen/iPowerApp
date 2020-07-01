@@ -5,8 +5,10 @@ MakerJS.SubsidiaryArea = function(engine) {
 
     this.showGrid = function(){
 
-        var gridHelper = new THREE.GridHelper( 2000, 100  );
+        var gridHelper = new THREE.GridHelper( 1200, 100);
         gridHelper.rotateX(Math.PI * 90/180);
+        // gridHelper.translateY(-150)
+        // gridHelper.translateZ(-150)
         this.engine.scene.add( gridHelper );
     }
 
