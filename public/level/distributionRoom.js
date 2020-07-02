@@ -151,43 +151,67 @@ MakerJS.distributionRoom=function(){
 
     //选中事件
     function eveChoose (e)  {
-        var nameNode
-        if(e.content instanceof THREE.Mesh) nameNode=e.content.name
-    
-        if(nameNode=="dyg2"){
-            resetMat()
-            engine.effects.addEdgesObject(low_p01,line_material)
-            engine.effects.addEdgesObject(low_p02)
-            low_p02.material=unreal_material
-            //相机动画
-            engine.animateCamera(engine.camera.position,engine.controls.target,{x:-78,y:170,z:100},{x:-78,y:0,z:100})
-           
-        }else if(nameNode=="dyg1"){
-            resetMat()
-            engine.effects.addEdgesObject(low_p01)
-            engine.effects.addEdgesObject(low_p02,line_material)
-            low_p01.material=unreal_material
-            engine.animateCamera(engine.camera.position,engine.controls.target,{x:-78,y:-170,z:100},{x:-78,y:0,z:100})
-           
-        }else if(nameNode=="gyg1"){
-            resetMat()
-            engine.effects.addEdgesObject(high_p03,line_material)
-            engine.effects.addEdgesObject(high_p04)
-            high_p04.material=unreal_material
-            engine.animateCamera(engine.camera.position,engine.controls.target,{x:78,y:-270,z:100},{x:78,y:0,z:100})
-        }else if(nameNode=="gyg2"){
-            resetMat()
-            engine.effects.addEdgesObject(high_p03)
-            engine.effects.addEdgesObject(high_p04,line_material)
-            high_p03.material=unreal_material
-            engine.animateCamera(engine.camera.position,engine.controls.target,{x:78,y:270,z:100},{x:78,y:0,z:100})
-        }else if(nameNode=="byq"){
-            resetMat()
-            engine.effects.addEdgesObject(change_p05,line_material)
-            engine.animateCamera(engine.camera.position,engine.controls.target,{x:0,y:-260,z:100},{x:0,y:0,z:100})
+        var nameNode;
+        if(e.content instanceof THREE.Mesh) {
+            nameNode=e.content.name
+            window.changhua.parseData(nameNode)
         }
-        
     }
+
+    var devices=[
+        "dyg1",
+        "dyg2",
+        "gyg1",
+        "gyg2",
+        "byq",
+    ]
+    var oo={name:''}
+
+    window.changhua={
+        parseData:function(data){
+            switch(data){
+                case 'dyg1':
+                    resetMat()
+                    engine.effects.addEdgesObject(low_p01)
+                    engine.effects.addEdgesObject(low_p02,line_material)
+                    low_p01.material=unreal_material
+                    engine.animateCamera(engine.camera.position,engine.controls.target,{x:-78,y:-170,z:100},{x:-78,y:0,z:100})
+                break;
+                case 'dyg2':
+                    resetMat()
+                    engine.effects.addEdgesObject(low_p01,line_material)
+                    engine.effects.addEdgesObject(low_p02)
+                    low_p02.material=unreal_material
+                    //相机动画
+                    engine.animateCamera(engine.camera.position,engine.controls.target,{x:-78,y:170,z:100},{x:-78,y:0,z:100})
+                    break;
+                case 'gyg1':
+                    resetMat()
+                    engine.effects.addEdgesObject(high_p03,line_material)
+                    engine.effects.addEdgesObject(high_p04)
+                    high_p04.material=unreal_material
+                    engine.animateCamera(engine.camera.position,engine.controls.target,{x:78,y:-270,z:100},{x:78,y:0,z:100})
+                    break;
+                case 'gyg2':
+                    resetMat()
+                    engine.effects.addEdgesObject(high_p03)
+                    engine.effects.addEdgesObject(high_p04,line_material)
+                    high_p03.material=unreal_material
+                    engine.animateCamera(engine.camera.position,engine.controls.target,{x:78,y:270,z:100},{x:78,y:0,z:100})
+                    break;
+                case 'byq':
+                    resetMat()
+                    engine.effects.addEdgesObject(change_p05,line_material)
+                    engine.animateCamera(engine.camera.position,engine.controls.target,{x:0,y:-260,z:100},{x:0,y:0,z:100})
+                    break;
+                case '回路什么的':
+                    break;    
+                default:
+                    break;
+            } 
+        }
+    }
+    
 
     //update
     function eveUpdate(){

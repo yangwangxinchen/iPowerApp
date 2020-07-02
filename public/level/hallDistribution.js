@@ -307,7 +307,7 @@ function eveChoose(e){
     var nameNode
     if(e.content instanceof THREE.Mesh) nameNode=e.content.name
      
-    setColor(e.content)
+    // setColor(e.content)
 
     // if(nameNode=="gui1"){
     //     engine.animateCamera(engine.camera.position,engine.controls.target,{x:150,y:-330,z:200},{x:150,y:0,z:200})
@@ -370,6 +370,72 @@ function setColor(_mesh){
  path_btn.onclick=()=> {
        console.log('电流走向')
     }
+
+window.changhua={
+    parseData:function(data){  
+        //改变模型颜色
+        var model= engine.scene.getObjectByName(data) 
+        setColor(model)
+        switch(data){
+            case 'gui1':
+                engine.animateCamera(engine.camera.position,engine.controls.target,{x:150,y:-330,z:200},{x:150,y:0,z:200})
+                //外框线
+                // pushValue(outlineObjects,airSwitchs[0])
+                // engine.effects.setOutlineObjects(outlineObjects)
+            break;
+            case 'gui2':
+                engine.animateCamera(engine.camera.position,engine.controls.target,{x:0,y:-330,z:200},{x:0,y:0,z:200})
+                break;
+            case 'gui3':
+                engine.animateCamera(engine.camera.position,engine.controls.target,{x:-150,y:-330,z:200},{x:-150,y:0,z:200})
+                break;
+            default:
+                break;
+        } 
+}
+
+}
+
+var devices=[
+    'gui1',
+    'gui2',
+    'gui3',
+    'gui3_huilu01',
+    'gui3_huilu02',
+    'gui3_huilu03',
+    'gui3_huilu04',
+    'gui3_huilu05',
+    'gui3_huilu06',
+    'gui3_huilu07',
+    'gui3_huilu08',
+    'gui3_huilu09',
+    'gui3_huilu10',
+    'gui3_huilu11',
+    'gui2_huilu01',
+    'gui2_huilu02',
+    'gui2_huilu03',
+    'gui2_duanlq',
+    'gui2_duanlqge',
+]
+
+document.addEventListener('keydown',myKeyDown)
+function myKeyDown(id) {
+    switch(id.key) {
+        case '1':
+           
+            break;
+        case '2':
+           
+            break;
+        case '3':
+           
+            break; 
+            case '4':
+            
+            break;        
+        default:
+            break;
+}}
 
 var index=0
  //关联数据

@@ -271,7 +271,7 @@ MakerJS.exhibitionHall=function(){
              for(var i in airSwitchs){
                  //空开黑块 改了个材质
                 airSwitchs[i].material[1]=airSwitch_material
-                engine.effects.addEdgesObject(airSwitchs[i],_this.line_material)
+                // engine.effects.addEdgesObject(airSwitchs[i],_this.line_material)
             }
         }
          
@@ -385,6 +385,7 @@ MakerJS.exhibitionHall=function(){
                 }
                 if(meshName=='KongKai'){
                     let mesh= engine.scene.getObjectByName(meshName)
+                    // console.log('kongkai:'+mesh.id)
                     airSwitchs.push(mesh)
                 }
                 if(meshName=='HengLiang'){
@@ -426,7 +427,7 @@ MakerJS.exhibitionHall=function(){
            
             showHideMonitorView()
             
-            label_3d()
+            css3DRendererCreate()
             setGlass()
             setLogoMaterial()
             setElectricCabinet()
@@ -454,9 +455,10 @@ MakerJS.exhibitionHall=function(){
         
             const point=new THREE.Mesh(new THREE.SphereBufferGeometry( 0.15, 16, 8 ),new THREE.LineBasicMaterial({color:"#007F7F",transparent:true,opacity:0.8}))
             point.position.set(x1,y1,z1)
-            engine.scene.add(line)
-            engine.scene.add(point)
-            // return line
+            var group=new THREE.Group()
+            group.add(line,point)
+            engine.scene.add(group)
+            return group
         }
         
        
@@ -544,27 +546,25 @@ MakerJS.exhibitionHall=function(){
                 engine.scene.add(group);
                
         } 
-        
-        
-        //通过样式实现3d效果
-        var css3DRenderer
-        var circuitCount=10;
-        var circuitRun=2
-        var capacity=1000
-        function label_3d(){
-             //渲染
-             css3DRenderer = new THREE.CSS3DRenderer()
-             css3DRenderer.setSize( engine.width,engine.height )
-             css3DRenderer.domElement.style.position = 'absolute'
-             css3DRenderer.domElement.style.top = 0
-             css3DRenderer.domElement.style.pointerEvents = "none"
-             document.body.appendChild(css3DRenderer.domElement );
-            var smartBox= _this.css3DObjectCreate(document.getElementById("box3"))
-            smartBox.position.set(-77,-21,38)
-            smartBox.rotation.set(0,Math.PI/2,Math.PI/2)
-            addNormalLine( -77,-21,30,-77,-21,36) 
-        }
-        
+
+         //通过样式实现3d效果
+         var css3DRenderer;
+         var circuitCount=10;
+         var circuitRun=2
+         var capacity=1000
+        //创建css3DRenderer
+         function css3DRendererCreate(){
+            //渲染
+            css3DRenderer = new THREE.CSS3DRenderer()
+            css3DRenderer.setSize( engine.width,engine.height )
+            css3DRenderer.domElement.style.position = 'absolute'
+            css3DRenderer.domElement.style.top = 0
+            css3DRenderer.domElement.style.pointerEvents = "none"
+            document.body.appendChild(css3DRenderer.domElement );
+
+            label_3d()
+         }
+
         //创建css3DObject
         this.css3DObjectCreate=function(div){
          
@@ -573,6 +573,34 @@ MakerJS.exhibitionHall=function(){
          label3d.scale.set(0.05,0.05,0.05)
          engine.scene.add(label3d)
          return  label3d
+        }
+
+        var smartBoxElement=document.getElementById("box3");
+        var smartBoxLine;
+        var doorElement=document.getElementById("doorbox")
+        
+        //3d文本
+        function label_3d(){
+            var smartBox= _this.css3DObjectCreate(smartBoxElement)
+            smartBox.position.set(-77,-21,38)
+            smartBox.rotation.set(0,Math.PI/2,Math.PI/2)
+            smartBoxLine=addNormalLine( -77,-21,30,-77,-21,36) 
+            showHideLabel(false,smartBoxElement,smartBoxLine)
+            
+            smartBox2= _this.css3DObjectCreate(doorElement)
+            smartBox2.position.set(-20, 33, 34)
+            smartBox2.rotation.set(Math.PI / 2, 0, 0)
+            showHideLabel(false,doorElement)
+        }
+
+        function showHideLabel(show,element,line){
+         if(show){
+            element.style.display='block'
+            if(line){line.visible=true}
+         }else{
+            element.style.display='none'
+            if(line){line.visible=false}
+         }
         }
         
        
@@ -708,21 +736,30 @@ MakerJS.exhibitionHall=function(){
         tween.start();
     }
 
+    var recordParam={
+        recordName:'张三',
+        recordDate:'2020-7-1',
+        recordTime:'16:00:00',
+        recordCounts:1
+    }
+    
     //门禁记录
-    function  accessRecord(state){
+    function  accessRecord(state,data){
         var access=engine.scene.getObjectByName('boli004');
         if(state){
-         //单独物体的边缘线
-        //  engine.effects.addEdgesObject(access,_this.line_material)
-        //  opacityChange(0,1)
         pushValue(outlineObjects,access) 
+        showHideLabel(true,doorElement)
         }else{
-        //  engine.effects.removeEdgesObject(access)
         removeByValue(outlineObjects,access)
+        showHideLabel(false,doorElement)
         }
         //外轮廓
         engine.effects.setOutlineObjects(outlineObjects)
-         
+        /*{name:'张三',date:'2020-7-1',time:'16:05:00',counts:1} */
+        if(data){
+            recordParam=data
+        }
+        
     }
 
     var alarm;
@@ -821,6 +858,28 @@ MakerJS.exhibitionHall=function(){
                         <span class='box3-text'>${capacity}kW</span>
                     </div>
                 `
+                document.getElementById("doorbox").innerHTML = `
+                <div class='box-child'>
+                    <span class='box3-text' style='font-size:18px' >智能门禁</span>
+                    <span class='box3-text'></span>
+                </div>
+                <div class='box-child'>
+                    <span class='box3-text'>姓名:</span>
+                    <span class='box3-text'>${recordParam.recordName}</span>
+                </div>
+                <div class='box-child'>
+                    <span class='box3-text'>日期:</span>
+                    <span class='box3-text'>${recordParam.recordDate}</span>
+                </div>
+                <div class='box-child'>
+                    <span class='box3-text'>时间:</span>
+                    <span class='box3-text'>${recordParam.recordTime}</span>
+                </div>
+                <div class='box-child'>
+                    <span class='box3-text'>次数:</span>
+                    <span class='box3-text'>${recordParam.recordCounts}</span>
+                </div> `
+
                 }
                 // TWEEN.update(); 
                 //根据距离改变外墙的透明度
@@ -849,20 +908,26 @@ MakerJS.exhibitionHall=function(){
         }
         
         function eveChoose(e){
-            var nameNode;
-            if(e.content instanceof THREE.Mesh)nameNode=e.content.name
-           if(nameNode=="KongKai"){
-             //TODO  跳转到智能配电箱(回路(资产)管理)  向手机端发送指令
-             param = {type:'toCircleManage',}
-             window.ReactNativeWebView&&window.ReactNativeWebView.postMessage(JSON.stringify(param)) ; 
-           }
+        //     var nameNode;
+        //     if(e.content instanceof THREE.Mesh)nameNode=e.content.name
+        //    if(nameNode=="KongKai"){
+        //      //TODO  跳转到智能配电箱(回路(资产)管理)  向手机端发送指令
+        //      param = {type:'toCircleManage',}
+        //      window.ReactNativeWebView&&window.ReactNativeWebView.postMessage(JSON.stringify(param)) ; 
+        //    }
 
         }
 
         //切换tab时 清除其他tab的显示状态
         function clearControlTab(){
+            //监控
             showHideMonitorView()
+            //门禁
             accessRecord(false)
+            //空开  智能配电箱
+            removeByValue(outlineObjects,airSwitchs[0])
+            engine.effects.setOutlineObjects(outlineObjects)
+            showHideLabel(false,smartBoxElement,smartBoxLine)
         }
 
          //接收手机端指令
@@ -885,9 +950,29 @@ MakerJS.exhibitionHall=function(){
                 roomMonitor()    //默认显示展厅监控
             },
             //门禁记录
-            accessRecord:()=>{
+            accessRecord:(data)=>{
                 clearControlTab()
-                accessRecord(true)//描边显示门  
+                accessRecord(true,data)//描边显示门  
+            },
+            //清除状态
+            clearControlTab:()=>{
+                clearControlTab()
+            },
+            parseData:function(data){
+                switch(data){
+                    case 'airSwitch':
+                        engine.animateCamera(engine.camera.position,engine.controls.target,{x:-50,y:-22,z:30},{x:-200,y:-22,z:30},3000)
+                        //外框线
+                        pushValue(outlineObjects,airSwitchs[0])
+                        engine.effects.setOutlineObjects(outlineObjects)
+                        showHideLabel(true,smartBoxElement,smartBoxLine)
+                    break;
+                    case '111':
+                        console.log(111)
+                        break;
+                    default:
+                        break;
+                } 
             }
             
             //控制面板
@@ -1106,22 +1191,24 @@ MakerJS.exhibitionHall=function(){
         // view_btn.onclick=cameraFlyHome;
         
         // 智能配电箱
-        const box_btn=document.getElementById('box')
-        box_btn.onclick=()=> {
-            // _this.cameraFly('diangui1',-60,-2,20,3)
-            engine.animateCamera(engine.camera.position,engine.controls.target,{x:-50,y:-22,z:30},{x:-200,y:-22,z:30},3000, 
-               function(){opacityChange(1,0)} )
-            
-            //出现智能配电箱界面
-            param = {type:'toCircleManage',}
-            window.ReactNativeWebView&&window.ReactNativeWebView.postMessage(JSON.stringify(param)) ; 
-        }
+        // const box_btn=document.getElementById('box')
+        // box_btn.onclick=()=> {
+        //     // _this.cameraFly('diangui1',-60,-2,20,3)
+        //     engine.animateCamera(engine.camera.position,engine.controls.target,{x:-50,y:-22,z:30},{x:-200,y:-22,z:30},3000)
+        //     //外框线
+        //     pushValue(outlineObjects,airSwitchs[0])
+        //     engine.effects.setOutlineObjects(outlineObjects)
+        //     //出现智能配电箱界面
+        //     param = {type:'toCircleManage',}
+        //     window.ReactNativeWebView&&window.ReactNativeWebView.postMessage(JSON.stringify(param)) ; 
+        // }
         
         //沙盘
          const sand_btn=document.getElementById('sand')
          sand_btn.onclick=()=> {
             //  _this.cameraFly('zhantai',60,2,20,3)
             engine.animateCamera(engine.camera.position,engine.controls.target,{x:60,y:-22,z:30},{x:200,y:-22,z:30})
+            clearControlTab()
             }
         
             var alarm;
@@ -1159,7 +1246,8 @@ MakerJS.exhibitionHall=function(){
                     accessRecord(false)
                     break;
                 case '9':
-                    accessRecord(true)
+                    // accessRecord(true)
+                    // window.changhua.accessRecord({recordName:'dddd'})
                     break;  
                 case 'u':
                     switchAirC(0,true)
@@ -1174,7 +1262,7 @@ MakerJS.exhibitionHall=function(){
                     switchAirC(1,false)
                     break;
                 case 'j':
-                    // setSandState(true,1,sandSide.left)
+                   window.changhua.parseData('airSwitch')
                     break;                             
                 default:
                    break;

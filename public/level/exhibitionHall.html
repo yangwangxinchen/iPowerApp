@@ -74,7 +74,7 @@
             color:rgb(6, 232, 240)
           }
 
-          .label {
+        .label {
 				color: #FFF;
 				font-family: sans-serif;
 				padding: 2px;
@@ -82,21 +82,32 @@
 			}
 
        .device{
-            position: absolute;
-            color:rgb(11, 213, 248);
-            background-color: rgba(0, 127, 127, 0.447);
-            border: 1px solid rgba(127,255,255,0.25);
-            box-shadow: 0px 0px 12px rgba(0,255,255,0.5);
-            width: 110px;
-            height: 70px;
-            padding: 10px;
-            font-family: '楷体';
-            font-size:10px;
-            text-align:left;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-evenly;
+        position: absolute;
+        color: #fff;
+        background-color: #629cec;
+        border: 8px solid;
+        /*border-radius: 10px;*/
+        border-image: linear-gradient(135deg , #cacaca , #2d2d2d) 30 30;
+        
+        box-shadow: 4px 6px 8px rgb(111, 108, 109);
+
+        width: 110px;
+        height: 60px;
+        padding: 10px;
+        font-family: '宋体';
+        font-size: 6px;
+        text-align: left;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-evenly;
+
+        line-height:18px;
+       }
+  
+       #doorbox{
+        height: 90px;
        }
 
        .box-child {
@@ -213,10 +224,11 @@
   <div id="mask"></div>   
   <!-- 配电箱ui -->
   <div class="device" id="box3"> </div>
+  <div class="device" id="doorbox"> </div>
   <!-- 按钮 -->
   <div id='box-wrapper'>
       <div  id='sand' class="wrapper-container"></div>
-      <div  id='box' class="wrapper-container"></div>
+      <!-- <div  id='box' class="wrapper-container"></div> -->
       <div  id='view' class="wrapper-container"></div>
     </div>
 
@@ -232,11 +244,11 @@
   // })
 
   </script>
-  <script>
-    // Public_Engine.world.addEventListener('loadEnd',()=>{
-    //   window.changhua.accessRecord()
-    // })
-  </script>
+  <!-- <script>
+    Public_Engine.world.addEventListener('loadEnd',()=>{
+      
+    })
+  </script> -->
 </body>
 
 </html>

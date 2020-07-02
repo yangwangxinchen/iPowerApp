@@ -304,7 +304,7 @@ MakerJS.World = function(engine) {
                             // console.log(mesh_url)
                            
                             let isMergeNode = this.merger.isMergeNode(query);
-                            console.log(isMergeNode)
+                            // console.log(isMergeNode)
                             let source = this.meshFiles[mesh_url];
                             if (source == undefined) {
                                 source = this.meshFiles[mesh_url] = {};
