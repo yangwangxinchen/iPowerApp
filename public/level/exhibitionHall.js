@@ -575,7 +575,7 @@ MakerJS.exhibitionHall=function(){
          return  label3d
         }
 
-        var smartBoxElement=document.getElementById("box3");
+        var smartBoxElement=document.getElementById("smartbox");
         var smartBoxLine;
         var doorElement=document.getElementById("doorbox")
         
@@ -749,6 +749,7 @@ MakerJS.exhibitionHall=function(){
         if(state){
         pushValue(outlineObjects,access) 
         showHideLabel(true,doorElement)
+        engine.animateCamera(engine.camera.position,engine.controls.target,{x:-30,y:-10,z:30},{x:-30,y:0,z:30})   
         }else{
         removeByValue(outlineObjects,access)
         showHideLabel(false,doorElement)
@@ -840,7 +841,7 @@ MakerJS.exhibitionHall=function(){
         function eveUpdate(){
                 if(css3DRenderer){
                     css3DRenderer.render(engine.scene, engine.camera );
-                    document.getElementById("box3").innerHTML= `
+                    document.getElementById("smartbox").innerHTML= `
                     <div class='box-child'>
                         <span class='box3-text' style='font-size:18px'>智能配电箱</span>
                         <span class='box3-text'></span>
@@ -952,12 +953,13 @@ MakerJS.exhibitionHall=function(){
             //门禁记录
             accessRecord:(data)=>{
                 clearControlTab()
-                accessRecord(true,data)//描边显示门  
+                accessRecord(true,data)//显示门  
             },
             //清除状态
             clearControlTab:()=>{
                 clearControlTab()
             },
+            //getParameterByValue(value)
             parseData:function(data){
                 switch(data){
                     case 'airSwitch':
@@ -1246,7 +1248,7 @@ MakerJS.exhibitionHall=function(){
                     accessRecord(false)
                     break;
                 case '9':
-                    // accessRecord(true)
+                    accessRecord(true)
                     // window.changhua.accessRecord({recordName:'dddd'})
                     break;  
                 case 'u':
