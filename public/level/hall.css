@@ -1,4 +1,4 @@
-/* home按钮 */
+/* 按钮父容器 */
 #box-wrapper {
     width: 100%;
     position: absolute;
@@ -7,6 +7,7 @@
     align-items: center;
     justify-content: center;
 }
+/* home导航按钮 */
 #view {
     width: 30px;
     height: 30px;
@@ -17,6 +18,15 @@
 .wrapper-container {
     margin-left: 1em;
     margin-right: 1em;
+}
+
+/* 沙盘导航按钮 */
+#sand {
+    width: 30px;
+    height: 30px;
+    background-image: url('../textures/sand.png');
+    background-size: contain;
+    background-repeat: no-repeat;
 }
 
 /* 配电房电流显示按钮 */
