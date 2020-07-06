@@ -1,6 +1,6 @@
 # iPowerApp
 
-public主要文件目录
+#public主要文件目录
 
 一 ./js
 threejs库包含的部分js
@@ -31,11 +31,11 @@ FilterMesh.js
 dependent.js  依赖的相关js
 
 exhibitionHall.js  
-展厅监测设备（灯，沙盘...）关联,
-辉光效果    `engine.blooms.setEnable(true)  engine.blooms.addBloomObjects(xxx)`
-边缘线效果  `engine.effects.addEdgesObject(xxx) / engine.effects.setEdgesObjects(xxx)`
-虚化效果    `engine.effects.unrealObject(xxx)`
-外轮廓效果
+-展厅监测设备（灯，沙盘...）关联,
+-辉光效果    `engine.blooms.setEnable(true)  engine.blooms.addBloomObjects(xxx)`
+-边缘线效果  `engine.effects.addEdgesObject(xxx) / engine.effects.setEdgesObjects(xxx)`
+-虚化效果    `engine.effects.unrealObject(xxx)`
+-外轮廓效果
 `pushValue(outlineObjects,##)`  将需要使用外轮廓的物体加入到该数组中
 `engine.blooms.addBloomObjects(##) `
 `engine.effects.setOutlineObjects(outlineObjects) `
@@ -64,4 +64,4 @@ world模型文件 材质路径需更改
 
 运行
 --start_server.bat    测试服务器
---html_start.bat     展厅页面
+--html_start.bat      展厅页面

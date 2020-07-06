@@ -1,4 +1,4 @@
-document.write(' <link type="text/css" rel="styleSheet"  href="./hall.css" />')
+// document.write(' <link type="text/css" rel="styleSheet"  href="./hall.css" />')
 
 document.write(
     `
@@ -77,6 +77,8 @@ document.write(
   <script src="libs/lottie.js"></script>
   <!-- 性能监测 -->
   <script src="../js/libs/stats.js"></script>
+
+  <script src="../js/scene/FieldTips.js"></script>
 
     `
 );

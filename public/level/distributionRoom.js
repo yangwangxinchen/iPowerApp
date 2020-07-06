@@ -165,8 +165,7 @@ MakerJS.distributionRoom=function(){
         "gyg2",
         "byq",
     ]
-    var oo={name:''}
-
+   
     window.changhua={
         parseData:function(data){
             switch(data){

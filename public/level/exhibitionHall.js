@@ -123,7 +123,6 @@ MakerJS.exhibitionHall=function(){
         var texture_airSwitch=textureLoad('../textures/changkaiguan.png')
         var airSwitch_material=new THREE.MeshPhongMaterial({color:0xffffff,map:texture_airSwitch})
         
-       
         //设备开关状态
         function device_on_off(devices,open,lampMat){
             //传入参数需要写在前面
@@ -439,6 +438,10 @@ MakerJS.exhibitionHall=function(){
             getMqtt()
             engine.addEventListener('update',eveUpdate)
             engine.nodeSelection.addEventListener('choose',eveChoose)
+
+            var field=new MakerJS.FieldTips(_engine)
+            var ccc=document.getElementById("doorbox")
+            field.cssInfoRender(new THREE.Vector3(-32, 33,40),new THREE.Vector3(-32, 33, 65),ccc,'222')
         } 
         
         //添加指示线
@@ -587,10 +590,10 @@ MakerJS.exhibitionHall=function(){
             smartBoxLine=addNormalLine( -77,-21,30,-77,-21,36) 
             showHideLabel(false,smartBoxElement,smartBoxLine)
             
-            smartBox2= _this.css3DObjectCreate(doorElement)
-            smartBox2.position.set(-20, 33, 34)
-            smartBox2.rotation.set(Math.PI / 2, 0, 0)
-            showHideLabel(false,doorElement)
+            // smartBox2= _this.css3DObjectCreate(doorElement)
+            // smartBox2.position.set(-20, 33, 34)
+            // smartBox2.rotation.set(Math.PI / 2, 0, 0)
+            // showHideLabel(false,doorElement)
         }
 
         function showHideLabel(show,element,line){
@@ -954,6 +957,7 @@ MakerJS.exhibitionHall=function(){
             accessRecord:(data)=>{
                 clearControlTab()
                 accessRecord(true,data)//显示门  
+                
             },
             //清除状态
             clearControlTab:()=>{
@@ -1244,12 +1248,10 @@ MakerJS.exhibitionHall=function(){
                     switchTapeLight(true)
                     break;
                 case '8':
-                    // switchTapeLight(false)
                     accessRecord(false)
                     break;
                 case '9':
                     accessRecord(true)
-                    // window.changhua.accessRecord({recordName:'dddd'})
                     break;  
                 case 'u':
                     switchAirC(0,true)
