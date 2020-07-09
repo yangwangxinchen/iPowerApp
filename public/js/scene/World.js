@@ -27,17 +27,19 @@ MakerJS.World = function(engine) {
         scope.font = font;
     });
 
+    //相对路径
     function get_base_url(filename) {
         //get relative path   
         if (filename !== undefined) {
             var parts = filename.split('/');
             // console.log(parts)
             parts.pop();    
+            // console.log(parts.length)
             return (parts.length < 1 ? '.' : parts.join('/'));
         }
         return filename;
     }
-
+     //文件名
     function get_file_name(filename) {
         if (filename !== undefined) {
             var names = filename.split("/");
@@ -96,7 +98,7 @@ MakerJS.World = function(engine) {
 
         var xmlParser = new DOMParser();
         this.WorldXml = xmlParser.parseFromString(filecontent, "application/xml");
-
+        // console.log( this.WorldXml)   //#document
         this.baseUrl = get_base_url(filename);
         var _name = get_file_name(filename)
         // console.log(_name)
@@ -117,8 +119,10 @@ MakerJS.World = function(engine) {
         // console.log(materials)
         for (var i = 0; i < materials.length; i++) {
             var element = materials[i];
+            //.world文件相对路径加上材质路径
             var mtlUrl = combine(this.baseUrl, element.textContent);
            //console.log(mtlUrl)
+           //材质也是个xml
             this.materialManager.load(this.baseUrl, mtlUrl);
         }
     };
@@ -167,7 +171,8 @@ MakerJS.World = function(engine) {
                     var dir = new THREE.Vector3(0, 0, 1).transformDirection(m1);
                     this.camera_position = new THREE.Vector3(pos[12], pos[13], pos[14]);
                     this.camera_target = this.camera_position.clone().sub(dir.multiplyScalar(10))
-
+                    
+                    //编辑器的相机坐标赋值给场景相机坐标
                     // this.engine.controls.position0.copy(this.camera_position);
                     // this.engine.controls.target0.copy(this.camera_target);
                 }
@@ -185,10 +190,10 @@ MakerJS.World = function(engine) {
         for (var i = 0; i < editors.length; i++) {
             var editor = editors[i];
             for (var j = 0; j < editor.childNodes.length; j++) {
-                var nodeXml = editor.childNodes[j];
+                var nodeXml = editor.childNodes[j];   //node父节点
                 // console.log(nodeXml)
                 if (nodeXml.nodeName == 'node') {
-                    var node = this.parseNode(nodeXml);
+                    var node = this.parseNode(nodeXml);  
                     // console.log(node)
                     if (node != undefined) {
                         this.engine.scene.add(node);   //添加到场景
@@ -200,17 +205,25 @@ MakerJS.World = function(engine) {
     };
 
     this.parseNode = function(nodeXml, parent) {
+        /**
+         * node=new THREE.Mesh(geometry, material) || new THREE.Object3D();
+         * id 11 name '' type '' uuid ''  
+         * userData {}  一个用于存储Object3D自定义数据的对象
+         * userData={'nodeID':xx,'UniqueID':xx}
+         */
         let node;
-
+        /**
+         * query={id:xx,name:xx,type:xx,uuid:xx};
+         */
         var query = {};
 
         let mat4 = new THREE.Matrix4();
         query.id = nodeXml.getAttribute('id');
         query.name = nodeXml.getAttribute('name');
         query.type = nodeXml.getAttribute('type');
-        // console.log(query.type)
+        
         //console.log(nodeXml.getElementsByTagName('mesh_name')[0])
-                    
+        //  console.log(nodeXml.childNodes)           
 
         for (var j = 0; j < nodeXml.childNodes.length; j++) {
             let xml = nodeXml.childNodes[j];
@@ -431,12 +444,12 @@ MakerJS.World = function(engine) {
         if (node != undefined) {
             node.name = query.name;
             node.userData['nodeID'] = query.id;
-            this.world_nodes[query.id] = node;
+            this.world_nodes[query.id] = node;    //id列表 id:node
 
             if (query.uuid) {
                 node.userData['UniqueID'] = query.uuid;
                 //node.uuid = uuid;
-                this.uuid_nodes[query.uuid] = node;
+                this.uuid_nodes[query.uuid] = node; //uuid列表  uuid:node
             }
 
             node.applyMatrix(mat4);
@@ -452,7 +465,7 @@ MakerJS.World = function(engine) {
                 this.parseNode(xml, { node: node, worldTransform: t });
             }
         }
-
+        // console.log(node)
         return node;
     };
 

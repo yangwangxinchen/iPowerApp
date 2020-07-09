@@ -1,6 +1,6 @@
 /* 按钮父容器 */
 #box-wrapper {
-    height: 100px;
+    height: 80px;
     position: absolute;
     right: 1em;
     top: 2em;
@@ -13,8 +13,8 @@
 }
 /* home导航按钮 */
 #view {
-    width: 30px;
-    height: 30px;
+    width: 25px;
+    height: 25px;
     background-image: url('../textures/view.png');
     background-repeat: no-repeat;
     background-size: contain;
@@ -26,8 +26,8 @@
 
 /* 沙盘导航按钮 */
 #sand {
-    width: 30px;
-    height: 30px;
+    width: 25px;
+    height: 25px;
     background-image: url('../textures/sand.png');
     background-size: contain;
     background-repeat: no-repeat;
@@ -35,8 +35,8 @@
 
 /* 配电房电流显示按钮 */
 #path {
-    width: 30px;
-    height: 30px;
+    width: 25px;
+    height: 25px;
     background-image: url('../textures/pdx.png');
     background-repeat: no-repeat;
     background-size: contain;

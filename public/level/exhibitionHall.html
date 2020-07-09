@@ -46,35 +46,20 @@
 				background: rgba( 0, 0, 0, .6 );
 			}
 
-       .device{
-        position: absolute;
-        color: #fff;
-        background-color: #629cec;
-        border-image: linear-gradient(135deg , #cacaca , #2d2d2d) 30 30;
-        box-shadow: 4px 6px 8px rgb(111, 108, 109);
-        width: 110px;
-        height: 60px;
-        padding: 10px;
-        font-family: '宋体';
-        font-size: 6px;
-        text-align: left;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: space-evenly;
-        line-height:18px;
-       }
+      .device {
+      position: absolute;
+      color: #fff;
+      background-color: #1e87ff;
+      border: 10px solid;
+      border-image: linear-gradient(145deg, #0ef2ff, #4b9bf2, #4b9bf2, #4b9bf2, #4b9bf2, #0ef2ff) 30 30;
+      box-shadow: 4px 6px 8px rgb(111, 108, 109);
+      text-shadow: 0px 0px 4px #fff;
+      width: 410px;
+      height: 200px;
+      font-family: 'arial';
+      opacity: 0.8;
+    }
   
-       #doorbox{
-        height: 90px;
-       }
-         /* 智能配电箱 */
-       .box-child {
-         display: flex;
-         width: 110px;
-         justify-content: space-between;
-         align-items: center;
-       }
 
   </style>
 
@@ -96,23 +81,31 @@
   <!-- 智能空开 门禁 ui -->
   <div class="device" id="smartbox"> </div>
   <div class="device" id="doorbox"> </div>
-  <div class="device" id="testbox">ttt</div>
+
+
+  <div id="emptyBox"> </div>
   <!-- 按钮 -->
   <div id='box-wrapper'>
-      <div  id='sand' class="wrapper-container"></div>
-      <div  id='view' class="wrapper-container"></div>
+      <div  id='sand' ></div>
+      <div  id='view' ></div>
     </div>
 
   <script>
     var Public_Engine = new MakerJS.Engine();
     //文件路径  是否合并 回调函数
-    Public_Engine.load('../mesh/exhibitionHall.world', false)
-  //   Public_Engine.load('../mesh/exhibitionHall.world',{
-  //     matches:{
-  //     name: { type:'contains',data:['diantimen','Text']},
-  //     // uuid : { type : 'equals' , data:[]},
-  //   }
-  // })
+    Public_Engine.load('../mesh/exhibitionHall.world', false,function(){
+      // console.log(Public_Engine.world.world_nodes)
+      // console.log()
+    })
+    
+
+    /*Public_Engine.load('../mesh/exhibitionHall.world',{
+      hasProperty:true,   //合并匹配模型
+      matches:{
+      name: { type:'contains',data:['diantimen']},
+      // uuid : { type : 'equals' , data:[]},
+    }
+    }) */
 
   </script>
   <!-- <script>

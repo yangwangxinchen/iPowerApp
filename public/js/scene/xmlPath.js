@@ -3,15 +3,14 @@ MakerJS.xmlPath=function(engine){
 
     //path    "../mesh/path/line.xml"
     this.parseXML=function(path){
-        if (window.XMLHttpRequest)
-        {// code for IE7+, Firefox, Chrome, Opera, Safari
-        xmlhttp=new XMLHttpRequest();
-        //  console.log(xmlhttp)
-        }
+        var xmlhttp=new XMLHttpRequest();
         xmlhttp.open("GET",path,false);
         xmlhttp.send();
-        xmlDoc=xmlhttp.responseXML;
-        // console.log(xmlDoc)
+        // var xmlParser = new DOMParser();
+        // var MaterialXml = xmlParser.parseFromString(xmlhttp.responseText, "application/xml");
+        // console.log(MaterialXml)  //xml形式
+        var xmlDoc=xmlhttp.responseXML;   //xml形式
+        // console.log(xmlhttp.responseText)   // xmlhttp.response  xmlhttp.responseText  文本形式
         var listArr=[]
         // console.log(xmlDoc.getElementsByTagName('noi:GEO_POINT_LIST_3D')[0].children[0].attributes[0].nodeValue)
          var list= xmlDoc.getElementsByTagName('noi:GEO_POINT_LIST_3D')

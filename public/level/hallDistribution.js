@@ -297,10 +297,6 @@ function eveUpdate(){
    
 }
 
-function eveChooseMore(e){
-
-// engine.effects.setOutlineObjects(e.content)
-}
 
 //choose
 function eveChoose(e){

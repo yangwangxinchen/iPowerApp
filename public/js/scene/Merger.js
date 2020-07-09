@@ -35,12 +35,12 @@ MakerJS.Merger = function(engine) {
     // 检查名称，uuid等
     this.isMergeNode = function(node_data) {
         if (!this.enabled) return false;
-
-        for (var i in node_data) {
-            if (this.matches.hasOwnProperty(i)) {
-                if (this.matches[i].type == 'contains') {
+        for (var i in node_data) {                        //node_data={id:xx,name:xx,type:xx,uuid:xx}
+        if (this.matches.hasOwnProperty(i)) {            //加载.world时  传进来的构造参数 this.matches = {name : { type : 'contains', data : ['xxx','yyy'] }}
+                if (this.matches[i].type == 'contains') {     
                     for (var j in this.matches[i].data) {
                         var d = this.matches[i].data[j];
+                        console.log('contains:'+d)
                         if (node_data[i].indexOf(d) != -1) {
                             return this.mergeHasProperty;
                         }
@@ -116,6 +116,7 @@ MakerJS.Merger = function(engine) {
                 }
 
                 var mergedGeo = scope.materialGeometries[material.name].geometry;
+                //.merge ( geometry : Geometry, matrix : Matrix4)
                 mergedGeo.merge(surfaceGeometries[i], object.transform);
             }
         }

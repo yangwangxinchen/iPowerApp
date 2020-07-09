@@ -49,7 +49,7 @@ MakerJS.FieldTips.prototype = {
         tipPalne.position.y = secondVec3.y;
         tipPalne.position.z = secondVec3.z;
         this.engine.cssScene.add(tipPalne);
-        tipPalne.scale.set(0.1, 0.1, 0.1);  //整体缩小，谷歌浏览器字体最小为12px
+        tipPalne.scale.set(0.05, 0.05, 0.05);  //整体缩小，谷歌浏览器字体最小为12px
         tipPalne.name = name;
 
         var pointarr = [firstVec3,secondVec3]
@@ -75,39 +75,9 @@ MakerJS.FieldTips.prototype = {
         this.engine.scene.add(tube);
         tube.name = "path_animation";
         this.engine.blooms.addBloomObjects(tube)
-        // var outGeo = new THREE.TubeGeometry(pipeSpline, 128, r * 0.05 + 0.1, 16, false);
-        // var outMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.15 });
-        // var outCube = new THREE.Mesh(outGeo, outMaterial);
-        // // outCube.pathName = dir.split("/")[dir.split("/").length -1];
-        // outCube.name = "path_animation";
-        // scope.scene.add(outCube);
         this.engine.addEventListener("update", function () {
-            texture.offset.x -= 0.02;
+            // texture.offset.x -= 0.02;
         });
-/*
-        //画线
-        var deltaX = secondVec3.x - firstVec3.x;
-        var turnPoint = new THREE.Vector3(firstVec3.x + deltaX / 2, firstVec3.y, firstVec3.z);  //1、2点高度一致
-
-        var positions = [];
-        positions.push(firstVec3.x, firstVec3.y, firstVec3.z);
-        positions.push(turnPoint.x, turnPoint.y, turnPoint.z);
-        positions.push(secondVec3.x, secondVec3.y, secondVec3.z);
-
-        // var Lgeometry = new THREE.LineGeometry();
-        // Lgeometry.setPositions(positions);
-        // var matLine = new THREE.LineMaterial({
-        //     color: 0xffffff,
-        //     linewidth: 2, // in pixels
-        //     dashed: false,
-        //     transparent: true,
-        //     opacity: 0.5
-        // });
-        // matLine.resolution.set(window.innerWidth, window.innerHeight); // resolution of the viewport
-        // var line = new THREE.Line2(Lgeometry, matLine);
-        // line.computeLineDistances();
-        // line.scale.set(1, 1, 1);
-        // this.engine.scene.add(line);*/
 
         //起点小球
         var geometryP = new THREE.SphereGeometry(0.3, 16, 16);   //球体半径，水平分段数，垂直分段数
@@ -123,6 +93,8 @@ MakerJS.FieldTips.prototype = {
             tipPalne.rotation.y = scope.engine.camera.rotation.y;
             tipPalne.rotation.z = scope.engine.camera.rotation.z;
         });
+        var lineInstance={line:tube,point:firstSphere,plane:tipPalne}
+        return lineInstance
     },
     cssInfoRenderLink: function (firstVec3, secondVec3, element) {
         var tipPalne;

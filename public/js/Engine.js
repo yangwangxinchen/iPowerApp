@@ -37,9 +37,14 @@ MakerJS.Engine = function () {
      this.camera.up.set(0, 0, 1);  //设置相机以z轴为上方  默认y轴为上方
     
 
-    //辅助线
+    //辅助坐标
     // this.axesHelper = new THREE.AxesHelper( 1000 );
     // this.scene.add( this.axesHelper );
+
+    //辅助网格
+    // var gridHelper = new THREE.GridHelper( 1200, 100);
+    // gridHelper.rotateX(Math.PI * 90/180);
+    // this.scene.add( gridHelper );
 
     //renderer
     this.renderer = new THREE.WebGLRenderer({
@@ -107,7 +112,7 @@ MakerJS.Engine = function () {
         const width=screenSize.width
         const height=screenSize.height
         scope.camera.aspect = width / height;
-        scope.camera.updateProjectionMatrix();   //更新相机
+        scope.camera.updateProjectionMatrix();   //更新投影矩阵
 
         // resize viewport width and height
         scope.renderer.setSize(width,height);  
@@ -123,7 +128,6 @@ MakerJS.Engine = function () {
         .load(['PX.jpg', 'NX.jpg', 'PY.jpg', 'NY.jpg', 'PZ.jpg', 'NZ.jpg']);
     
     
-  
     var clock = new THREE.Clock();
     //性能监测
     // var stats = new Stats();
@@ -207,29 +211,7 @@ MakerJS.Engine = function () {
     this.filterMesh=new MakerJS.FilterMesh(this);
 
     // this.subsidiaryArea=new MakerJS.SubsidiaryArea(this)
-    
-    //相机飞行动画
-    this.cameraFly=function(targetPos,controlsPos,time){
-   
-        //相机起始位置需要在外面定义 如果以参数传入,相机最后的位置会异常
-        var currentCameraPos=scope.camera.position
-    
-        function fly (targetPos,controlsPos,time){
-            //缓动方式:四次方的缓动   类型:前半段加速 后半段减速
-            var tween=new TWEEN.Tween(currentCameraPos).to(targetPos,1000*time).easing(TWEEN.Easing.Quadratic.InOut)
-            var update =function(){
-                scope.camera.position.set(currentCameraPos.x,currentCameraPos.y,currentCameraPos.z)
-                scope.controls.target=controlsPos    //控制器中心点
-            }
-            tween.onUpdate(update)
-            return tween;
-        }
-        
-        var tw=fly(targetPos,controlsPos,time)
-    
-        return tw
-        
-    }
+
 };
 
 MakerJS.Engine.prototype = Object.create(THREE.EventDispatcher.prototype);
@@ -369,7 +351,7 @@ MakerJS.Engine.prototype.clearScene = function (begin, end) {
         }
     }
 }
-
+/*xml文件(.world)   合并   */
 MakerJS.Engine.prototype.load = function (file, merge, callback) {
 
     var scope = this;

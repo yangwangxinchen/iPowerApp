@@ -87,6 +87,7 @@ MakerJS.Materials = function(engine) {
         let MaterialXml = xmlParser.parseFromString(filecontent, "application/xml");
 
         var materials = MaterialXml.childNodes[0];
+        // console.log(materials)
 
         for (var i = 0; i < materials.childNodes.length; i++) {
             var mtlXml = materials.childNodes[i];

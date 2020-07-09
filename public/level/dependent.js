@@ -77,7 +77,7 @@ document.write(
   <script src="libs/lottie.js"></script>
   <!-- 性能监测 -->
   <script src="../js/libs/stats.js"></script>
-
+  <!-- 信息框 -->
   <script src="../js/scene/FieldTips.js"></script>
 
     `
