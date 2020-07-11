@@ -731,6 +731,7 @@ MakerJS.exhibitionHall=function(){
         //外轮廓
         engine.effects.setOutlineObjects(outlineObjects)
         /*{name:'张三',date:'2020-7-1',time:'16:05:00',counts:1} */
+        typeof data == 'string' && (data = JSON.parse(data))
         if(data){
             recordParam=data
         }
@@ -836,7 +837,7 @@ MakerJS.exhibitionHall=function(){
                             <span class='box3-text' style='font-size:50px'>门禁#1</span>
                             <span class='box3-text'></span>
                         </div>
-                        <img src="${recordParam.recordSrc}" style='position:absolute; bottom: 30px; left:30px'>
+                        <img src="${recordParam.recordSrc}" object-fit='cover' style='position:absolute; bottom: 30px; left:20px;width:64px;height:64px;border-radius:50px;background-size:cover;'>
                         <div class='box-child' style='position:absolute; top: 85px; left:140px;font-size:30px'>
                             <span class='box3-text'>${recordParam.recordName}</span>
                         </div>
@@ -888,7 +889,7 @@ MakerJS.exhibitionHall=function(){
 
         }
 
-        //切换tab时 清除其他tab的显示状态
+        //切换app端tab时 清除其他tab的显示状态
         this.clearControlTab=function(){
             //监控
             _this.showHideMonitorView()

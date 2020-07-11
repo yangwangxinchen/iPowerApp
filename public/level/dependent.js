@@ -17,9 +17,10 @@ document.write(
   <script src="../js/postprocessing/TAARenderPass.js"></script>
 
   <!-- SSAO --> 
-  <script src="../js/math/SimplexNoise.js"></script>
   <script src="../js/shaders/SSAOShader.js"></script>
   <script src="../js/postprocessing/SSAOPass.js"></script>
+
+  <script src="../js/math/SimplexNoise.js"></script>
 
   <!-- 引入后期处理通道js -->
   <script src="../js/shaders/CopyShader.js"></script>
