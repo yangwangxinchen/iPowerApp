@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#000000" />
   <meta name="description" content="Web site created using create-react-app" />
   <link rel="shortcut icon" href="../bitbug_favicon.ico">
-  <link type="text/css" rel="styleSheet"  href="./hall.css" />
+  <link type="text/css" rel="styleSheet" href="./hall.css" />
   <title>展厅配电房</title>
 
   <style>
@@ -19,33 +19,31 @@
       height: 100%;
       overflow: hidden;
     }
-
   </style>
 
 
   <style>
-  .device{
-            position: absolute;
-            color:rgb(11, 213, 248);
-            background-color: rgba(0, 127, 127, 0.447);
-            border: 1px solid rgba(127,255,255,0.25);
-            width: 130px;
-            height: 100px;
-            font-family: '楷体';
-            font-size:10px;
-            text-align:left;
+    .device {
+      position: absolute;
+      color: rgb(11, 213, 248);
+      background-color: rgba(0, 127, 127, 0.447);
+      border: 1px solid rgba(127, 255, 255, 0.25);
+      width: 130px;
+      height: 100px;
+      font-family: '楷体';
+      font-size: 10px;
+      text-align: left;
     }
 
-   #device02{
-    width: 150px;
-    height: 20px;
-    font-size:5px;
-   }
-
+    #device02 {
+      width: 150px;
+      height: 20px;
+      font-size: 5px;
+    }
   </style>
 
-<script src="dependent.js"></script>
-<script src="hallDistribution.js"></script>
+  <script src="dependent.js"></script>
+  <script src="hallDistribution.js"></script>
 
 </head>
 
@@ -55,25 +53,25 @@
       <canvas id="Maker_Render_Canvas"></canvas>
     </div>
   </div>
-      
-      <div id="mask"></div>
-  
-      <div class="device"  id="device01" ></div>
-      <div class="device"  id="device02" ></div>
-      <div class="device"  id="device03" ></div>
-      <div class="device"  id="device04" ></div>
-      <div class="device"  id="device05" ></div>
 
-      <div id='box-wrapper'>
-          <div id='view' class="wrapper-container"></div>
-          <div id='path' class="wrapper-container"></div>
-      </div>
+  <div id="mask"></div>
+
+  <div class="device" id="device01"></div>
+  <div class="device" id="device02"></div>
+  <div class="device" id="device03"></div>
+  <div class="device" id="device04"></div>
+  <div class="device" id="device05"></div>
+
+  <div id='box-wrapper'>
+    <div id='view' class="wrapper-container"></div>
+    <div id='path' class="wrapper-container"></div>
+  </div>
 
   <script>
     var Public_Engine = new MakerJS.Engine();
     //文件路径  是否合并 回调函数
-    Public_Engine.load('../mesh/hallDistribution.world', false, function () {})
-  
+    Public_Engine.load('../mesh/hallDistribution.world', false, function () { })
+
   </script>
 </body>
 

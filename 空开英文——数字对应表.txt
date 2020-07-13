@@ -1,0 +1,14 @@
+数字对应表：
+Room_AirC_1	1      左空调
+Room_Screen	2      大屏
+Room_AirC_2	3      右空调
+Room_B_Lamp	4      灯带
+Hallway_S_Lamp  	5      走廊灯
+Room_S_Lamp	6      平板灯
+Room_D_Lamp_2	7      配电房射灯
+Room_D_Lamp_1	8      展厅筒灯
+Room_Curtain_ON	9      窗帘开
+   Room_Curtain_OFF	10    窗帘关
+
+mqtt://ebox.vrmaker.com.cn:8083/mqtt
+DCA6322942C9/PUBLISH/#

@@ -7,8 +7,8 @@
   <meta name="theme-color" content="#000000" />
   <meta name="description" content="Web site created using create-react-app" />
   <link rel="shortcut icon" href="../bitbug_favicon.ico">
-  <link type="text/css" rel="styleSheet"  href="./hall.css" />
-  
+  <link type="text/css" rel="styleSheet" href="./hall.css" />
+
   <title>展厅</title>
 
   <style>
@@ -21,32 +21,32 @@
       overflow: hidden;
     }
 
-        #box {
-            width: 40px;
-            height: 40px;
-            background-image: url('../textures/pdx.png');
-            background-size: contain;
-            background-repeat: no-repeat;
-        }
+    #box {
+      width: 40px;
+      height: 40px;
+      background-image: url('../textures/pdx.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+    }
 
-        #info {
-            position: absolute;
-            top: 30px;
-            width: 100%;
-            text-align: center;
-            z-index: 100;
-            display:block;
-            color:rgb(6, 232, 240)
-          }
+    #info {
+      position: absolute;
+      top: 30px;
+      width: 100%;
+      text-align: center;
+      z-index: 100;
+      display: block;
+      color: rgb(6, 232, 240)
+    }
 
-        .label {
-				color: #FFF;
-				font-family: sans-serif;
-				padding: 2px;
-				background: rgba( 0, 0, 0, .6 );
-			}
+    .label {
+      color: #FFF;
+      font-family: sans-serif;
+      padding: 2px;
+      background: rgba(0, 0, 0, .6);
+    }
 
-      .device {
+    .device {
       position: absolute;
       color: #fff;
       background-color: #1e87ff;
@@ -59,14 +59,12 @@
       font-family: 'arial';
       opacity: 0.8;
     }
-  
-
   </style>
 
   <!-- 依赖文件 -->
   <script src="./dependent.js"></script>
   <script src="exhibitionHall.js"></script>
-  
+
 </head>
 
 <body>
@@ -77,7 +75,7 @@
   </div>
 
   <!-- 动画遮罩 -->
-  <div id="mask"></div>   
+  <div id="mask"></div>
   <!-- 智能空开 门禁 ui -->
   <div class="device" id="smartbox"> </div>
   <div class="device" id="doorbox"> </div>
@@ -86,18 +84,18 @@
   <div id="emptyBox"> </div>
   <!-- 按钮 -->
   <div id='box-wrapper'>
-      <div  id='sand' ></div>
-      <div  id='view' ></div>
-    </div>
+    <div id='sand'></div>
+    <div id='view'></div>
+  </div>
 
   <script>
     var Public_Engine = new MakerJS.Engine();
     //文件路径  是否合并 回调函数
-    Public_Engine.load('../mesh/exhibitionHall.world', false,function(){
+    Public_Engine.load('../mesh/exhibitionHall.world', false, function () {
       // console.log(Public_Engine.world.world_nodes)
       // console.log()
     })
-    
+
 
     /*Public_Engine.load('../mesh/exhibitionHall.world',{
       hasProperty:true,   //合并匹配模型

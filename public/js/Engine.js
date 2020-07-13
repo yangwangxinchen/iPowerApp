@@ -9,37 +9,37 @@ MakerJS.Engine = function () {
     const MakerJS_div = document.getElementById("MakerJS");
     this.div = MakerJS_div;
     this.canvas = canvas;
-    
+
     this.renderEnabled = false;
     this.realtime = true;  //true 如果不实时渲染 1.灯光状态无法立即同步 2.报警动画不会一直执行
 
     this.needReset = false;
 
-    var screenSize={
-    //  width:400,  //window.innerWidth  //MakerJS_div.offsetWidth
-    //  height:304 ,  //window.innerHeight
+    var screenSize = {
+        //  width:400,  //window.innerWidth  //MakerJS_div.offsetWidth
+        //  height:304 ,  //window.innerHeight
 
-     width:window.innerWidth,
-     height:window.innerHeight
+        width: window.innerWidth,
+        height: window.innerHeight
     }
 
-    this.width=screenSize.width
-    this.height=screenSize.height
+    this.width = screenSize.width
+    this.height = screenSize.height
 
     var devicePixelRatio = window.devicePixelRatio || 1;
-    
+
     //scene
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(0x040306); //new THREE.Color(0x212121); // 0x7f7f7f
-    var scene=this.scene
+    var scene = this.scene
     //camera
-     this.camera = new THREE.PerspectiveCamera(60, this.width / this.height, 1, 10000);
-     this.camera.up.set(0, 0, 1);  //设置相机以z轴为上方  默认y轴为上方
-    
+    this.camera = new THREE.PerspectiveCamera(60, this.width / this.height, 1, 10000);
+    this.camera.up.set(0, 0, 1);  //设置相机以z轴为上方  默认y轴为上方
+
 
     //辅助坐标
-    // this.axesHelper = new THREE.AxesHelper( 1000 );
-    // this.scene.add( this.axesHelper );
+    this.axesHelper = new THREE.AxesHelper( 1000 );
+    this.scene.add( this.axesHelper );
 
     //辅助网格
     // var gridHelper = new THREE.GridHelper( 1200, 100);
@@ -49,28 +49,28 @@ MakerJS.Engine = function () {
     //renderer
     this.renderer = new THREE.WebGLRenderer({
         canvas: canvas,
-        antialias:true,
+        antialias: true,
         // alpha:true
     });
     this.renderer.autoClear = false;   //让后处理有效果,关闭自动清除,后面需要手动清除
     this.renderer.setClearColor(0xffffff);  //背景透明
     this.renderer.setSize(this.width, this.height);
     this.renderer.setPixelRatio(devicePixelRatio);
-    this.renderer.sortObjects=false   //物体的渲染顺序将会由他们添加到场景中的顺序所决定
+    this.renderer.sortObjects = false   //物体的渲染顺序将会由他们添加到场景中的顺序所决定
     // this.renderer.setFaceCulling(THREE.CullFaceFront,THREE.FrontFaceDirectionCW);
     //轨道控制器
     this.controls = new THREE.OrbitControls(this.camera, MakerJS_div);
     // this.controls.autoRotate=false
-    this.controls.target.set(0,0,1)
+    this.controls.target.set(0, 0, 1)
     // this.controls.maxPolarAngle=1    //垂直旋转角度
     // this.controls.enablePan=false;  //禁用拖拽
     this.controls.enableDamping = true;
     this.controls.dampingFactor = 0.8;
     // this.controls.minDistance=100   
-    this.controls.maxDistance=2000    //限制
+    this.controls.maxDistance = 2000    //限制
     this.controls.update();
-   
-   
+
+
     // console.log(scope)
     //控制器监听事件
     // this.controls.addEventListener('change', function (event) {
@@ -80,10 +80,10 @@ MakerJS.Engine = function () {
     //     // scope.requestFrame();
     // });
 
-    this.controls.addEventListener('end',function(){
+    this.controls.addEventListener('end', function () {
         // console.log('更新位置信息')
         //更新场景矩阵 可以获得更新的(位置等)数据
-        scope.scene.updateMatrixWorld();  
+        scope.scene.updateMatrixWorld();
     })
 
     // console.log(this.controls)
@@ -107,17 +107,17 @@ MakerJS.Engine = function () {
     this.taaRenderPass.sampleLevel = 2;
 
     window.addEventListener('resize', resizeWindow, false);
-    
+
     function resizeWindow() {
-        const width=screenSize.width
-        const height=screenSize.height
+        const width = screenSize.width
+        const height = screenSize.height
         scope.camera.aspect = width / height;
         scope.camera.updateProjectionMatrix();   //更新投影矩阵
 
         // resize viewport width and height
-        scope.renderer.setSize(width,height);  
-        scope.composer.setSize(width,height);
-        scope.blooms.setSize(width,height);
+        scope.renderer.setSize(width, height);
+        scope.composer.setSize(width, height);
+        scope.blooms.setSize(width, height);
 
         scope.requestFrame();
     }
@@ -126,36 +126,36 @@ MakerJS.Engine = function () {
     this.scene.background = new THREE.CubeTextureLoader()
         .setPath('../textures/skybox1/')
         .load(['PX.jpg', 'NX.jpg', 'PY.jpg', 'NY.jpg', 'PZ.jpg', 'NZ.jpg']);
-    
-    
+
+
     var clock = new THREE.Clock();
     //性能监测
     // var stats = new Stats();
     // stats.showPanel(0);// 0: fps, 1: ms, 2: mb, 3+: custom
     // document.body.appendChild( stats.dom );
- 
+
     function update() {
         scope.controls.update(clock.getDelta()); //更新控制器
         // TWEEN.update()  //更新补间动画
         scope.dispatchEvent({ type: "update" });
     }
 
-    
+
     function render() {
-       
+
         // scope.renderer.autoClear = false;
         scope.renderer.clear();  //渲染器清除颜色、深度,模板缓存.
         scope.renderer.render(scope.scene, scope.camera);//执行渲染操作
-        
+
         //需要在渲染之后执行才有后处理效果
         scope.blooms.render();
         scope.composer.render();
 
         scope.dispatchEvent({ type: "render" });
     }
-   
+
     function animate() {
-        
+
         requestAnimationFrame(animate);  //请求再次渲染函数
         //控制实时渲染
         if (scope.renderEnabled) {
@@ -163,18 +163,18 @@ MakerJS.Engine = function () {
             render();
             // stats.end();
         }
-       update();
-        
+        update();
+
     }
-    
+
     animate();
 
     this.requestFrame();
-   
-    
+
+
     //add light
-    this.directionalLight = new THREE.DirectionalLight('#fff'); 
-    this.directionalLight.position.set(30,-100,200).normalize();
+    this.directionalLight = new THREE.DirectionalLight('#fff');
+    this.directionalLight.position.set(30, -100, 200).normalize();
     //console.log(this.directionalLight)
     //this.directionalLight.lookAt(new THREE.Vector3(50, 100, 75));
     this.scene.add(this.directionalLight);
@@ -182,7 +182,7 @@ MakerJS.Engine = function () {
     this.ambientLight = new THREE.AmbientLight('#fff', 0.3);
     this.scene.add(this.ambientLight);
 
-   
+
     //directional light
     var SHADOW_MAP_WIDTH = 1024 * 4,
         SHADOW_MAP_HEIGHT = 1024 * 2;
@@ -201,14 +201,14 @@ MakerJS.Engine = function () {
     // this.directionalLight.shadow.mapSize.width = SHADOW_MAP_WIDTH;
     // this.directionalLight.shadow.mapSize.height = SHADOW_MAP_HEIGHT;
 
-    
+
     this.world = new MakerJS.World(this);
     // this.lods = new MakerJS.LODs(this);    //world 里面的lod一同注释掉了,暂时不需要lod
     this.effects = new MakerJS.Effects(this);
     this.blooms = new MakerJS.Bloom(this);
     this.nodeSelection = new MakerJS.NodeSelection(this);
     //过滤模型
-    this.filterMesh=new MakerJS.FilterMesh(this);
+    this.filterMesh = new MakerJS.FilterMesh(this);
 
     // this.subsidiaryArea=new MakerJS.SubsidiaryArea(this)
 
@@ -236,9 +236,9 @@ MakerJS.Engine.prototype.requestFrame = function () {
 
     if (!this.realtime) {
         var scope = this;
-       
+
         this.renderTimeout = setTimeout(function () {
-             // console.log('关闭渲染')
+            // console.log('关闭渲染')
             scope.renderEnabled = false;
         }, 1500);
     }
@@ -388,13 +388,13 @@ MakerJS.Engine.prototype.load = function (file, merge, callback) {
 
     var scene = scope.scene;
     var _idx = scene.children.length - 1;
-    
+
     //p 文本内容
     loader.load(function (p) {
         _do_parse(p, file);
         // console.log(p)
         if (callback) callback();
-         //加载
+        //加载
         console.log('load： ' + file);
     });
 
@@ -402,20 +402,21 @@ MakerJS.Engine.prototype.load = function (file, merge, callback) {
     this.clearScene(0, _idx);
 };
 
-MakerJS.Engine.prototype.getMqtt=function(){
-    var client = mqtt.connect("mqtt://www.vrmaker.com.cn:61614/mqtt",{
-			username: 'vrmaker',
-  			password: 'vrmaker',
-		});
+MakerJS.Engine.prototype.getMqtt = function () {
+    var client = mqtt.connect("mqtt://ebox.vrmaker.com.cn:8083/mqtt", {
+        username: 'vrmaker',
+        password: 'vrmaker',
+    });
 
-		client.on("connect", function () {
-			console.log("connected。。。。");
-			client.subscribe("changhua/get/#");
-		});
-        return client;
+    client.on("connect", function () {
+        console.log("connected。。。。");
+        //changhua/get/#
+        client.subscribe("DCA6322942C9/PUBLISH/#");
+    });
+    return client;
 }
 
-MakerJS.Engine.prototype.animateCamera = function(oldP, oldT, newP, newT, span = 3000, callBack) {
+MakerJS.Engine.prototype.animateCamera = function (oldP, oldT, newP, newT, span = 3000, callBack) {
     var scope = this;
     var tween = new TWEEN.Tween({
         x1: oldP.x, // 相机x
@@ -433,7 +434,7 @@ MakerJS.Engine.prototype.animateCamera = function(oldP, oldT, newP, newT, span =
         y2: newT.y,
         z2: newT.z
     }, span);
-    tween.onUpdate(function(object) {
+    tween.onUpdate(function (object) {
         scope.controls.position0.x = object.x1;
         scope.controls.position0.y = object.y1;
         scope.controls.position0.z = object.z1;
@@ -443,13 +444,13 @@ MakerJS.Engine.prototype.animateCamera = function(oldP, oldT, newP, newT, span =
         scope.controls.update();
         scope.controls.reset();
     })
-    tween.onComplete(function() {
+    tween.onComplete(function () {
         scope.controls.enabled = true;
         callBack && callBack()
     })
     tween.easing(TWEEN.Easing.Quadratic.InOut);
     tween.start();
-    this.addEventListener("update", function() {
+    this.addEventListener("update", function () {
         TWEEN.update();
     })
 }
